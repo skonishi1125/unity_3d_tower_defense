@@ -15,7 +15,7 @@ public class BuildController : MonoBehaviour
 
         // ホバー更新（Place / Demolish のときだけ）
         if (currentBuildMode != BuildMode.None)
-            UpdateHover();
+            PlanableHighlight();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -46,17 +46,19 @@ public class BuildController : MonoBehaviour
         }
     }
 
-    private void UpdateHover()
+    // 配置できる場所にグリッド上にハイライトする
+    private void PlanableHighlight()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, groundLayerMask))
         {
-            if (cellHighlight != null) cellHighlight.gameObject.SetActive(false);
+            if (cellHighlight != null)
+                cellHighlight.gameObject.SetActive(false);
             return;
         }
 
         Vector2Int cell = WorldToCell(hit.point);
-        Vector3 center = CellToWorldCenter(cell, hit.point.y + 1f); // Z-fighting避け
+        Vector3 center = CellToWorldCenter(cell, hit.point.y + .1f);
         if (cellHighlight != null)
         {
             cellHighlight.gameObject.SetActive(true);
@@ -109,7 +111,7 @@ public class BuildController : MonoBehaviour
 
     private Vector2Int WorldToCell(Vector3 world)
     {
-        // cellSize=1, origin=(0,0,0) 前提
+        // 1グリッドあたり 1, origin = (0,0,0) 前提
         int x = Mathf.FloorToInt(world.x);
         int z = Mathf.FloorToInt(world.z);
         return new Vector2Int(x, z);
