@@ -9,6 +9,13 @@ public class BuildController : MonoBehaviour
     [SerializeField] private Transform cellHighlight;
 
 
+    [Header("Ghost Setting")]
+    private GameObject ghostInstance; // 現状選択されている建造物が格納される想定
+    [SerializeField] private float highlightYOffset = 0.01f;
+    [SerializeField] private float ghostYOffset = 0.0f;
+    [SerializeField] private Material ghostMaterial;
+
+
     private void Update()
     {
         SwitchMode();
@@ -24,9 +31,8 @@ public class BuildController : MonoBehaviour
             else if (currentBuildMode == BuildMode.Demolish)
                 DemolishTower();
         }
-
-
     }
+
     private void SwitchMode()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -52,18 +58,64 @@ public class BuildController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, groundLayerMask))
         {
-            if (cellHighlight != null)
-                cellHighlight.gameObject.SetActive(false);
+            if (cellHighlight != null) cellHighlight.gameObject.SetActive(false);
+            if (ghostInstance != null) ghostInstance.SetActive(false);
             return;
         }
 
         Vector2Int cell = WorldToCell(hit.point);
-        Vector3 center = CellToWorldCenter(cell, hit.point.y + .1f);
+
+        // セル中心（地面の高さ）
+        Vector3 cellCenter = CellToWorldCenter(cell, hit.point.y);
+
+        // ハイライト表示（少し浮かせてチラつき防止）
         if (cellHighlight != null)
         {
             cellHighlight.gameObject.SetActive(true);
-            cellHighlight.position = center;
+            cellHighlight.position = cellCenter + Vector3.up * highlightYOffset;
         }
+
+        // ゴースト表示（Placeのときだけ）
+        if (currentBuildMode == BuildMode.Place)
+        {
+            EnsureGhost();
+            if (ghostInstance != null)
+            {
+                ghostInstance.SetActive(true);
+                ghostInstance.transform.position = cellCenter + Vector3.up * ghostYOffset;
+            }
+        }
+        else
+        {
+            if (ghostInstance != null) ghostInstance.SetActive(false);
+        }
+    }
+
+    // Planeするとき、半透明に作る対象のものを表示させる
+    private void EnsureGhost()
+    {
+        if (ghostInstance != null) return;
+        if (towerPrefab == null) return;
+
+        ghostInstance = Instantiate(towerPrefab);
+        ghostInstance.name = "[Ghost] " + towerPrefab.name;
+
+        // 衝突判定無効化
+        foreach (var col in ghostInstance.GetComponentsInChildren<Collider>())
+            col.enabled = false;
+
+        if (ghostMaterial != null)
+        {
+            foreach (var r in ghostInstance.GetComponentsInChildren<Renderer>())
+                r.material = ghostMaterial;
+        }
+
+        // 攻撃スクリプトなどあれば無効化しておく
+        // foreach (var mb in ghostInstance.GetComponentsInChildren<MonoBehaviour>())
+        //     mb.enabled = false;
+
+        ghostInstance.SetActive(false);
+
     }
 
 
@@ -95,15 +147,19 @@ public class BuildController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
         {
+            // グリッドを無視して生成する場合
             //Vector3 p = hit.point;
             //float s = .2f;
             //DrawDebugLine(ray, hit, p, s);
-
             //Instantiate(towerPrefab, hit.point, Quaternion.identity);
 
+            // グリッドを考慮して生成する場合
+            // 小数点をすべて取り除き、1グリッド中の中央の座標をcellCenterとして取得。
+            // そこを基準にInstantiateしている
             Vector2Int cell = WorldToCell(hit.point);
             Vector3 cellCenter = CellToWorldCenter(cell, hit.point.y);
             DrawDebugLine(ray, hit, cellCenter, .2f);
+
             Instantiate(towerPrefab, cellCenter, Quaternion.identity);
 
         }
@@ -111,7 +167,7 @@ public class BuildController : MonoBehaviour
 
     private Vector2Int WorldToCell(Vector3 world)
     {
-        // 1グリッドあたり 1, origin = (0,0,0) 前提
+        // 1グリッド(cellSize)あたり 1, origin = (0,0,0) 前提
         int x = Mathf.FloorToInt(world.x);
         int z = Mathf.FloorToInt(world.z);
         return new Vector2Int(x, z);
