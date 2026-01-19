@@ -1,9 +1,14 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildController : MonoBehaviour
 {
-    private BuildMode currentBuildMode = BuildMode.None;
+    private Camera mainCamera;
+    [Header("Plane Setting")]
+    // グリッド上に配置したTowerのデータ情報
+    private readonly Dictionary<Vector2Int, GameObject> placedTowersDictionary = new();
+
+    private BuildMode currentBuildMode = BuildMode.Place;
     [SerializeField] private LayerMask groundLayerMask;
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private Transform cellHighlight;
@@ -15,6 +20,10 @@ public class BuildController : MonoBehaviour
     [SerializeField] private float ghostYOffset = 0.0f;
     [SerializeField] private Material ghostMaterial;
 
+    private void Awake()
+    {
+        mainCamera = Camera.main;
+    }
 
     private void Update()
     {
@@ -22,7 +31,7 @@ public class BuildController : MonoBehaviour
 
         // ホバー更新（Place / Demolish のときだけ）
         if (currentBuildMode != BuildMode.None)
-            PlanableHighlight();
+            DisplayPlaceableEffect();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -52,10 +61,11 @@ public class BuildController : MonoBehaviour
         }
     }
 
-    // 配置できる場所にグリッド上にハイライトする
-    private void PlanableHighlight()
+
+    // 配置場所のグリッドに、四角くハイライト + Ghostを出す
+    private void DisplayPlaceableEffect()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, groundLayerMask))
         {
             if (cellHighlight != null) cellHighlight.gameObject.SetActive(false);
@@ -64,21 +74,30 @@ public class BuildController : MonoBehaviour
         }
 
         Vector2Int cell = WorldToCell(hit.point);
+        bool canPlace = !placedTowersDictionary.ContainsKey(cell);
 
-        // セル中心（地面の高さ）
+        // 配置済みの場所には何もエフェクトを出さない
+        if (!canPlace && currentBuildMode == BuildMode.Place)
+        {
+            if (ghostInstance != null)
+                ghostInstance.SetActive(false);
+
+            cellHighlight.gameObject.SetActive(false);
+            return;
+        }
+
         Vector3 cellCenter = CellToWorldCenter(cell, hit.point.y);
-
-        // ハイライト表示（少し浮かせてチラつき防止）
         if (cellHighlight != null)
         {
             cellHighlight.gameObject.SetActive(true);
-            cellHighlight.position = cellCenter + Vector3.up * highlightYOffset;
+            cellHighlight.position = cellCenter + Vector3.up * highlightYOffset; // 少し浮かせて地面に埋もれないようにする
         }
 
-        // ゴースト表示（Placeのときだけ）
+        // ゴースト表示処理
         if (currentBuildMode == BuildMode.Place)
         {
             EnsureGhost();
+            // 操作モードがPlaceで、現在のマウス位置に何も配置されてない場合はGhostを出す。
             if (ghostInstance != null)
             {
                 ghostInstance.SetActive(true);
@@ -87,11 +106,12 @@ public class BuildController : MonoBehaviour
         }
         else
         {
-            if (ghostInstance != null) ghostInstance.SetActive(false);
+            if (ghostInstance != null)
+                ghostInstance.SetActive(false);
         }
     }
 
-    // Planeするとき、半透明に作る対象のものを表示させる
+    // Place時、作成予定の半透明なTowerを画面に生成する
     private void EnsureGhost()
     {
         if (ghostInstance != null) return;
@@ -121,28 +141,26 @@ public class BuildController : MonoBehaviour
 
     private void DemolishTower()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
         {
-            Vector3 p = hit.point;
-            float s = .2f;
-            DrawDebugLine(ray, hit, p, s);
-
-            Collider[] colliders = Physics.OverlapSphere(hit.point, 0.5f);
-            foreach (var collider in colliders)
+            Vector2Int cell = WorldToCell(hit.point);
+            if (!placedTowersDictionary.TryGetValue(cell, out var tower))
             {
-                if (collider.gameObject.layer == LayerMask.NameToLayer("Tower"))
-                    Destroy(collider.gameObject);
+                Debug.Log($"何も配置されていません: {cell}");
+                return;
             }
+            Destroy(tower);
+            placedTowersDictionary.Remove(cell);
         }
 
     }
 
     private void PlaceTower()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
@@ -157,10 +175,17 @@ public class BuildController : MonoBehaviour
             // 小数点をすべて取り除き、1グリッド中の中央の座標をcellCenterとして取得。
             // そこを基準にInstantiateしている
             Vector2Int cell = WorldToCell(hit.point);
+            if (placedTowersDictionary.ContainsKey(cell))
+            {
+                Debug.Log($"その位置にはすでに配置されています: {cell}");
+                return;
+            }
+
             Vector3 cellCenter = CellToWorldCenter(cell, hit.point.y);
             DrawDebugLine(ray, hit, cellCenter, .2f);
 
-            Instantiate(towerPrefab, cellCenter, Quaternion.identity);
+            var tower = Instantiate(towerPrefab, cellCenter, Quaternion.identity);
+            placedTowersDictionary.Add(cell, tower); // グリッドシステム二データとして保管
 
         }
     }
