@@ -4,7 +4,7 @@ using UnityEngine;
 public class BuildController : MonoBehaviour
 {
     private Camera mainCamera;
-    [Header("Plane Setting")]
+    [Header("Place Setting")]
     // グリッド上に配置したTowerのデータ情報
     private readonly Dictionary<Vector2Int, GameObject> placedTowersDictionary = new();
 
@@ -82,7 +82,8 @@ public class BuildController : MonoBehaviour
             if (ghostInstance != null)
                 ghostInstance.SetActive(false);
 
-            cellHighlight.gameObject.SetActive(false);
+            if (cellHighlight != null)
+                cellHighlight.gameObject.SetActive(false);
             return;
         }
 
@@ -185,7 +186,7 @@ public class BuildController : MonoBehaviour
             DrawDebugLine(ray, hit, cellCenter, .2f);
 
             var tower = Instantiate(towerPrefab, cellCenter, Quaternion.identity);
-            placedTowersDictionary.Add(cell, tower); // グリッドシステム二データとして保管
+            placedTowersDictionary.Add(cell, tower); // グリッドシステムにデータとして保管しておく
 
         }
     }
