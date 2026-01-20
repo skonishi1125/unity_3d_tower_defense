@@ -7,14 +7,16 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float arriveDistance = .1f;
 
     private Waypoint path;
-    private int currentIndex;
+    public int CurrentIndex;
 
     public event Action ReachedGoal;
 
     public void Initialize(Waypoint waypoint)
     {
         path = waypoint;
-        currentIndex = 0;
+        CurrentIndex = 0;
+
+        Debug.Log($"Initialized! path:{path} CurrentIndex: {CurrentIndex}");
 
         // デフォルトポジションがあるなら、ここに書く
 
@@ -25,7 +27,7 @@ public class EnemyMovement : MonoBehaviour
         if (path == null || path.Count == 0)
             return;
 
-        Transform target = path.get(currentIndex);
+        Transform target = path.get(CurrentIndex);
         if (target == null)
             return;
 
@@ -43,10 +45,10 @@ public class EnemyMovement : MonoBehaviour
 
         if (sqrDist <= arriveDistance * arriveDistance)
         {
-            Debug.Log($"{sqrDist}, {arriveDistance * arriveDistance} ");
-            currentIndex++;
+            //Debug.Log($"{sqrDist}, {arriveDistance * arriveDistance} ");
+            CurrentIndex++;
 
-            if (currentIndex >= path.Count)
+            if (CurrentIndex >= path.Count)
             {
                 ReachedGoal?.Invoke();
                 enabled = false;
