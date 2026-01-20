@@ -3,7 +3,6 @@
 public class Enemy : MonoBehaviour
 {
     private EnemyMovement movement;
-    [SerializeField] private Waypoint waypoint;
 
     private void Awake()
     {
@@ -12,7 +11,6 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        movement.Initialize(waypoint);
         movement.ReachedGoal += OnReachedGoal;
     }
 

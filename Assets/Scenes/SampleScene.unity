@@ -961,7 +961,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d808fa7bd25abf141bf82f84792ffbfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WaypointPath: []
+  WaypointPath:
+  - {fileID: 717682665}
+  - {fileID: 1922253132}
+  - {fileID: 641078513}
+  - {fileID: 1436898902}
+  - {fileID: 1724533262}
+  - {fileID: 1320376398}
 --- !u!4 &3438413632036583300
 Transform:
   m_ObjectHideFlags: 0

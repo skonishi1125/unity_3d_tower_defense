@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class EnemySpawner : MonoBehaviour
     private void Start()
     {
         // 初期スポーン設定
-        timer = duration;
+        //timer = duration;
     }
 
 
@@ -28,7 +29,15 @@ public class EnemySpawner : MonoBehaviour
 
     private void Spawn(Transform spawnPoint)
     {
-        Instantiate(SpawnEnemies[0], spawnPoint);
+
+        // この形で呼び出すと、spawnPointのGameObjectの子要素として作られてしまう
+        // Instantiate(SpawnEnemies[0], spawnPoint);
+        // 生成場所を指定したい場合は、以下のようにposition, rotationどちらも明示的に指定する必要がある
+        var go = Instantiate(SpawnEnemies[0], spawnPoint.position, spawnPoint.rotation);
+        // ちなみに第4引数にTransform parent などとすると、その親の子要素として位置も指定しつつ生成ができる
+        var mover = go.GetComponent<EnemyMovement>();
+        mover.Initialize(waypoint);
+
         timer = duration;
         spawnCount++;
         Debug.Log("spawn!");

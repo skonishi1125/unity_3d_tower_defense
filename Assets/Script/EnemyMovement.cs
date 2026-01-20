@@ -13,6 +13,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void Initialize(Waypoint waypoint)
     {
+        Debug.Log(waypoint);
         path = waypoint;
         CurrentIndex = 0;
 

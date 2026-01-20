@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d7b781d6201e94781cb5163b63e97e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypoint: {fileID: 0}
 --- !u!114 &1403716294149460502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,6 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c2510b254dbb4448862aa46cd5b094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 3
   arriveDistance: 0.2
   CurrentIndex: 0
