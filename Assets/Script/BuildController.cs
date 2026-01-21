@@ -4,6 +4,8 @@ using UnityEngine;
 public class BuildController : MonoBehaviour
 {
     private Camera mainCamera;
+    [SerializeField] private GridSystem grid;
+
     [Header("Place Setting")]
     // グリッド上に配置したTowerのデータ情報
     private readonly Dictionary<Vector2Int, GameObject> placedTowersDictionary = new();
@@ -23,6 +25,8 @@ public class BuildController : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
+        if (grid == null)
+            grid = FindFirstObjectByType<GridSystem>();
     }
 
     private void Update()
@@ -74,10 +78,9 @@ public class BuildController : MonoBehaviour
         }
 
         Vector2Int cell = WorldToCell(hit.point);
-        bool canPlace = !placedTowersDictionary.ContainsKey(cell);
 
-        // 配置済みの場所には何もエフェクトを出さない
-        if (!canPlace && currentBuildMode == BuildMode.Place)
+        // 建造モード, 配置不可セルにマウスがある場合はエフェクトを出さない。
+        if (currentBuildMode == BuildMode.Place && grid.IsBlocked(cell))
         {
             if (ghostInstance != null)
                 ghostInstance.SetActive(false);
@@ -87,18 +90,22 @@ public class BuildController : MonoBehaviour
             return;
         }
 
+        // Ghost等の表示を中央から始めるために、中央の位置情報を取得
         Vector3 cellCenter = CellToWorldCenter(cell, hit.point.y);
+
+        // セルハイライト処理
         if (cellHighlight != null)
         {
             cellHighlight.gameObject.SetActive(true);
-            cellHighlight.position = cellCenter + Vector3.up * highlightYOffset; // 少し浮かせて地面に埋もれないようにする
+            // 少しy軸を浮かせて、地面が光っているように演出
+            cellHighlight.position = cellCenter + Vector3.up * highlightYOffset;
         }
 
-        // ゴースト表示処理
+        // Ghost表示処理
+        // Ghostは建造モードのときだけ表示する。
         if (currentBuildMode == BuildMode.Place)
         {
             EnsureGhost();
-            // 操作モードがPlaceで、現在のマウス位置に何も配置されてない場合はGhostを出す。
             if (ghostInstance != null)
             {
                 ghostInstance.SetActive(true);
@@ -112,9 +119,10 @@ public class BuildController : MonoBehaviour
         }
     }
 
-    // Place時、作成予定の半透明なTowerを画面に生成する
+    // 半透明なTower GameObjectを生成する。生成後は非activeとしておく
     private void EnsureGhost()
     {
+        // すでに作られていたら走らせないでよい
         if (ghostInstance != null) return;
         if (towerPrefab == null) return;
 
@@ -139,7 +147,7 @@ public class BuildController : MonoBehaviour
 
     }
 
-
+    // 塔の破壊処理
     private void DemolishTower()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -148,16 +156,16 @@ public class BuildController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
         {
             Vector2Int cell = WorldToCell(hit.point);
-            if (!placedTowersDictionary.TryGetValue(cell, out var tower))
-            {
+            GameObject tower;
+            if (grid.TryRemoveTower(cell, out tower))
+                Destroy(tower);
+            else
                 Debug.Log($"何も配置されていません: {cell}");
-                return;
-            }
-            Destroy(tower);
-            placedTowersDictionary.Remove(cell);
+
         }
 
     }
+
 
     private void PlaceTower()
     {
@@ -176,17 +184,16 @@ public class BuildController : MonoBehaviour
             // 小数点をすべて取り除き、1グリッド中の中央の座標をcellCenterとして取得。
             // そこを基準にInstantiateしている
             Vector2Int cell = WorldToCell(hit.point);
-            if (placedTowersDictionary.ContainsKey(cell))
+            if (grid.IsBlocked(cell))
             {
-                Debug.Log($"その位置にはすでに配置されています: {cell}");
+                Debug.Log($"その位置には配置できません。: {cell}");
                 return;
             }
 
             Vector3 cellCenter = CellToWorldCenter(cell, hit.point.y);
             DrawDebugLine(ray, hit, cellCenter, .2f);
-
             var tower = Instantiate(towerPrefab, cellCenter, Quaternion.identity);
-            placedTowersDictionary.Add(cell, tower); // グリッドシステムにデータとして保管しておく
+            grid.TryAddTower(cell, tower);
 
         }
     }
