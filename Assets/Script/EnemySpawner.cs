@@ -18,7 +18,6 @@ public class EnemySpawner : MonoBehaviour
         //timer = duration;
     }
 
-
     private void Update()
     {
         timer -= Time.deltaTime;

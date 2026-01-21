@@ -87,7 +87,7 @@ public class BuildController : MonoBehaviour
         }
 
         // Ghost等の表示を中央から始めるために、中央の位置情報を取得
-        Vector3 cellCenter = grid.CellToWorldCenter(cell, hit.point.y);
+        Vector3 cellCenter = grid.CellToWorldCenter(cell);
 
         // セルハイライト処理
         if (cellHighlight != null)
@@ -186,7 +186,7 @@ public class BuildController : MonoBehaviour
                 return;
             }
 
-            Vector3 cellCenter = grid.CellToWorldCenter(cell, hit.point.y);
+            Vector3 cellCenter = grid.CellToWorldCenter(cell);
             DrawDebugLine(ray, hit, cellCenter, .2f);
             var tower = Instantiate(towerPrefab, cellCenter, Quaternion.identity);
             if (!grid.TryAddTower(cell, tower))

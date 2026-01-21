@@ -163,6 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51438b9921bfe147890a2da2fe2cb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cellSize: 1
+  origin: {x: 0, y: 0, z: 0}
 --- !u!1 &263029282
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,7 +760,7 @@ Transform:
   m_GameObject: {fileID: 1320376397}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10, y: 0, z: 0}
+  m_LocalPosition: {x: -9, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -886,6 +888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d6aea06f171629459798f2d0ff0370e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: {fileID: 230092162}
   points:
   - {fileID: 717682665}
   - {fileID: 1922253132}
@@ -894,7 +897,7 @@ MonoBehaviour:
   - {fileID: 1724533262}
   - {fileID: 1320376398}
   segmentPrefab: {fileID: 6159781993304161231, guid: fa9d3229d87b6e744a862ddfa7244ff2, type: 3}
-  roadWidth: 2
+  roadWidth: 1
   roadThickness: 0.05
   yOffset: 0.01
   flattenY: 1
@@ -986,7 +989,7 @@ Transform:
   m_GameObject: {fileID: 2086789177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

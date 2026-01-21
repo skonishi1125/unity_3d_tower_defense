@@ -1,8 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 public class RoadGenerator : MonoBehaviour
 {
     // 床Objectの命名規則
     private const string SegmentPrefix = "[RoadSegment]";
+
+    // グリッド周り
+    [SerializeField] private GridSystem grid;
+    private readonly List<Vector2Int> lastRoadCells = new();
 
     [Header("Source")]
     [SerializeField] private Transform[] points;
@@ -12,12 +17,8 @@ public class RoadGenerator : MonoBehaviour
     [SerializeField] private GameObject segmentPrefab;
 
     [Header("Shape")]
-    [SerializeField] private float roadWidth = 1.0f;
     [SerializeField] private float roadThickness = 0.05f;
-    [SerializeField] private float yOffset = 0.01f;
-
-    [Header("Options")]
-    [SerializeField] private bool flattenY = true;
+    [SerializeField] private float yOffset = 0.01f; // Groundよりも少しだけ上に表示させるための補正値
 
 
     private void Start()
@@ -25,14 +26,14 @@ public class RoadGenerator : MonoBehaviour
         Generate();
     }
 
-    [ContextMenu("Regenerate Road")]
     public void Generate()
     {
         // 道は2点間で作るので、長さが2未満なら何もしない
         if (points == null || points.Length < 2) return;
         if (segmentPrefab == null) return;
 
-        Clear();
+        Clear(); // 見た目Objectの削除
+        ClearRoadCellsOnGrid(); // グリッドシステムのデータの削除
 
         for (int i = 0; i < points.Length - 1; i++)
         {
@@ -41,38 +42,32 @@ public class RoadGenerator : MonoBehaviour
             Transform b = points[i + 1];
             if (a == null || b == null) continue;
 
-            Vector3 p0 = a.position;
-            Vector3 p1 = b.position;
+            RegisterBlockAndPlaceTiles(a.position, b.position);
+        }
+    }
 
-            // 見下ろし型なので、y軸は固定する(Planeに貼り付ける)
-            if (flattenY)
-            {
-                p0.y = 0f;
-                p1.y = 0f;
-            }
+    // 辿っていったセルを登録していく
+    // Bresenham(格子線分アルゴリズム)で、p0 -> p1を結ぶ線を1セルずつ辿る
+    private void RegisterBlockAndPlaceTiles(Vector3 p0, Vector3 p1)
+    {
+        var c0 = grid.WorldToCell(p0);
+        var c1 = grid.WorldToCell(p1);
 
-            // 向きと長さを取得
-            Vector3 dir = p1 - p0;
-            float length = dir.magnitude;
-            if (length <= 0.0001f) continue;
+        foreach (var cell in EnumerateCells(c0, c1))
+        {
+            // データとして登録
+            grid.RegisterBlockedCell(cell);
+            lastRoadCells.Add(cell);
 
-            Vector3 mid = (p0 + p1) * 0.5f;
-            mid.y += yOffset;
+            // セルの中央の値(1*1なら、0.5, 0.5)を取って、そこを基準にタイルを置く
+            Vector3 pos = grid.CellToWorldCenter(cell);
+            pos.y += yOffset;
 
-            // セグメント生成
-            // 3Dオブジェクトは真ん中を基準にして、左右に伸びていくので、midを取得しておく必要がある
-            GameObject seg = Instantiate(segmentPrefab, mid, Quaternion.identity, transform);
-            seg.name = $"{SegmentPrefix} {i}";
+            GameObject tile = Instantiate(segmentPrefab, pos, Quaternion.identity, gameObject.transform);
+            tile.name = $"{SegmentPrefix} {cell.x},{cell.y}";
 
-            // 向き：CubeのZ(Forward)方向を p0->p1 に合わせる
-            Vector3 flatDir = new Vector3(dir.x, 0f, dir.z);
-            seg.transform.rotation = Quaternion.LookRotation(flatDir.normalized, Vector3.up);
-
-            // 道Segment Objectの長さ調整
-            // midに配置しているので、roadWidth = 1の場合はWaypointに配置したmidから0.5ずつ左右に伸びる
-            // y軸は道の分厚さ
-            // z軸は、p1 - p0の、絶対値の分だけ伸ばせば道に必要なの数値となる
-            seg.transform.localScale = new Vector3(roadWidth, roadThickness, length);
+            // 1セルタイル前提なら scale は固定
+            tile.transform.localScale = new Vector3(1f, roadThickness, 1f);
         }
     }
 
@@ -89,4 +84,45 @@ public class RoadGenerator : MonoBehaviour
             }
         }
     }
+
+    // 生成した道要素について、データとしても削除する
+    private void ClearRoadCellsOnGrid()
+    {
+        if (grid == null) return;
+
+        foreach (var cell in lastRoadCells)
+            grid.UnregisterBlockedCell(cell);
+
+        lastRoadCells.Clear();
+    }
+
+    // Bresenhamのアルゴリズム
+    // (1,1) -> (6,3)とかの例なら、横に5, 縦に2 というようなルート結果をうまく出してくれる。
+    private IEnumerable<Vector2Int> EnumerateCells(Vector2Int a, Vector2Int b)
+    {
+        int x0 = a.x;
+        int y0 = a.y;
+        int x1 = b.x;
+        int y1 = b.y;
+
+        int dx = Mathf.Abs(x1 - x0); // 目的地まで、横に何マスか
+        int dy = Mathf.Abs(y1 - y0); // 縦に何マスか
+        // +方向に進むか-方向に進むか
+        int sx = x0 < x1 ? 1 : -1;
+        int sy = y0 < y1 ? 1 : -1;
+        // 横 or 縦に寄っていないかの指標
+        int err = dx - dy;
+
+        while (true)
+        {
+            yield return new Vector2Int(x0, y0);
+            if (x0 == x1 && y0 == y1) yield break;
+
+            int e2 = 2 * err;
+            if (e2 > -dy) { err -= dy; x0 += sx; }
+            if (e2 < dx) { err += dx; y0 += sy; }
+        }
+    }
+
+
 }
