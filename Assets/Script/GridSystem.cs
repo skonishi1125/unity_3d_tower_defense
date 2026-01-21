@@ -3,11 +3,8 @@ using UnityEngine;
 
 public class GridSystem : MonoBehaviour
 {
-    // タワーが建てられているセル
     private readonly Dictionary<Vector2Int, GameObject> towers = new();
-
-    private readonly HashSet<Vector2Int> blocked = new();
-
+    private readonly HashSet<Vector2Int> blocked = new(); // 指定のセルになにか含まれているかを高速で判定できる
 
     public bool IsBlocked(Vector2Int cell) => blocked.Contains(cell) || towers.ContainsKey(cell);
 
@@ -28,11 +25,25 @@ public class GridSystem : MonoBehaviour
         return true;
     }
 
-    public void RegisterBlocked(Vector2Int cell) => blocked.Add(cell);
+    // ブロック用セル関連
+    public void RegisterBlockedCell(Vector2Int cell) => blocked.Add(cell);
+    public void UnregisterBlockedCell(Vector2Int cell) => blocked.Remove(cell);
+    public void ClearBlockedCells() => blocked.Clear();
 
-    public void ClearBlocked() => blocked.Clear();
+    // -------- 座標変換系 --------
+    public Vector2Int WorldToCell(Vector3 world)
+    {
+        // 1グリッド(cellSize)あたり 1, origin = (0,0,0) 前提
+        int x = Mathf.FloorToInt(world.x);
+        int z = Mathf.FloorToInt(world.z);
+        return new Vector2Int(x, z);
+    }
 
-
+    public Vector3 CellToWorldCenter(Vector2Int cell, float y)
+    {
+        // cellSize=1 なので +0.5 で中心
+        return new Vector3(cell.x + 0.5f, y, cell.y + 0.5f);
+    }
 
 
 }

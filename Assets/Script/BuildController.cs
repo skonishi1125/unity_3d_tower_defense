@@ -7,14 +7,10 @@ public class BuildController : MonoBehaviour
     [SerializeField] private GridSystem grid;
 
     [Header("Place Setting")]
-    // グリッド上に配置したTowerのデータ情報
-    private readonly Dictionary<Vector2Int, GameObject> placedTowersDictionary = new();
-
     private BuildMode currentBuildMode = BuildMode.Place;
     [SerializeField] private LayerMask groundLayerMask;
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private Transform cellHighlight;
-
 
     [Header("Ghost Setting")]
     private GameObject ghostInstance; // 現状選択されている建造物が格納される想定
@@ -77,7 +73,7 @@ public class BuildController : MonoBehaviour
             return;
         }
 
-        Vector2Int cell = WorldToCell(hit.point);
+        Vector2Int cell = grid.WorldToCell(hit.point);
 
         // 建造モード, 配置不可セルにマウスがある場合はエフェクトを出さない。
         if (currentBuildMode == BuildMode.Place && grid.IsBlocked(cell))
@@ -91,7 +87,7 @@ public class BuildController : MonoBehaviour
         }
 
         // Ghost等の表示を中央から始めるために、中央の位置情報を取得
-        Vector3 cellCenter = CellToWorldCenter(cell, hit.point.y);
+        Vector3 cellCenter = grid.CellToWorldCenter(cell, hit.point.y);
 
         // セルハイライト処理
         if (cellHighlight != null)
@@ -155,7 +151,7 @@ public class BuildController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
         {
-            Vector2Int cell = WorldToCell(hit.point);
+            Vector2Int cell = grid.WorldToCell(hit.point);
             GameObject tower;
             if (grid.TryRemoveTower(cell, out tower))
                 Destroy(tower);
@@ -183,35 +179,24 @@ public class BuildController : MonoBehaviour
             // グリッドを考慮して生成する場合
             // 小数点をすべて取り除き、1グリッド中の中央の座標をcellCenterとして取得。
             // そこを基準にInstantiateしている
-            Vector2Int cell = WorldToCell(hit.point);
+            Vector2Int cell = grid.WorldToCell(hit.point);
             if (grid.IsBlocked(cell))
             {
                 Debug.Log($"その位置には配置できません。: {cell}");
                 return;
             }
 
-            Vector3 cellCenter = CellToWorldCenter(cell, hit.point.y);
+            Vector3 cellCenter = grid.CellToWorldCenter(cell, hit.point.y);
             DrawDebugLine(ray, hit, cellCenter, .2f);
             var tower = Instantiate(towerPrefab, cellCenter, Quaternion.identity);
-            grid.TryAddTower(cell, tower);
+            if (!grid.TryAddTower(cell, tower))
+            {
+                Destroy(tower);
+                Debug.Log($"登録に失敗しました: {cell}");
+            }
 
         }
     }
-
-    private Vector2Int WorldToCell(Vector3 world)
-    {
-        // 1グリッド(cellSize)あたり 1, origin = (0,0,0) 前提
-        int x = Mathf.FloorToInt(world.x);
-        int z = Mathf.FloorToInt(world.z);
-        return new Vector2Int(x, z);
-    }
-
-    private Vector3 CellToWorldCenter(Vector2Int cell, float y)
-    {
-        // cellSize=1 なので +0.5 で中心
-        return new Vector3(cell.x + 0.5f, y, cell.y + 0.5f);
-    }
-
 
     // Cameraからマウスクリック位置に飛ばされるRayを赤色で可視化する
     private void DrawDebugLine(Ray ray, RaycastHit hit, Vector3 p, float s)
