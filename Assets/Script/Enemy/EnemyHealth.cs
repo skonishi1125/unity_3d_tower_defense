@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+// TODO: ヘルスバーを用意しておく
 public class EnemyHealth : MonoBehaviour
 {
     private Enemy enemy;
@@ -23,6 +24,8 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(float damage)
     {
         ReduceHp(damage);
+        // TODO: 広く光って被弾が分かるVFX
+
         OnTakeDamaged?.Invoke();
     }
 
@@ -37,6 +40,8 @@ public class EnemyHealth : MonoBehaviour
     private void Die()
     {
         isDead = true;
+        Destroy(gameObject);
+        Debug.Log("died!");
         // スコアを入れたり、お金を増やしたり
     }
 

@@ -9,6 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2304266721947157843}
+  - component: {fileID: 6000800236445169558}
+  - component: {fileID: 4767833305737107152}
+  - component: {fileID: 2366217837241422840}
   m_Layer: 0
   m_Name: TowerARoot
   m_TagString: Untagged
@@ -32,6 +35,58 @@ Transform:
   - {fileID: 6395697637497492427}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6000800236445169558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661700152622570216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b6493e388594b40ae5a091e6d9e01b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4767833305737107152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661700152622570216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81fb6ed7f9e622e44b82f20392a3aee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp:
+    baseValue: 0
+    additiveBonus: 0
+    multiplier: 1
+  attack:
+    baseValue: 5
+    additiveBonus: 0
+    multiplier: 1
+  attackInterval:
+    baseValue: 0
+    additiveBonus: 0
+    multiplier: 1
+--- !u!114 &2366217837241422840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661700152622570216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0591688a61d0acf45a3988a78f74e09d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 5
+  whatIsEnemy:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &8835246227894810755
 GameObject:
   m_ObjectHideFlags: 0

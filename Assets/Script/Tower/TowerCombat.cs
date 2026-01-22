@@ -1,11 +1,23 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 
 public class TowerCombat : MonoBehaviour
 {
     private TowerStatus status;
 
-    private bool isAttacking = false;
-    // 敵のレイヤ whatIsEnemy
+    [Header("Attack")]
+    private float attackTimer;
+    private float attackInterval = 1f; // TODO: TowerStatusから参照する
+    private Tween attackTween;
+
+    [Header("Attack Hop")]
+    [SerializeField] private float hopHeight = 1f;
+    [SerializeField] private float hopDuration = 0.1f;
+
+    [Header("Detection")]
+    [SerializeField] private float range = 3f;
+    [SerializeField] private LayerMask whatIsEnemy;
+
 
     private void Awake()
     {
@@ -14,20 +26,55 @@ public class TowerCombat : MonoBehaviour
 
     private void Update()
     {
-        if (isAttacking)
-            PerformAttack();
+        attackTimer -= Time.deltaTime;
+
+        // タイマーをこの時点でリセットすると、タイマーが経過したとき誰もいなかったらクールタイムがリセットされる
+        // なので、攻撃した時にタイマーはリセットされるようにする。
+        if (TryGetTarget(out var target))
+        {
+            attackTween?.Kill();
+
+            // 攻撃時に跳ねる処理
+            attackTween = transform
+                .DOJump(transform.position, hopHeight, 1, hopDuration)
+                .SetEase(Ease.OutQuad)
+                .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
+            target.TakeDamage(status.GetAttack());
+            attackTimer = attackInterval;
+        }
     }
 
-    private void PerformAttack()
+    private bool TryGetTarget(out EnemyHealth best)
     {
-        isAttacking = true;
+        best = null;
 
-        // 前方にRayを撃ち、感知した敵を取得
-        // 敵.GetComponent<EnemyHealth>()を取って、TakeDamage(TowerStatus.Attack)とする
-        // (インターフェースとしてもよい)
+        if (attackTimer > 0f)
+            return false;
 
-        // TowerStatus.attackIntervalの分だけ待つ
-        isAttacking = false;
+        Collider[] hits = Physics.OverlapSphere(transform.position, range, whatIsEnemy);
+        if (hits == null || hits.Length == 0) return false;
+
+        float bestSqrDist = float.PositiveInfinity;
+
+        foreach (var hit in hits)
+        {
+            var enemy = hit.GetComponentInParent<EnemyHealth>();
+            if (enemy == null) continue;
+
+            float sqrDist = (enemy.transform.position - transform.position).sqrMagnitude;
+            if (sqrDist < bestSqrDist)
+            {
+                bestSqrDist = sqrDist;
+                best = enemy;
+            }
+        }
+
+        return best != null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 
 
