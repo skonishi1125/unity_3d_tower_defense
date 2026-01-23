@@ -78,8 +78,8 @@ public class TowerCombat : MonoBehaviour
             // viewingAngleはDegree
             // cosθとして使うには、Radianにして、引数を渡す必要があるので変換
             // ex) 視野角45°なら、radianにして、cos45° (0.707...)を返して、内積と比較させる
-            float viewingAngleRad = status.GetViewingAngle() * Mathf.Deg2Rad;
-            float cos = Mathf.Cos(viewingAngleRad);
+            float halfAngleRad = (status.GetViewingAngle() * .5f) * Mathf.Deg2Rad;
+            float cos = Mathf.Cos(halfAngleRad);
 
             //Debug.Log($"内積: {dot} cosθ: {cos}");
 

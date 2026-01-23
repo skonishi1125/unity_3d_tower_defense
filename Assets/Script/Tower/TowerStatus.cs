@@ -6,7 +6,7 @@ public class TowerStatus : MonoBehaviour
     public Status attack;
     public Status attackInterval; // 攻撃頻度 0.1秒など
     public Status attackRange; // スカラー 攻撃する距離 3 = 3マス分にしたい
-    public Status viewingAngle; // 視野角 45 = 実質90°で感知する
+    public Status viewingAngle; // 視野角 90° = ±45°の方向で広がることになる
 
     public float GetMaxHp()
     {
@@ -47,9 +47,9 @@ public class TowerStatus : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(transform.position, transform.forward * GetAttackRange()); // 正面
 
-        float viewingAngle = GetViewingAngle();
-        Quaternion leftRayRotation = Quaternion.AngleAxis(-viewingAngle, Vector3.up);
-        Quaternion rightRayRotation = Quaternion.AngleAxis(viewingAngle, Vector3.up);
+        float halfAngle = GetViewingAngle() * .5f;
+        Quaternion leftRayRotation = Quaternion.AngleAxis(-halfAngle, Vector3.up);
+        Quaternion rightRayRotation = Quaternion.AngleAxis(halfAngle, Vector3.up);
 
         Vector3 leftRayDirection = leftRayRotation * transform.forward;
         Vector3 rightRayDirection = rightRayRotation * transform.forward;
