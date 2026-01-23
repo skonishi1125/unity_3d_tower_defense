@@ -34,6 +34,31 @@ public class TowerStatus : MonoBehaviour
         return viewingAngle.GetValue();
     }
 
+    // TowerCombatとか別箇所に書くと、Playモード中以外は取得できずにエラーになる
+    // (status.Get()...という形になるが、statusはAwakeしないと読まないので）
+
+    private void OnDrawGizmos()
+    {
+        // 索敵範囲
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, GetAttackRange());
+
+        // 視野
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(transform.position, transform.forward * GetAttackRange()); // 正面
+
+        float viewingAngle = GetViewingAngle();
+        Quaternion leftRayRotation = Quaternion.AngleAxis(-viewingAngle, Vector3.up);
+        Quaternion rightRayRotation = Quaternion.AngleAxis(viewingAngle, Vector3.up);
+
+        Vector3 leftRayDirection = leftRayRotation * transform.forward;
+        Vector3 rightRayDirection = rightRayRotation * transform.forward;
+
+        Gizmos.DrawRay(transform.position, leftRayDirection * GetAttackRange());
+        Gizmos.DrawRay(transform.position, rightRayDirection * GetAttackRange());
+
+    }
+
 
 
 }

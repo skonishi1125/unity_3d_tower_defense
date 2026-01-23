@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using DG.Tweening;
+﻿using DG.Tweening;
+using UnityEngine;
 
 public class TowerCombat : MonoBehaviour
 {
@@ -28,11 +28,11 @@ public class TowerCombat : MonoBehaviour
         // タイマーをこの時点でリセットすると、
         // 経過したとき誰もいなかったらクールタイムがリセットされる
         // なので、攻撃が成功した時にタイマーはリセットされるようにする。
-        if (TryGetTarget(out var target))
-            PerformAttack(target);
+        if (TryGetTarget(out var targetEnemyHealth))
+            PerformAttack(targetEnemyHealth);
     }
 
-    private void PerformAttack(EnemyHealth target)
+    private void PerformAttack(EnemyHealth h)
     {
         attackTween?.Kill();
 
@@ -41,49 +41,71 @@ public class TowerCombat : MonoBehaviour
             .DOJump(transform.position, hopHeight, 1, hopDuration)
             .SetEase(Ease.OutQuad)
             .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
-        target.TakeDamage(status.GetAttack());
+        h.TakeDamage(status.GetAttack());
 
         // 攻撃が終わったら、インターバルリセット
         attackTimer = status.GetAttackInterval();
     }
 
-    private bool TryGetTarget(out EnemyHealth best)
+    private bool TryGetTarget(out EnemyHealth attackEnemyHealth)
     {
-        best = null;
+        attackEnemyHealth = null;
 
         if (attackTimer > 0f)
             return false;
 
-        // TODO: ベクトルで視野角とスカラーで判断させるようにする
+        // 攻撃距離でOverlapSphereを実行して、周囲の敵を取得
         float range = status.GetAttackRange();
-        Collider[] hits = Physics.OverlapSphere(transform.position, range, whatIsEnemy);
-        if (hits == null || hits.Length == 0) return false;
+        Collider[] hitEnemies = Physics.OverlapSphere(transform.position, range, whatIsEnemy);
+        if (hitEnemies == null || hitEnemies.Length == 0) return false;
 
-        float bestSqrDist = float.PositiveInfinity;
+        // 取得した敵を、以下の条件で振り分ける
+        // * 視野角内かどうか
+        // * 視野角内であれば、最も進んでいる敵を攻撃
+        Vector3 towerPos = transform.position;
+        Vector3 forwardDir = transform.forward;
 
-        foreach (var hit in hits)
+        float traveledDistance = 0f;
+
+        foreach (var hit in hitEnemies)
         {
-            var enemy = hit.GetComponentInParent<EnemyHealth>();
-            if (enemy == null) continue;
+            Vector3 enemyPos = hit.transform.position;
+            Vector3 targetDir = (enemyPos - towerPos).normalized;
 
-            float sqrDist = (enemy.transform.position - transform.position).sqrMagnitude;
-            if (sqrDist < bestSqrDist)
+            // Towerから見た正面ベクトル と 敵ポジションを内積で比較
+            float dot = Vector3.Dot(forwardDir, targetDir);
+
+            // viewingAngleはDegree
+            // cosθとして使うには、Radianにして、引数を渡す必要があるので変換
+            // ex) 視野角45°なら、radianにして、cos45° (0.707...)を返して、内積と比較させる
+            float viewingAngleRad = status.GetViewingAngle() * Mathf.Deg2Rad;
+            float cos = Mathf.Cos(viewingAngleRad);
+
+            //Debug.Log($"内積: {dot} cosθ: {cos}");
+
+            if (dot > cos)
             {
-                bestSqrDist = sqrDist;
-                best = enemy;
+                // colliderは敵のVisualに付与されているので、
+                // Scriptデータを取りたいなら、Parant側から取る必要がある
+                var enemy = hit.GetComponentInParent<Enemy>();
+                if (enemy == null)
+                    continue;
+                var enemyHealth = hit.GetComponentInParent<EnemyHealth>();
+                if (enemyHealth == null)
+                    continue;
+
+                // 複数いたときは、最も移動している敵を攻撃するように書き換える
+                if (traveledDistance < enemy.TraveledDistance)
+                {
+                    //Debug.Log($"攻撃対象を更新。{enemy.gameObject.name}");
+                    attackEnemyHealth = enemyHealth;
+                    traveledDistance = enemy.TraveledDistance;
+                }
             }
+
         }
 
-        return best != null;
+        return attackEnemyHealth != null;
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, status.GetAttackRange());
-    }
-
-
-
 
 }

@@ -49,6 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d7b781d6201e94781cb5163b63e97e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LifeTime: 0
+  TraveledDistance: 0
 --- !u!114 &3821590108012024288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,7 +100,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   speed:
-    baseValue: 2
+    baseValue: 0.5
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &1557771631432904626

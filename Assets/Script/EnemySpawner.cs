@@ -5,9 +5,9 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private Waypoint waypoint;
     [SerializeField] private GameObject[] SpawnEnemies;
+    [SerializeField] private int maxSpawnCount = 20;
+    [SerializeField] private float duration = 1.0f;
     private float timer;
-    private float duration = 5.0f;
-    private int maxSpawnCount = 5;
 
     private int currentIndex = 0;
     private int spawnCount = 0;
