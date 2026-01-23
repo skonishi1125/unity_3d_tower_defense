@@ -28,20 +28,26 @@ public class TowerCombat : MonoBehaviour
     {
         attackTimer -= Time.deltaTime;
 
-        // タイマーをこの時点でリセットすると、タイマーが経過したとき誰もいなかったらクールタイムがリセットされる
-        // なので、攻撃した時にタイマーはリセットされるようにする。
+        // タイマーをこの時点でリセットすると、
+        // 経過したとき誰もいなかったらクールタイムがリセットされる
+        // なので、攻撃が成功した時にタイマーはリセットされるようにする。
         if (TryGetTarget(out var target))
-        {
-            attackTween?.Kill();
+            PerformAttack(target);
+    }
 
-            // 攻撃時に跳ねる処理
-            attackTween = transform
-                .DOJump(transform.position, hopHeight, 1, hopDuration)
-                .SetEase(Ease.OutQuad)
-                .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
-            target.TakeDamage(status.GetAttack());
-            attackTimer = attackInterval;
-        }
+    private void PerformAttack(EnemyHealth target)
+    {
+        attackTween?.Kill();
+
+        // 攻撃時に跳ねる処理
+        attackTween = transform
+            .DOJump(transform.position, hopHeight, 1, hopDuration)
+            .SetEase(Ease.OutQuad)
+            .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
+        target.TakeDamage(status.GetAttack());
+
+        // 攻撃が終わったら、インターバルリセット
+        attackTimer = attackInterval;
     }
 
     private bool TryGetTarget(out EnemyHealth best)
