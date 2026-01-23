@@ -3,13 +3,18 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed;
+    private EnemyStatus status;
     [SerializeField] private float arriveDistance = .1f;
 
     private Waypoint path;
     public int CurrentIndex;
 
     public event Action ReachedGoal;
+
+    public void Awake()
+    {
+        status = GetComponent<EnemyStatus>();
+    }
 
     public void Initialize(Waypoint waypoint)
     {
@@ -59,6 +64,9 @@ public class EnemyMovement : MonoBehaviour
 
         // 移動
         Vector3 dir = to.normalized;
+        float moveSpeed = 0f;
+        if (status != null)
+            moveSpeed = status.GetSpeed();
         transform.position += dir * moveSpeed * Time.deltaTime;
 
     }

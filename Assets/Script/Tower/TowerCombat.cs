@@ -7,7 +7,6 @@ public class TowerCombat : MonoBehaviour
 
     [Header("Attack")]
     private float attackTimer;
-    private float attackInterval = 1f; // TODO: TowerStatusから参照する
     private Tween attackTween;
 
     [Header("Attack Hop")]
@@ -15,9 +14,7 @@ public class TowerCombat : MonoBehaviour
     [SerializeField] private float hopDuration = 0.1f;
 
     [Header("Detection")]
-    [SerializeField] private float range = 3f;
     [SerializeField] private LayerMask whatIsEnemy;
-
 
     private void Awake()
     {
@@ -47,7 +44,7 @@ public class TowerCombat : MonoBehaviour
         target.TakeDamage(status.GetAttack());
 
         // 攻撃が終わったら、インターバルリセット
-        attackTimer = attackInterval;
+        attackTimer = status.GetAttackInterval();
     }
 
     private bool TryGetTarget(out EnemyHealth best)
@@ -57,6 +54,8 @@ public class TowerCombat : MonoBehaviour
         if (attackTimer > 0f)
             return false;
 
+        // TODO: ベクトルで視野角とスカラーで判断させるようにする
+        float range = status.GetAttackRange();
         Collider[] hits = Physics.OverlapSphere(transform.position, range, whatIsEnemy);
         if (hits == null || hits.Length == 0) return false;
 
@@ -80,7 +79,8 @@ public class TowerCombat : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, range);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, status.GetAttackRange());
     }
 
 

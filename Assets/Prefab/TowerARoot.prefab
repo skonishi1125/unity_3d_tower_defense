@@ -68,6 +68,14 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   attackInterval:
+    baseValue: 1.5
+    additiveBonus: 0
+    multiplier: 1
+  attackRange:
+    baseValue: 3
+    additiveBonus: 0
+    multiplier: 1
+  viewingAngle:
     baseValue: 0
     additiveBonus: 0
     multiplier: 1
@@ -83,7 +91,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0591688a61d0acf45a3988a78f74e09d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 5
+  hopHeight: 1
+  hopDuration: 0.1
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 256

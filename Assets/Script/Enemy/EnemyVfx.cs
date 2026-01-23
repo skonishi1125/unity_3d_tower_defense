@@ -24,8 +24,6 @@ public class EnemyVfx : MonoBehaviour
 
         onDamageVfxCo = StartCoroutine(OnDamageVfx());
 
-
-
     }
 
     private IEnumerator OnDamageVfx()

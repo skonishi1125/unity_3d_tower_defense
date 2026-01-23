@@ -61,7 +61,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c2510b254dbb4448862aa46cd5b094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
   arriveDistance: 0.2
   CurrentIndex: 0
 --- !u!114 &3313464339836147167
@@ -99,7 +98,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   speed:
-    baseValue: 0
+    baseValue: 2
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &1557771631432904626
