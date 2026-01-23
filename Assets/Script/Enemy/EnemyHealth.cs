@@ -6,6 +6,7 @@ public class EnemyHealth : MonoBehaviour
 {
     private Enemy enemy;
     private EnemyStatus status;
+    private EnemyVfx vfx;
 
     [SerializeField] protected float currentHp;
     [SerializeField] protected bool isDead;
@@ -17,6 +18,7 @@ public class EnemyHealth : MonoBehaviour
     {
         enemy = GetComponent<Enemy>();
         status = GetComponent<EnemyStatus>();
+        vfx = GetComponent<EnemyVfx>();
 
         currentHp = status.GetMaxHp();
     }
@@ -24,8 +26,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(float damage)
     {
         ReduceHp(damage);
-        // TODO: 広く光って被弾が分かるVFX
-
+        vfx?.PlayOnDamageVfx(); // イベントでも良いかもしれない。
         OnTakeDamaged?.Invoke();
     }
 

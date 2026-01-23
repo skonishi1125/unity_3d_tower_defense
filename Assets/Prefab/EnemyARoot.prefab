@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3821590108012024288}
   - component: {fileID: 3313464339836147167}
   - component: {fileID: 734155403097183684}
+  - component: {fileID: 1557771631432904626}
   m_Layer: 8
   m_Name: EnemyARoot
   m_TagString: Untagged
@@ -101,6 +102,20 @@ MonoBehaviour:
     baseValue: 0
     additiveBonus: 0
     multiplier: 1
+--- !u!114 &1557771631432904626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353156939387932224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfc1378a62b044d44a5e020bfd211d1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onDamageMaterial: {fileID: 2100000, guid: 4cd38a0f27548e44f8be6a8aef990fa6, type: 2}
+  onDamageVfxDuration: 0.1
 --- !u!1 &8705712263716069509
 GameObject:
   m_ObjectHideFlags: 0
