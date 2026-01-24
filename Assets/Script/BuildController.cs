@@ -124,6 +124,9 @@ public class BuildController : MonoBehaviour
 
         ghostInstance = Instantiate(towerPrefab);
         ghostInstance.name = "[Ghost] " + towerPrefab.name;
+        var tower = ghostInstance.GetComponent<Tower>();
+        if (tower != null)
+            tower.SetState(TowerStateType.Ghost);
 
         // 衝突判定無効化
         foreach (var col in ghostInstance.GetComponentsInChildren<Collider>())
@@ -162,7 +165,6 @@ public class BuildController : MonoBehaviour
 
     }
 
-
     private void PlaceTower()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -194,6 +196,12 @@ public class BuildController : MonoBehaviour
                 Destroy(tower);
                 Debug.Log($"登録に失敗しました: {cell}");
             }
+
+            // TODO: ↑の処理と併せて考慮する必要がありそう
+            var c = GetComponent<Tower>();
+            if (c != null)
+                c.SetState(TowerStateType.Battle);
+
 
         }
     }
