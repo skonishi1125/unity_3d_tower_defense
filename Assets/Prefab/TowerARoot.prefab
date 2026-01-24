@@ -48,7 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StateType: 0
-  rotationSpeed: 2
+  TargetRotation: {x: 0, y: 0, z: 0, w: 0}
+  rotationSpeed: 50
 --- !u!114 &4767833305737107152
 MonoBehaviour:
   m_ObjectHideFlags: 0

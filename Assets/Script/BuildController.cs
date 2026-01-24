@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class BuildController : MonoBehaviour
 {
@@ -191,14 +192,17 @@ public class BuildController : MonoBehaviour
             Vector3 cellCenter = grid.CellToWorldCenter(cell);
             //DrawDebugLine(ray, hit, cellCenter, .2f);
 
-            // Ghost生成
-            var tower = Instantiate(towerPrefab, cellCenter, Quaternion.identity);
+            // GhostからTowerの実体を生成
+            Quaternion rotate = Quaternion.identity;
+            if (ghostInstance != null && ghostInstance.TryGetComponent<Tower>(out var ghostTower))
+                rotate = ghostTower.TargetRotation;
+            else if (ghostInstance != null)
+                rotate = ghostInstance.transform.rotation;
+
+            var tower = Instantiate(towerPrefab, cellCenter, rotate);
             var c = tower.GetComponent<Tower>();
             if (c != null)
-            {
                 c.SetState(TowerStateType.Battle);
-                c.transform.rotation = c.TargetRotation;
-            }
             if (!grid.TryAddTower(cell, tower))
             {
                 Destroy(tower);
