@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.Table;
+﻿using UnityEngine;
 
 public class BuildController : MonoBehaviour
 {
@@ -133,15 +131,15 @@ public class BuildController : MonoBehaviour
         foreach (var col in ghostInstance.GetComponentsInChildren<Collider>())
             col.enabled = false;
 
-        if (ghostMaterial != null)
+        // Visual配下だけ、マテリアルを差し替えたい
+        // AttackRangeVisualのマテリアルは変えたくないので、
+        // Visualを抜き出して、そこのRenderer周りのマテリアルだけを半透明にする
+        var visual = ghostInstance.transform.Find("Visual");
+        if (visual != null && ghostMaterial != null)
         {
-            foreach (var r in ghostInstance.GetComponentsInChildren<Renderer>())
+            foreach (var r in visual.GetComponentsInChildren<Renderer>(true))
                 r.material = ghostMaterial;
         }
-
-        // 攻撃スクリプトなどあれば無効化しておく
-        // foreach (var mb in ghostInstance.GetComponentsInChildren<MonoBehaviour>())
-        //     mb.enabled = false;
 
         ghostInstance.SetActive(false);
 

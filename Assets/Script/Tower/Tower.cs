@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum TowerStateType
 {
@@ -14,10 +13,18 @@ public class Tower : MonoBehaviour
     // 建築時、確定した角度で建築する必要があるので参照する
     public Quaternion TargetRotation;
     [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private GameObject attackRangeVisual;
 
     private void Awake()
     {
         TargetRotation = transform.rotation;
+
+        if (attackRangeVisual == null)
+        {
+            var t = transform.Find("AttackRangeVisual");
+            if (t != null)
+                attackRangeVisual = t.gameObject;
+        }
     }
 
     // ゴースト状態のものは回転できる
@@ -51,9 +58,6 @@ public class Tower : MonoBehaviour
 
     private void RotateSmoothly()
     {
-        if (StateType != TowerStateType.Ghost)
-            return;
-
         // Angle: 2つの回転aとbの角度を返す。
         // Slerpで指定角度まで近づけたら、矯正てその値にする
         if (Quaternion.Angle(transform.rotation, TargetRotation) < 0.1f)
@@ -73,6 +77,21 @@ public class Tower : MonoBehaviour
     public void SetState(TowerStateType type)
     {
         StateType = type;
+
+        switch (StateType)
+        {
+            case TowerStateType.Ghost:
+                if (attackRangeVisual != null)
+                    attackRangeVisual.SetActive(true);
+                break;
+            case TowerStateType.Battle:
+                if (attackRangeVisual != null)
+                    attackRangeVisual.SetActive(false);
+                break;
+            default:
+                break;
+        }
+
     }
 
 }

@@ -291,7 +291,7 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  towerPrefab: {fileID: 661700152622570216, guid: 73df28dc35c26d740b666509ada8adfc, type: 3}
+  towerPrefab: {fileID: 1994175516832729979, guid: 73df28dc35c26d740b666509ada8adfc, type: 3}
   cellHighlight: {fileID: 3438413632036583300}
   highlightYOffset: 0.01
   ghostYOffset: 0
