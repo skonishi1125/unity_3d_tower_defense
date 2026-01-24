@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class TowerCombat : MonoBehaviour
 {
+    private Tower tower;
     private TowerStatus status;
 
     [Header("Attack")]
@@ -18,11 +19,16 @@ public class TowerCombat : MonoBehaviour
 
     private void Awake()
     {
+        tower = GetComponent<Tower>();
         status = GetComponent<TowerStatus>();
     }
 
     private void Update()
     {
+        // Ghost中などは、タイマーを走らせない
+        if (tower.StateType != TowerStateType.Battle)
+            return;
+
         attackTimer -= Time.deltaTime;
 
         // タイマーをこの時点でリセットすると、
@@ -34,6 +40,7 @@ public class TowerCombat : MonoBehaviour
 
     private void PerformAttack(EnemyHealth h)
     {
+
         attackTween?.Kill();
 
         // 攻撃時に跳ねる処理

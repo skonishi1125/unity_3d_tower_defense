@@ -13,7 +13,7 @@ public class BuildController : MonoBehaviour
     [SerializeField] private Transform cellHighlight;
 
     [Header("Ghost Setting")]
-    private GameObject ghostInstance; // 現状選択されている建造物が格納される想定
+    private GameObject ghostInstance; // 設置予定物
     [SerializeField] private float highlightYOffset = 0.01f;
     [SerializeField] private float ghostYOffset = 0.0f;
     [SerializeField] private Material ghostMaterial;
@@ -189,20 +189,21 @@ public class BuildController : MonoBehaviour
             }
 
             Vector3 cellCenter = grid.CellToWorldCenter(cell);
-            DrawDebugLine(ray, hit, cellCenter, .2f);
+            //DrawDebugLine(ray, hit, cellCenter, .2f);
+
+            // Ghost生成
             var tower = Instantiate(towerPrefab, cellCenter, Quaternion.identity);
+            var c = tower.GetComponent<Tower>();
+            if (c != null)
+            {
+                c.SetState(TowerStateType.Battle);
+                c.transform.rotation = c.TargetRotation;
+            }
             if (!grid.TryAddTower(cell, tower))
             {
                 Destroy(tower);
                 Debug.Log($"登録に失敗しました: {cell}");
             }
-
-            // TODO: ↑の処理と併せて考慮する必要がありそう
-            var c = GetComponent<Tower>();
-            if (c != null)
-                c.SetState(TowerStateType.Battle);
-
-
         }
     }
 
