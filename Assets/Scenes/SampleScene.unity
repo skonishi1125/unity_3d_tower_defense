@@ -840,7 +840,7 @@ Transform:
   m_GameObject: {fileID: 1470873431}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.39317402, y: -0.83138216, z: 0.027496224}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -899,8 +899,6 @@ MonoBehaviour:
   - {fileID: 1724533262}
   - {fileID: 1320376398}
   segmentPrefab: {fileID: 6159781993304161231, guid: fa9d3229d87b6e744a862ddfa7244ff2, type: 3}
-  roadThickness: 0.05
-  yOffset: 0.01
 --- !u!1 &1724533261
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,9 +16,8 @@ public class RoadGenerator : MonoBehaviour
     [Header("Prefab")]
     [SerializeField] private GameObject segmentPrefab;
 
-    [Header("Shape")]
-    [SerializeField] private float roadThickness = 0.05f;
-    [SerializeField] private float yOffset = 0.01f; // Groundよりも少しだけ上に表示させるための補正値
+    [Header("Road Shape")]
+    public const float RoadThickness = 0.02f; // つまり、上には.01f分だけ浮き出るということ
 
 
     private void Start()
@@ -61,13 +60,12 @@ public class RoadGenerator : MonoBehaviour
 
             // セルの中央の値(1*1なら、0.5, 0.5)を取って、そこを基準にタイルを置く
             Vector3 pos = grid.CellToWorldCenter(cell);
-            pos.y += yOffset;
 
             GameObject tile = Instantiate(segmentPrefab, pos, Quaternion.identity, gameObject.transform);
             tile.name = $"{SegmentPrefix} {cell.x},{cell.y}";
 
             // 1セルタイル前提なら scale は固定
-            tile.transform.localScale = new Vector3(1f, roadThickness, 1f);
+            tile.transform.localScale = new Vector3(1f, RoadThickness, 1f);
         }
     }
 
