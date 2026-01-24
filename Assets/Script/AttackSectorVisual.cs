@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// このcsを付与したObjectに、MeshFilter, MeshRendererを必須とするという宣言
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class AttackSectorVisual : MonoBehaviour
 {
@@ -12,50 +13,57 @@ public class AttackSectorVisual : MonoBehaviour
 
     private void Awake()
     {
+        // 攻撃範囲の詳細, 作る想定のMeshを用意
         status = GetComponentInParent<TowerStatus>();
         mf = GetComponent<MeshFilter>();
         mesh = new Mesh { name = "AttackSectorMesh" };
-        mf.sharedMesh = mesh;
+        mf.sharedMesh = mesh; // MeshRendererが描画するようにする
 
         Rebuild();
     }
 
-    // パラメータが変わる可能性があるなら、必要時に呼ぶ（例：強化/レベルアップ時など）
+
+    // 扇形のメッシュを、三角形を用いて擬似的に作る
+    // https://scrapbox.io/skonishi1125-64754808/Unity_3dタワーディフェンス#69748c5d00000000009d4689
     public void Rebuild()
     {
-        float range = status.GetAttackRange();          // Gizmoと同じ値を使う:contentReference[oaicite:3]{index=3}
+        float range = status.GetAttackRange();
         float angle = status.GetViewingAngle();
-        float half = angle * 0.5f;
+        float half = angle * 0.5f; // forwardを正面として、±halfの扇形にする
 
-        // 頂点：中心 + 円弧上(segments+1点)
-        int vertCount = 1 + (segments + 1);
-        var vertices = new Vector3[vertCount];
-        var triangles = new int[segments * 3];
+        int vertCount = 1 + (segments + 1); // 三角形扇形 頂点の数。例えば三角形3つで表すなら5
+        var vertices = new Vector3[vertCount]; // 頂点ベクトルを入れる配列 頂点分のインデックスがある
+        var triangles = new int[segments * 3]; // verticesのどれ、どれ、どれをつなげて三角形にするかを格納する 頂点 x 3だけ用意
 
-        vertices[0] = new Vector3(0f, yOffset, 0f);
+        vertices[0] = new Vector3(0f, yOffset, 0f); // 扇形の中心点 ローカル座標(0,yOffset,0)にしておく
 
         for (int i = 0; i <= segments; i++)
         {
-            float t = (float)i / segments;                 // 0..1
-            float a = Mathf.Lerp(-half, half, t);          // -half..half（度）
-            Quaternion rot = Quaternion.Euler(0f, a, 0f);
-            Vector3 dir = rot * Vector3.forward;           // forward基準
-            vertices[1 + i] = dir * range + new Vector3(0f, yOffset, 0f);
+            float t = (float)i / segments;// このループが今どのくらい進んでいるのかの割合
+            float a = Mathf.Lerp(-half, half, t);// 例えば90°なら、tの値に応じて、-45° ~ +45°までの値を入れる
+            Quaternion rot = Quaternion.Euler(0f, a, 0f); // aの分だけ回転するQuaternionを用意
+            Vector3 dir = rot * Vector3.forward;// forwardを基準に、Quaternionの分だけ回転。
+            vertices[1 + i] = dir * range + new Vector3(0f, yOffset, 0f); // i = 0は中心点として静的に値を入れているので、+1から入れていく
         }
 
-        // 三角形：扇（中心0, i, i+1）
+        // 埋めたverticesの値について、どんな感じで三角形を構築していくのかを決定していく
+        // triangles
         for (int i = 0; i < segments; i++)
         {
+            // 1ループで、triangles[0][1][2]の3要素分決定していく
             int tri = i * 3;
-            triangles[tri + 0] = 0;
-            triangles[tri + 1] = 1 + i;
-            triangles[tri + 2] = 1 + i + 1;
+            triangles[tri + 0] = 0; // vertices[0]をかならず使う（扇形の中心点）
+            triangles[tri + 1] = 1 + i; // vertice[1+i]と
+            triangles[tri + 2] = 1 + i + 1; // vertice[1+i+1]で、
+
+            // 1ループ目なら、vertices[0][1][2]
+            // 2ループ目なら、vertices[0][2][3] で三角形を作っていく感じ。
         }
 
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+        mesh.RecalculateNormals(); // 光の当たり方の再設定
+        mesh.RecalculateBounds(); // カリング(描画対象判定）の調整
     }
 }

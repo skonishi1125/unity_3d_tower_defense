@@ -159,7 +159,7 @@ MonoBehaviour:
   StateType: 0
   TargetRotation: {x: 0, y: 0, z: 0, w: 0}
   rotationSpeed: 50
-  attackRangeVisual: {fileID: 0}
+  attackRangeVisual: {fileID: 7931084378412263425}
 --- !u!114 &6623551144004580440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,5 +449,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9933a09b504c14896a6281e32c50c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  segments: 24
+  segments: 10
   yOffset: 0.02
