@@ -18,14 +18,8 @@ public class EnemyMovement : MonoBehaviour
 
     public void Initialize(Waypoint waypoint)
     {
-        Debug.Log(waypoint);
         path = waypoint;
         CurrentIndex = 0;
-
-        Debug.Log($"Initialized! path:{path} CurrentIndex: {CurrentIndex}");
-
-        // デフォルトポジションがあるなら、ここに書く
-
     }
 
     private void Update()
@@ -62,14 +56,27 @@ public class EnemyMovement : MonoBehaviour
             return;
         }
 
-        // 移動
         Vector3 dir = to.normalized;
+
+        Move(dir);
+        Rotate(dir);
+
+    }
+
+    private void Move(Vector3 dir)
+    {
         float moveSpeed = 0f;
         if (status != null)
             moveSpeed = status.GetSpeed();
         transform.position += dir * moveSpeed * Time.deltaTime;
-
     }
 
+    private void Rotate(Vector3 dir)
+    {
+        transform.rotation = Quaternion.LookRotation(dir, Vector3.right);
 
+        // 進行方向にRayを出して可視化 デバッグ用
+        //Debug.DrawRay(transform.position, transform.forward * 2f, Color.blue);
+        //Debug.DrawRay(transform.position, dir * 2f, Color.red);
+    }
 }

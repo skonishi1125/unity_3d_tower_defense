@@ -32,7 +32,7 @@ public class EnemySpawner : MonoBehaviour
         // ↑この形で呼び出すと、spawnPointのGameObjectの子要素として作られてしまう
         // 生成場所を指定したい場合は、以下のようにposition, rotationどちらも明示的に指定する必要がある
         // ちなみに第4引数にTransform parent などとすると、その親の子要素として位置も指定しつつ生成ができる
-        var go = Instantiate(SpawnEnemies[0], spawnPoint.position, spawnPoint.rotation);
+        var go = Instantiate(SpawnEnemies[0], spawnPoint.position, Quaternion.identity);
 
         // 敵のスポーンy座標 = (Colliderの高さの半分) + (床の厚み * .5f)
         float spawnHeight = 0f;
