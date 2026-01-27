@@ -31,9 +31,7 @@ public class EnemySpawner : MonoBehaviour
         // ↑この形で呼び出すと、spawnPointのGameObjectの子要素として作られてしまう
         // 生成場所を指定したい場合は、以下のようにposition, rotationどちらも明示的に指定する必要がある
         // ちなみに第4引数にTransform parent などとすると、その親の子要素として位置も指定しつつ生成ができる
-        // Vector3.left: 初期から左に向いておいてほしいのでここで指定
-        // (指定がないと、SlerpでWaypointに向かって最初に振り向く処理が走る)
-        var go = Instantiate(SpawnEnemies[0], spawnPoint.position, Quaternion.LookRotation(Vector3.left));
+        var go = Instantiate(SpawnEnemies[0], spawnPoint.position, Quaternion.identity);
 
         // 敵のスポーンy座標 = (Colliderの高さの半分) + (床の厚み * .5f)
         float spawnHeight = 0f;
@@ -44,7 +42,7 @@ public class EnemySpawner : MonoBehaviour
         spawnHeight += RoadGenerator.RoadThickness * .5f;
         go.transform.position = spawnPoint.position + Vector3.up * spawnHeight;
 
-        // 移動処理起動
+        // 移動, rotate初期化
         var mover = go.GetComponent<EnemyMovement>();
         mover.Initialize(waypoint);
 

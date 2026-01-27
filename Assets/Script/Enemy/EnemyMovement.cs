@@ -10,10 +10,9 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float arriveDistance = .1f;
     private Quaternion targetRotation;
     private float rotationSpeed = 10f;
-    private int previewIndex;
 
-    // 右から左に動く想定なので、最初は必ず左に動くという意味合いにしておく
-    public Vector3 FirstDirection = Vector3.left;
+    // 右から左に動くゲーム想定なので、最初は必ず左に動くという意味合いにしておく
+    private Vector3 firstDirection = Vector3.left;
     public int CurrentIndex;
 
     public event Action ReachedGoal;
@@ -21,22 +20,16 @@ public class EnemyMovement : MonoBehaviour
     public void Awake()
     {
         status = GetComponent<EnemyStatus>();
-
-        // 初回の方向決定
-        DetectTargetRotate(FirstDirection);
     }
 
     public void Initialize(Waypoint waypoint)
     {
         path = waypoint;
         CurrentIndex = 0;
-        previewIndex = 0;
 
         // 初回の方向決定
-        //Transform target = path.Get(CurrentIndex);
-        //Vector3 to = target.position - transform.position;
-        //to.y = 0f;
-        //DetectTargetRotate(to.normalized);
+        DetectTargetRotate(firstDirection);
+        transform.rotation = Quaternion.LookRotation(firstDirection, Vector3.up);
 
     }
 
@@ -65,27 +58,22 @@ public class EnemyMovement : MonoBehaviour
         if (sqrDist <= arriveDistance * arriveDistance)
         {
             CurrentIndex++;
-
             if (CurrentIndex >= path.Count)
             {
                 ReachedGoal?.Invoke();
                 enabled = false;
                 return;
             }
-        }
 
-        // 新しい行き先(Waypoint)へと更新されたときの、目的地変更処理
-        // 1フレーム誤差があるが、気にならない程度なので一旦このまま
-        // （問題あれば、CurrentIndex++としたのち、新しいWaypointを取得してそこで更新すれば良い）
-        if (previewIndex != CurrentIndex)
-        {
-            DetectTargetRotate(to.normalized);
-            previewIndex = CurrentIndex;
+            // 目的地更新
+            Transform newTarget = path.Get(CurrentIndex);
+            Vector3 newTo = newTarget.position - transform.position;
+            to.y = 0f;
+            DetectTargetRotate(newTo.normalized);
+
         }
 
         Move(to.normalized);
-        DetectTargetRotate(to.normalized);
-
         RotateSmoothly();
     }
 
@@ -99,7 +87,8 @@ public class EnemyMovement : MonoBehaviour
 
     private void DetectTargetRotate(Vector3 dir)
     {
-        targetRotation = Quaternion.LookRotation(dir);
+        if (dir != Vector3.zero)
+            targetRotation = Quaternion.LookRotation(dir);
 
         // 進行方向にRayを出して可視化 デバッグ用
         //Debug.DrawRay(transform.position, transform.forward * 2f, Color.blue);
