@@ -1,12 +1,13 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
-// TODO: ヘルスバーを用意しておく
 public class EnemyHealth : MonoBehaviour
 {
     private Enemy enemy;
     private EnemyStatus status;
     private EnemyVfx vfx;
+    private Slider healthBar;
 
     [SerializeField] protected float currentHp;
     [SerializeField] protected bool isDead;
@@ -19,8 +20,18 @@ public class EnemyHealth : MonoBehaviour
         enemy = GetComponent<Enemy>();
         status = GetComponent<EnemyStatus>();
         vfx = GetComponent<EnemyVfx>();
+        healthBar = GetComponentInChildren<Slider>();
 
         currentHp = status.GetMaxHp();
+        UpdateHealthBar();
+    }
+
+    private void UpdateHealthBar()
+    {
+        if (healthBar == null)
+            return;
+
+        healthBar.value = currentHp / status.GetMaxHp();
     }
 
     public void TakeDamage(float damage)
@@ -33,6 +44,7 @@ public class EnemyHealth : MonoBehaviour
     private void ReduceHp(float damage)
     {
         currentHp -= damage;
+        UpdateHealthBar();
 
         if (currentHp <= 0)
             Die();
