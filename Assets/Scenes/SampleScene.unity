@@ -904,7 +904,7 @@ MonoBehaviour:
   waypoint: {fileID: 2086789179}
   SpawnEnemies:
   - {fileID: 1353156939387932224, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
-  maxSpawnCount: 1
+  maxSpawnCount: 3
   duration: 3
 --- !u!4 &1470873433
 Transform:

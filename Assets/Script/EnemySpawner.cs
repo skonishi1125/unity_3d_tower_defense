@@ -22,7 +22,7 @@ public class EnemySpawner : MonoBehaviour
         timer -= Time.deltaTime;
         if (spawnCount < maxSpawnCount)
             if (timer < 0f)
-                Spawn(waypoint.get(currentIndex));
+                Spawn(waypoint.Get(currentIndex));
     }
 
     private void Spawn(Transform spawnPoint)

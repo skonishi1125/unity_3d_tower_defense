@@ -10,7 +10,10 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float arriveDistance = .1f;
     private Quaternion targetRotation;
     private float rotationSpeed = 10f;
+    private int previewIndex;
 
+    // 右から左に動く想定なので、最初は必ず左に動くという意味合いにしておく
+    public Vector3 FirstDirection = Vector3.left;
     public int CurrentIndex;
 
     public event Action ReachedGoal;
@@ -18,12 +21,23 @@ public class EnemyMovement : MonoBehaviour
     public void Awake()
     {
         status = GetComponent<EnemyStatus>();
+
+        // 初回の方向決定
+        DetectTargetRotate(FirstDirection);
     }
 
     public void Initialize(Waypoint waypoint)
     {
         path = waypoint;
         CurrentIndex = 0;
+        previewIndex = 0;
+
+        // 初回の方向決定
+        //Transform target = path.Get(CurrentIndex);
+        //Vector3 to = target.position - transform.position;
+        //to.y = 0f;
+        //DetectTargetRotate(to.normalized);
+
     }
 
     private void Update()
@@ -31,7 +45,7 @@ public class EnemyMovement : MonoBehaviour
         if (path == null || path.Count == 0)
             return;
 
-        Transform target = path.get(CurrentIndex);
+        Transform target = path.Get(CurrentIndex);
         if (target == null)
             return;
 
@@ -42,6 +56,7 @@ public class EnemyMovement : MonoBehaviour
         //Debug.Log($"idx={currentIndex} target={target.name} targetPos={target.position} enemyPos={transform.position}");
         //Debug.DrawLine(transform.position, target.position, Color.yellow);
 
+        // Waypointに到達したときの判定
         // sqr: square(2乗)を意味する単語 magnitude: 大きさ、絶対値を表す単語
         // つまり、(B-A)^2 の大きさが、(有効距離)^2よりも少なければ到達したとみなしている
         // to.magnitude = √ が考慮されるので、2乗して処理を軽めにしている
@@ -49,25 +64,30 @@ public class EnemyMovement : MonoBehaviour
 
         if (sqrDist <= arriveDistance * arriveDistance)
         {
-            //Debug.Log($"{sqrDist}, {arriveDistance * arriveDistance} ");
             CurrentIndex++;
 
             if (CurrentIndex >= path.Count)
             {
                 ReachedGoal?.Invoke();
                 enabled = false;
+                return;
             }
-            return;
         }
 
-        Vector3 dir = to.normalized;
+        // 新しい行き先(Waypoint)へと更新されたときの、目的地変更処理
+        // 1フレーム誤差があるが、気にならない程度なので一旦このまま
+        // （問題あれば、CurrentIndex++としたのち、新しいWaypointを取得してそこで更新すれば良い）
+        if (previewIndex != CurrentIndex)
+        {
+            DetectTargetRotate(to.normalized);
+            previewIndex = CurrentIndex;
+        }
 
-        Move(dir);
-        DetectTargetRotate(dir);
+        Move(to.normalized);
+        DetectTargetRotate(to.normalized);
+
         RotateSmoothly();
     }
-
-
 
     private void Move(Vector3 dir)
     {
@@ -79,10 +99,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void DetectTargetRotate(Vector3 dir)
     {
-        // 即時振り向きの場合は下記
-        // transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
-        if (dir != Vector3.zero)
-            targetRotation = Quaternion.LookRotation(dir);
+        targetRotation = Quaternion.LookRotation(dir);
 
         // 進行方向にRayを出して可視化 デバッグ用
         //Debug.DrawRay(transform.position, transform.forward * 2f, Color.blue);
@@ -90,6 +107,9 @@ public class EnemyMovement : MonoBehaviour
     }
     private void RotateSmoothly()
     {
+        // 即時振り向きの場合は下記
+        // transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             targetRotation,

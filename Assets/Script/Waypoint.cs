@@ -12,7 +12,7 @@ public class Waypoint : MonoBehaviour
             Debug.LogWarning("WaypointPathがnullです");
     }
 
-    public Transform get(int index)
+    public Transform Get(int index)
     {
         if (WaypointPath == null || index < 0 || index >= WaypointPath.Length)
             return null;
