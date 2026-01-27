@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public enum TowerStateType
 {
@@ -14,6 +15,8 @@ public class Tower : MonoBehaviour
     public Quaternion TargetRotation;
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private GameObject attackRangeVisual;
+    [SerializeField] private GameObject coolTimeUI;
+
 
     private void Awake()
     {
@@ -82,11 +85,18 @@ public class Tower : MonoBehaviour
         {
             case TowerStateType.Ghost:
                 if (attackRangeVisual != null)
+                {
                     attackRangeVisual.SetActive(true);
+                    coolTimeUI.SetActive(false);
+                }
+
                 break;
             case TowerStateType.Battle:
                 if (attackRangeVisual != null)
+                {
                     attackRangeVisual.SetActive(false);
+                    coolTimeUI.SetActive(true);
+                }
                 break;
             default:
                 break;

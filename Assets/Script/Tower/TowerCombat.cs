@@ -1,5 +1,7 @@
 ﻿using DG.Tweening;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TowerCombat : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class TowerCombat : MonoBehaviour
     [Header("Attack")]
     private float attackTimer;
     private Tween attackTween;
+    [SerializeField] private Slider coolTimeBar;
 
     [Header("Attack Hop")]
     [SerializeField] private float hopHeight = 1f;
@@ -21,6 +24,13 @@ public class TowerCombat : MonoBehaviour
     {
         tower = GetComponent<Tower>();
         status = GetComponent<TowerStatus>();
+        if (coolTimeBar == null)
+            coolTimeBar = GetComponentInChildren<Slider>();
+    }
+
+    private void Start()
+    {
+        UpdateCoolTimeBar();
     }
 
     private void Update()
@@ -30,12 +40,30 @@ public class TowerCombat : MonoBehaviour
             return;
 
         attackTimer -= Time.deltaTime;
+        UpdateCoolTimeBar();
 
         // タイマーをこの時点でリセットすると、
         // 経過したとき誰もいなかったらクールタイムがリセットされる
         // なので、攻撃が成功した時にタイマーはリセットされるようにする。
         if (TryGetTarget(out var targetEnemyHealth))
             PerformAttack(targetEnemyHealth);
+    }
+
+    // クールタイムを示すSliderバーの更新処理
+    private void UpdateCoolTimeBar()
+    {
+        // attackTimerが0に近づくほど、Sliderのvalueは1に近づく
+        // ex) 5秒おきの攻撃の場合
+        // * attackTimer = 5 -> (1 - (5/5)) = 0
+        // * attackTimer = 4 -> (1 - (4/5)) = 0.2
+        // ...
+        // * attackTimer = 1 -> (1 - (1/5)) = 0.8
+        // * attackTimer = 0 -> (1 - (0/5)) = 1 ※攻撃準備完了
+        float calculateValue = 1 - (attackTimer / status.GetAttackInterval());
+        if (calculateValue < 0)
+            calculateValue = 0;
+
+        coolTimeBar.value = calculateValue;
     }
 
     private void PerformAttack(EnemyHealth h)

@@ -4,7 +4,7 @@ public class TowerStatus : MonoBehaviour
 {
     public Status maxHp; // 0になると壊れる
     public Status attack;
-    public Status attackInterval; // 攻撃頻度 0.1秒など
+    public Status attackInterval; // 攻撃にかかる時間
     public Status attackRange; // スカラー 攻撃する距離 3 = 3マス分にしたい
     public Status viewingAngle; // 視野角 90° = ±45°の方向で広がることになる
 
