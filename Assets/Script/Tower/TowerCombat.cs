@@ -82,9 +82,9 @@ public class TowerCombat : MonoBehaviour
             // Towerから見た正面ベクトル と 敵ポジションを内積で比較
             float dot = Vector3.Dot(forwardDir, targetDir);
 
-            // viewingAngleはDegree
-            // cosθとして使うには、Radianにして、引数を渡す必要があるので変換
-            // ex) 視野角45°なら、radianにして、cos45° (0.707...)を返して、内積と比較させる
+            // GetViewingAngle()は、Degreeで返る。
+            // また合計の値が返る（90°なら、前方から-45から+45°の範囲となる）。
+            // ex) 90°なら、radianにして、cos45° (0.707...)を返して、内積と比較させる
             float halfAngleRad = (status.GetViewingAngle() * .5f) * Mathf.Deg2Rad;
             float cos = Mathf.Cos(halfAngleRad);
 

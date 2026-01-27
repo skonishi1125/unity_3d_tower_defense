@@ -4,9 +4,13 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     private EnemyStatus status;
-    [SerializeField] private float arriveDistance = .1f;
 
     private Waypoint path;
+    // WayPointに到達したと見なす範囲の猶予
+    [SerializeField] private float arriveDistance = .1f;
+    private Quaternion targetRotation;
+    private float rotationSpeed = 10f;
+
     public int CurrentIndex;
 
     public event Action ReachedGoal;
@@ -59,9 +63,11 @@ public class EnemyMovement : MonoBehaviour
         Vector3 dir = to.normalized;
 
         Move(dir);
-        Rotate(dir);
-
+        DetectTargetRotate(dir);
+        RotateSmoothly();
     }
+
+
 
     private void Move(Vector3 dir)
     {
@@ -71,12 +77,23 @@ public class EnemyMovement : MonoBehaviour
         transform.position += dir * moveSpeed * Time.deltaTime;
     }
 
-    private void Rotate(Vector3 dir)
+    private void DetectTargetRotate(Vector3 dir)
     {
-        transform.rotation = Quaternion.LookRotation(dir, Vector3.right);
+        // 即時振り向きの場合は下記
+        // transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+        if (dir != Vector3.zero)
+            targetRotation = Quaternion.LookRotation(dir);
 
         // 進行方向にRayを出して可視化 デバッグ用
         //Debug.DrawRay(transform.position, transform.forward * 2f, Color.blue);
         //Debug.DrawRay(transform.position, dir * 2f, Color.red);
+    }
+    private void RotateSmoothly()
+    {
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            Time.deltaTime * rotationSpeed
+        );
     }
 }
