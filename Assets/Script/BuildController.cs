@@ -18,11 +18,28 @@ public class BuildController : MonoBehaviour
     [SerializeField] private Material ghostMaterial;
     private float ghostCost;
 
+    [Header("Dependencies")]
+    // IEconomyを実装しているEconomyManagerを参照させる
+    // SerializeFieldはMonoBehaviourでないと割り当てられないので、
+    // IEconomyであってもSerializeFieldとして付与するように設計している
+    [SerializeField] private MonoBehaviour economyProvider;
+    private IEconomy economy;
+
     private void Awake()
     {
         mainCamera = Camera.main;
         if (grid == null)
             grid = FindFirstObjectByType<GridSystem>();
+
+        // as: キャストできるならそうする。無理ならnull。
+        // MonoBehaviourとして受け取ったが、実際はIEconomyとして扱えるようにする
+        economy = economyProvider as IEconomy;
+        if (economy == null)
+        {
+            Debug.LogError("economyProvider must implement IEconomy. (Assign EconomyManager to economyProvider)");
+            enabled = false;
+            return;
+        }
     }
 
     private void Update()
@@ -170,10 +187,6 @@ public class BuildController : MonoBehaviour
 
     private void PlaceTower()
     {
-        // まず予算が足りなければ、Return
-        if (! GameManager.Instance.IsBuildable(ghostCost))
-            return;
-
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -205,6 +218,10 @@ public class BuildController : MonoBehaviour
             else if (ghostInstance != null)
                 rotate = ghostInstance.transform.rotation;
 
+            // 建築可否及びコストの消費
+            if (!economy.TrySpend(ghostCost))
+                return;
+
             var tower = Instantiate(towerPrefab, cellCenter, rotate);
             var c = tower.GetComponent<Tower>();
             if (c != null)
@@ -212,9 +229,9 @@ public class BuildController : MonoBehaviour
             if (!grid.TryAddTower(cell, tower))
             {
                 Destroy(tower);
+                economy.Refund(ghostCost);
                 Debug.Log($"登録に失敗しました: {cell}");
             }
-            GameManager.Instance.ReduceMoney(ghostCost);
         }
     }
 

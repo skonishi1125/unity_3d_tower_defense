@@ -49,28 +49,6 @@ public class GameManager : MonoBehaviour
         currentLife = 10;
     }
 
-    public bool IsBuildable(float cost)
-    {
-        return money >= cost;
-    }
-
-    public void AddMoney(float value)
-    {
-        money += value;
-    }
-
-    public void ReduceMoney(float value)
-    {
-        money -= value;
-
-        // こうならないようにtower設置時に考慮するが、保険
-        if (money < 0)
-            money = 0;
-
-        Debug.Log($"所持金:{money}円");
-
-    }
-
     public void IncreaseLife()
     {
         currentLife += 1;
