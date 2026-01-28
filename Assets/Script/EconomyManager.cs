@@ -19,7 +19,11 @@ public sealed class EconomyManager : MonoBehaviour, IEconomy
     private void Awake()
     {
         money = initialMoney;
-        MoneyChanged?.Invoke(money);
+    }
+
+    private void Start()
+    {
+        MoneyChanged?.Invoke(money); // HUDなど更新
     }
 
     public bool TrySpend(float cost)

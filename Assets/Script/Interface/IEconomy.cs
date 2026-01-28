@@ -1,9 +1,13 @@
-﻿public interface IEconomy
+﻿using System;
+
+public interface IEconomy
 {
     // インターフェースはアクセスレベルは基本的に使わない
     // (ごく例外もあるが、基本publicとして使う）
     // IEconomyを持つクラスは、これらの実装を必ず持つというルール
     float CurrentMoney { get; }
+
+    event Action<float> MoneyChanged;
 
     bool TrySpend(float cost);
 

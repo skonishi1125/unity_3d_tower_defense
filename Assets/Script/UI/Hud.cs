@@ -3,16 +3,27 @@ using UnityEngine;
 
 public class Hud : MonoBehaviour
 {
-    [SerializeField] private EconomyManager em;
+    // EconomyManagerなどをSerializeFieldで割り当てて、
+    // そこからIEconomyを抜き取り、コードで使う
+    // (EconomyManager em としないのは、SerializeFieldで割り当てられないから）
+    [SerializeField] private MonoBehaviour economyProvider;
     [SerializeField] private TextMeshProUGUI moneyAmount;
+
+    private IEconomy economy;
 
     private void Awake()
     {
-        if (em == null)
-            em = FindFirstObjectByType<EconomyManager>();
+        // MonoBehaviourをキャスト
+        economy = economyProvider as IEconomy;
+        if (economy == null)
+        {
+            Debug.LogError("economyProvider must implement IEconomy.");
+            enabled = false;
+            return;
+        }
 
         // 初期表示（購読前にAwake通知が終わっている可能性があるため）
-        UpdateMoneyAmount(em.CurrentMoney);
+        UpdateMoneyAmount(economy.CurrentMoney);
     }
 
     private void UpdateMoneyAmount(float currentMoney)
@@ -22,18 +33,14 @@ public class Hud : MonoBehaviour
 
     private void OnEnable()
     {
-        if (em != null)
-            em.MoneyChanged += UpdateMoneyAmount;
-
-        // 保険で、有効化のたびに表示を正しくしておく
-        if (em != null)
-            UpdateMoneyAmount(em.CurrentMoney);
+        if (economy == null) return;
+        economy.MoneyChanged += UpdateMoneyAmount;
+        UpdateMoneyAmount(economy.CurrentMoney);
     }
-
     private void OnDisable()
     {
-        if (em != null)
-            em.MoneyChanged -= UpdateMoneyAmount;
+        if (economy == null) return;
+        economy.MoneyChanged -= UpdateMoneyAmount;
     }
 
 
