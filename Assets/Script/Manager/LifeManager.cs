@@ -5,11 +5,13 @@ public class LifeManager : MonoBehaviour, ILife
 {
     [Header("Initial Values")]
     [SerializeField] private int initialLife = 10;
-    [SerializeField] private int life { get; set; }
+    private int life;
+    private bool isLifeZero = false;
+
     public int CurrentLife => life;
 
     public event Action<int> LifeChanged;
-
+    public event Action LifeZero;
 
     private void Awake()
     {
@@ -29,11 +31,10 @@ public class LifeManager : MonoBehaviour, ILife
         life = Mathf.Max(0, life - amount);
         LifeChanged?.Invoke(life);
 
-        if (life == 0)
+        if (life == 0 && ! isLifeZero)
         {
-            // ゲームオーバー処理
-            // GameOver の通知先は「GameState管理」に委ねるのが分離としては綺麗
-            // まずはここで何か呼ぶならイベントにするのが無難
+            isLifeZero = true;
+            LifeZero?.Invoke();
         }
     }
 

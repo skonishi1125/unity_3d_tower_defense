@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum GameState
 {
@@ -10,25 +9,19 @@ public enum GameState
     Result
 }
 
-public class GameManager : MonoBehaviour
+public class StateManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static StateManager Instance;
     // ゲーム全体の状態
     public GameState State { get; private set; } = GameState.Playing;
     public float elapsedTime { get; private set; }
 
+    [SerializeField] private LifeManager lifeManager;
+
     private void Awake()
     {
-        // Scene遷移したとき、そのSceneにGameManagerがあったときの配慮
-        // これでDebug時、各シーンにGamemanagerを置いておける
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        if (lifeManager == null)
+            lifeManager = FindFirstObjectByType<LifeManager>();
     }
 
     private void Update()
@@ -37,8 +30,22 @@ public class GameManager : MonoBehaviour
             elapsedTime = Time.time;
     }
 
+    private void OnEnable()
+    {
+        if (lifeManager != null)
+            lifeManager.LifeZero += GameOver;
+    }
+
+    private void OnDisable()
+    {
+        if (lifeManager != null)
+            lifeManager.LifeZero -= GameOver;
+    }
+
+
     public void GameOver()
     {
+        Debug.Log("GAME OVER!");
         // ゲームオーバー特有の処理をしたあと
         EndGame();
     }
