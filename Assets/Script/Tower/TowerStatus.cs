@@ -2,11 +2,12 @@
 
 public class TowerStatus : MonoBehaviour
 {
-    public Status maxHp; // 0になると壊れる
-    public Status attack;
-    public Status attackInterval; // 攻撃にかかる時間
-    public Status attackRange; // スカラー 攻撃する距離 3 = 3マス分にしたい
-    public Status viewingAngle; // 視野角 90° = ±45°の方向で広がることになる
+    [SerializeField] private Status maxHp; // 0になると壊れる
+    [SerializeField] private Status attack;
+    [SerializeField] private Status attackInterval; // 攻撃にかかる時間
+    [SerializeField] private Status attackRange; // スカラー 攻撃する距離 3 = 3マス分にしたい
+    [SerializeField] private Status viewingAngle; // 視野角 90° = ±45°の方向で広がることになる
+    [SerializeField] private Status cost; // 建造費用
 
     public float GetMaxHp()
     {
@@ -34,9 +35,13 @@ public class TowerStatus : MonoBehaviour
         return viewingAngle.GetValue();
     }
 
+    public float GetCost()
+    {
+        return cost.GetValue();
+    }
+
     // TowerCombatとか別箇所に書くと、Playモード中以外は取得できずにエラーになる
     // (status.Get()...という形になるが、statusはAwakeしないと読まないので）
-
     private void OnDrawGizmos()
     {
         // 索敵範囲

@@ -16,6 +16,7 @@ public class BuildController : MonoBehaviour
     [SerializeField] private float highlightYOffset = 0.01f;
     [SerializeField] private float ghostYOffset = 0.0f;
     [SerializeField] private Material ghostMaterial;
+    private float ghostCost;
 
     private void Awake()
     {
@@ -125,7 +126,10 @@ public class BuildController : MonoBehaviour
         ghostInstance.name = "[Ghost] " + towerPrefab.name;
         var tower = ghostInstance.GetComponent<Tower>();
         if (tower != null)
+        {
             tower.SetState(TowerStateType.Ghost);
+            ghostCost = tower.Status.GetCost();
+        }
 
         // 衝突判定無効化
         foreach (var col in ghostInstance.GetComponentsInChildren<Collider>())
@@ -166,6 +170,10 @@ public class BuildController : MonoBehaviour
 
     private void PlaceTower()
     {
+        // まず予算が足りなければ、Return
+        if (! GameManager.Instance.IsBuildable(ghostCost))
+            return;
+
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -206,6 +214,7 @@ public class BuildController : MonoBehaviour
                 Destroy(tower);
                 Debug.Log($"登録に失敗しました: {cell}");
             }
+            GameManager.Instance.ReduceMoney(ghostCost);
         }
     }
 

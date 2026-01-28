@@ -296,6 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StateType: 0
+  Status: {fileID: 0}
   TargetRotation: {x: 0, y: 0, z: 0, w: 0}
   rotationSpeed: 50
   attackRangeVisual: {fileID: 7931084378412263425}
@@ -317,7 +318,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   attack:
-    baseValue: 5
+    baseValue: 3
     additiveBonus: 0
     multiplier: 1
   attackInterval:
@@ -330,6 +331,10 @@ MonoBehaviour:
     multiplier: 1
   viewingAngle:
     baseValue: 90
+    additiveBonus: 0
+    multiplier: 1
+  cost:
+    baseValue: 50
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &3923435590487456338

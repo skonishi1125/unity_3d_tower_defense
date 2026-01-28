@@ -13,11 +13,10 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
     // ゲーム全体の状態
     public GameState State { get; private set; } = GameState.Playing;
 
-    public int money { get; private set; }
+    public float money { get; private set; }
     public float elapsedTime { get; private set; }
     public float currentLife { get; private set; }
 
@@ -50,26 +49,34 @@ public class GameManager : MonoBehaviour
         currentLife = 10;
     }
 
-    private void AddMoney(int value)
+    public bool IsBuildable(float cost)
+    {
+        return money >= cost;
+    }
+
+    public void AddMoney(float value)
     {
         money += value;
     }
 
-    private void ReduceMoney(int value)
+    public void ReduceMoney(float value)
     {
         money -= value;
 
         // こうならないようにtower設置時に考慮するが、保険
         if (money < 0)
             money = 0;
+
+        Debug.Log($"所持金:{money}円");
+
     }
 
-    private void IncreaseLife()
+    public void IncreaseLife()
     {
         currentLife += 1;
     }
 
-    private void DecreaseLife()
+    public void DecreaseLife()
     {
         currentLife -= 1;
         if (currentLife == 0)
@@ -78,13 +85,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void GameOver()
+    public void GameOver()
     {
         // ゲームオーバー特有の処理をしたあと
         EndGame();
     }
 
-    private void GameClear()
+    public void GameClear()
     {
         // クリア特有の処理をしたあと
         EndGame();

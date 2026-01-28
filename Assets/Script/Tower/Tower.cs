@@ -11,6 +11,9 @@ public enum TowerStateType
 public class Tower : MonoBehaviour
 {
     public TowerStateType StateType;
+
+    public TowerStatus Status;
+
     // 建築時、確定した角度で建築する必要があるので参照する
     public Quaternion TargetRotation;
     [SerializeField] private float rotationSpeed = 5f;
@@ -28,6 +31,8 @@ public class Tower : MonoBehaviour
             if (t != null)
                 attackRangeVisual = t.gameObject;
         }
+
+        Status = GetComponent<TowerStatus>();
     }
 
     // ゴースト状態のものは回転できる
