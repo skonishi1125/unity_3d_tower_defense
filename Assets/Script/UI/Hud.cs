@@ -51,14 +51,21 @@ public class Hud : MonoBehaviour
 
     private void OnEnable()
     {
-        if (economy == null) return;
-        economy.MoneyChanged += UpdateMoneyAmount;
-        UpdateMoneyAmount(economy.CurrentMoney);
+        if (economy != null)
+            economy.MoneyChanged += UpdateMoneyAmount;
+
+        if (life != null)
+            life.LifeChanged += UpdateLifeAmount;
+
     }
     private void OnDisable()
     {
-        if (economy == null) return;
-        economy.MoneyChanged -= UpdateMoneyAmount;
+        if (economy != null)
+            economy.MoneyChanged -= UpdateMoneyAmount;
+
+        if (life != null)
+            life.LifeChanged -= UpdateLifeAmount;
+
     }
 
 

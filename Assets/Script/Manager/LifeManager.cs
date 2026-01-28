@@ -5,7 +5,7 @@ public class LifeManager : MonoBehaviour, ILife
 {
     [Header("Initial Values")]
     [SerializeField] private int initialLife = 10;
-    [SerializeField] private int life {  get; set; }
+    [SerializeField] private int life { get; set; }
     public int CurrentLife => life;
 
     public event Action<int> LifeChanged;

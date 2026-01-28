@@ -345,6 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2206dbc17f563384f801e100e44a1f44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetCamera: {fileID: 0}
 --- !u!1 &6044517223250561650
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,7 +648,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   speed:
-    baseValue: 2
+    baseValue: 10
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &8049122818346501371
