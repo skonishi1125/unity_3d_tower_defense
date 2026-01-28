@@ -15,10 +15,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     // ゲーム全体の状態
     public GameState State { get; private set; } = GameState.Playing;
-
-    public float money { get; private set; }
     public float elapsedTime { get; private set; }
-    public float currentLife { get; private set; }
 
     private void Awake()
     {
@@ -32,35 +29,12 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        SetDefaultValue();
-
     }
 
     private void Update()
     {
         if (State == GameState.Playing)
             elapsedTime = Time.time;
-    }
-
-    private void SetDefaultValue()
-    {
-        money = 100;
-        currentLife = 10;
-    }
-
-    public void IncreaseLife()
-    {
-        currentLife += 1;
-    }
-
-    public void DecreaseLife()
-    {
-        currentLife -= 1;
-        if (currentLife == 0)
-        {
-            GameOver();
-        }
     }
 
     public void GameOver()

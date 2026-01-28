@@ -276,7 +276,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   economyProvider: {fileID: 1280282523}
+  lifeProvider: {fileID: 1498318528}
   moneyAmount: {fileID: 1797265741}
+  lifeAmount: {fileID: 527940112}
 --- !u!1 &230092160
 GameObject:
   m_ObjectHideFlags: 0
@@ -1682,6 +1684,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1498318527}
+  - component: {fileID: 1498318528}
   m_Layer: 0
   m_Name: LIFE_MANAGER
   m_TagString: Untagged
@@ -1704,6 +1707,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1498318528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1498318526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb5b7a1d076486458b3cd4234e7be92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialLife: 10
 --- !u!1 &1636901725
 GameObject:
   m_ObjectHideFlags: 0
