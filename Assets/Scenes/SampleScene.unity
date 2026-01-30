@@ -323,8 +323,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51438b9921bfe147890a2da2fe2cb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellSize: 1
-  origin: {x: 0, y: 0, z: 0}
 --- !u!1 &263029282
 GameObject:
   m_ObjectHideFlags: 0
@@ -2293,18 +2291,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5484984339263044105, guid: ee1eeffc877f6c24cb623b162c6e9324, type: 3}
-      propertyPath: m_Size.x
-      value: 0.50770444
-      objectReference: {fileID: 0}
-    - target: {fileID: 5484984339263044105, guid: ee1eeffc877f6c24cb623b162c6e9324, type: 3}
-      propertyPath: m_Center.x
-      value: 0.25114793
-      objectReference: {fileID: 0}
-    - target: {fileID: 6298186141211062472, guid: ee1eeffc877f6c24cb623b162c6e9324, type: 3}
+    - target: {fileID: 4656334001758098864, guid: ee1eeffc877f6c24cb623b162c6e9324, type: 3}
       propertyPath: lifeProvider
       value: 
       objectReference: {fileID: 1498318528}
+    - target: {fileID: 7035624622641163686, guid: ee1eeffc877f6c24cb623b162c6e9324, type: 3}
+      propertyPath: gridSystem
+      value: 
+      objectReference: {fileID: 230092162}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

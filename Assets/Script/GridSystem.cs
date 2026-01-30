@@ -6,8 +6,11 @@ public class GridSystem : MonoBehaviour
     private readonly Dictionary<Vector2Int, GameObject> towers = new();
     private readonly HashSet<Vector2Int> blocked = new(); // 指定のセルになにか含まれているかを高速で判定できる
 
-    [SerializeField] private float cellSize = 1f;
-    [SerializeField] private Vector3 origin = Vector3.zero; // グリッド左下の基準点
+    private float cellSize = 1f;
+    private Vector3 origin = Vector3.zero; // グリッド左下の基準点
+
+    public float CellSize => cellSize;
+    public Vector3 Origin => origin;
 
 
     public bool IsBlocked(Vector2Int cell) => blocked.Contains(cell) || towers.ContainsKey(cell);
@@ -30,7 +33,7 @@ public class GridSystem : MonoBehaviour
     // ブロック用セル関連
     public void RegisterBlockedCell(Vector2Int cell) => blocked.Add(cell);
     public void UnregisterBlockedCell(Vector2Int cell) => blocked.Remove(cell);
-    public void ClearBlockedCells() => blocked.Clear();
+    public void ClearBlockedCells() => blocked.Clear(); // TODO: 使う場合、既存の建物登録用スクリプトも再登録するよう修正
 
     // -------- 座標変換系 --------
 
@@ -47,7 +50,7 @@ public class GridSystem : MonoBehaviour
         int x = Mathf.FloorToInt(local.x / cellSize);
         int z = Mathf.FloorToInt(local.z / cellSize); // 5/1 = 5マスとみなす
 
-        // ex) (12.5,0,5) なら、結果的に(12,0,5)として返す。
+        // ex) (12.5,0,5) なら、結果的に(12,5)として返す。
         return new Vector2Int(x, z);
     }
 
