@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4b1287001059d540ab0cfdc8d448c7d, type: 3}
-  m_Name: Stage1
+  m_Name: sampleStage
   m_EditorClassIdentifier: 
   waves:
   - {fileID: 11400000, guid: 35872fe3f71d5444bbd5eac02b7c6850, type: 2}
   - {fileID: 11400000, guid: cfdf4c5ac9907de4e80f3088ffc37cd2, type: 2}
+  - {fileID: 11400000, guid: 5afeeff94f7ddc447b82abb56987691f, type: 2}

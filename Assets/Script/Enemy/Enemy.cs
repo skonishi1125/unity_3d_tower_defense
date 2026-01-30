@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
 
     private void OnReachedGoal()
     {
-        Debug.Log("Enemy reached goal");
+        //Debug.Log("Enemy reached goal");
         Destroy(gameObject);
     }
 

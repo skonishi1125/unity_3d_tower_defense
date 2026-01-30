@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dab900bfe6a9d4a46bb9f6dc95eb7c79, type: 3}
-  m_Name: wave2
+  m_Name: sampleWave3
   m_EditorClassIdentifier: 
   waveName: 
   enemyGroups:
   - enemyPrefab: {fileID: 8304212716229790698, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
-    spawnCount: 5
-    spawnInterval: 2
-  startDelay: 0
+    spawnCount: 1
+    spawnInterval: 0
+  startDelay: 5
   endDelay: 0
-  isBossWave: 0
+  isBossWave: 1

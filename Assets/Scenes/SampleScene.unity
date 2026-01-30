@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 72494693}
   - component: {fileID: 72494692}
   m_Layer: 0
-  m_Name: STAGE_MANAGER
+  m_Name: STAGEWAVE_MANAGER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,8 +227,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 853b3e57f45edec48ba97aa67a98cb56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageConfig: {fileID: 0}
-  enemySpawner: {fileID: 0}
+  stageConfig: {fileID: 11400000, guid: 3a337bef9de12dc4b8f15166363dbe53, type: 2}
+  enemySpawner: {fileID: 1470873432}
 --- !u!4 &72494693
 Transform:
   m_ObjectHideFlags: 0
@@ -1701,10 +1701,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoint: {fileID: 2086789179}
-  SpawnEnemies:
-  - {fileID: 8304212716229790698, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
-  maxSpawnCount: 10
-  duration: 1
 --- !u!4 &1470873433
 Transform:
   m_ObjectHideFlags: 0
@@ -2418,18 +2414,18 @@ MeshRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 2003952120}
+  - {fileID: 410087041}
+  - {fileID: 832575519}
   - {fileID: 385021154}
   - {fileID: 1280282522}
   - {fileID: 1498318527}
   - {fileID: 72494693}
-  - {fileID: 2003952120}
-  - {fileID: 410087041}
-  - {fileID: 832575519}
+  - {fileID: 2086789178}
+  - {fileID: 1470873433}
   - {fileID: 230092161}
   - {fileID: 263029286}
   - {fileID: 3438413632036583300}
-  - {fileID: 2086789178}
-  - {fileID: 1470873433}
   - {fileID: 940084906}
   - {fileID: 8255155}
   - {fileID: 6579170302942582440}

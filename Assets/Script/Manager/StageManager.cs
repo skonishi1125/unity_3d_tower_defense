@@ -7,12 +7,12 @@ public class StageManager : MonoBehaviour
     [SerializeField] private EnemySpawner enemySpawner;
 
     private int currentWaveIndex = 0;
-    private bool isRunning;
+    private bool isRunning = false;
     private Coroutine stageRoutine;
 
     private void Start()
     {
-        isRunning = true;
+        Debug.Log("start!");
         BeginStage();
     }
 
@@ -35,6 +35,7 @@ public class StageManager : MonoBehaviour
             if (!isRunning)
                 yield break;
 
+            Debug.Log($"wave: {i} 開始");
             var wave = stageConfig.waves[currentWaveIndex];
             currentWaveIndex = i;
             // こちらが終わったら、またこのfor文が回ってWaveが動く。
@@ -43,6 +44,8 @@ public class StageManager : MonoBehaviour
 
         // ステージ終了処理
         isRunning = false;
+
+        // 終わっても、敵はまだ画面にいるのでそのあたりを正しくチェック
         // クリアなどのイベントを作って通知...
 
     }
@@ -52,7 +55,7 @@ public class StageManager : MonoBehaviour
         // ボスウェーブのとき、なにかするならここで
         if (wave.isBossWave)
         {
-
+            Debug.Log("boss!");
         }
 
         // 開始前待機時間
@@ -87,7 +90,7 @@ public class StageManager : MonoBehaviour
                 yield break;
             }
 
-            // スポーン処理 spawner.Spawn(enemyPrefab);
+            enemySpawner.Spawn(enemyPrefab);
 
             yield return new WaitForSeconds(group.spawnInterval);
         }
