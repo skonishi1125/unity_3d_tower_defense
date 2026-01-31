@@ -2,10 +2,8 @@
 
 public enum GameState
 {
-    Ready,
-    WaveIntro, // 3 2 1...と、カウントダウン
+    Edit,
     Playing,
-    Slowing,
     Result
 }
 
@@ -13,7 +11,7 @@ public class StateManager : MonoBehaviour
 {
     public static StateManager Instance;
     // ゲーム全体の状態
-    public GameState State { get; private set; } = GameState.Playing;
+    public GameState State { get; private set; } = GameState.Edit;
     public float elapsedTime { get; private set; }
 
     [SerializeField] private LifeManager lifeManager;

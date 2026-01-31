@@ -1,0 +1,140 @@
+{
+    "version": 1,
+    "name": "GameInputSet",
+    "maps": [
+        {
+            "name": "Global",
+            "id": "76a5985c-c654-4620-ab55-bfc0cc24f9a1",
+            "actions": [
+                {
+                    "name": "ToggleMode",
+                    "type": "Button",
+                    "id": "9ed50444-709d-4466-bafe-1e07d6d9582e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "727732a3-3cb4-4d6a-92fb-5fe79f872430",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Edit",
+            "id": "50f37fe7-6b51-4d65-886c-55d4d87f465d",
+            "actions": [
+                {
+                    "name": "SelectBuild",
+                    "type": "Button",
+                    "id": "24f8361a-5acd-44f5-9d7b-2e00225e03b2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectDemolish",
+                    "type": "Button",
+                    "id": "8a67e9b3-fd03-4f3c-a50c-e96cae6dba11",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Confirm",
+                    "type": "Button",
+                    "id": "1b2144d0-ed07-4ad7-9fc3-c2163bebb734",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Rotate",
+                    "type": "Button",
+                    "id": "60489e1d-1dbd-4263-80fa-143feb90a316",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b9c6d474-34bc-4901-be59-cc0f784fe326",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectBuild",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0e9bea1f-1cbb-4504-9bd3-b6b25ff2f0bd",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectDemolish",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "50df0cd8-0e22-425c-a665-63c113da41e1",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0ec72159-6b80-49ef-9d8a-c64360c4b252",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Key_Mouse",
+            "bindingGroup": "Key_Mouse",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
