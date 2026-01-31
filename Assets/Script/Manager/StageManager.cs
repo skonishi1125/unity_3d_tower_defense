@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
@@ -9,6 +10,11 @@ public class StageManager : MonoBehaviour
     private int currentWaveIndex = 0;
     private bool isRunning = false;
     private Coroutine stageRoutine;
+
+    public int CurrentWave => currentWaveIndex + 1;
+    public int MaxWave => stageConfig.waves.Length;
+
+    public event Action WaveChanged;
 
     private void Start()
     {
@@ -35,9 +41,10 @@ public class StageManager : MonoBehaviour
             if (!isRunning)
                 yield break;
 
-            Debug.Log($"wave: {i} 開始");
             var wave = stageConfig.waves[currentWaveIndex];
             currentWaveIndex = i;
+            Debug.Log($"wave: {CurrentWave} 開始");
+            WaveChanged?.Invoke();
             // こちらが終わったら、またこのfor文が回ってWaveが動く。
             yield return StartCoroutine(RunWave(wave));
         }

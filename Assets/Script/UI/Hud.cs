@@ -3,14 +3,17 @@ using UnityEngine;
 
 public class Hud : MonoBehaviour
 {
+    // インターフェース系
     // EconomyManagerなどをSerializeFieldで割り当てて、
     // そこからIEconomyを抜き取り、コードで使う
     // (EconomyManager em としないのは、SerializeFieldで割り当てられないから）
     [SerializeField] private MonoBehaviour economyProvider;
     [SerializeField] private MonoBehaviour lifeProvider;
+    [SerializeField] private StageManager stageManager;
 
     [SerializeField] private TextMeshProUGUI moneyAmount;
     [SerializeField] private TextMeshProUGUI lifeAmount;
+    [SerializeField] private TextMeshProUGUI waveNumber;
 
     private IEconomy economy;
     private ILife life;
@@ -37,16 +40,35 @@ public class Hud : MonoBehaviour
         }
         UpdateLifeAmount(life.CurrentLife);
 
+        if (stageManager == null)
+            stageManager = FindFirstObjectByType<StageManager>();
+
+        if (waveNumber != null)
+            UpdateWaveText();
+
     }
 
     private void UpdateMoneyAmount(float currentMoney)
     {
-        moneyAmount.text = $"{currentMoney} 円";
+        float number = currentMoney;
+        string formattedNumber = number.ToString("N0");
+        moneyAmount.text = $"{formattedNumber}";
     }
 
     private void UpdateLifeAmount(int currentLife)
     {
-        lifeAmount.text = $"{currentLife}";
+        string lifeSquare = "■";
+        string currentLifeSquare = "";
+        for (int i = 0; i < currentLife; i++)
+        {
+            currentLifeSquare = currentLifeSquare + lifeSquare;
+        }
+        lifeAmount.text = currentLifeSquare;
+    }
+
+    private void UpdateWaveText()
+    {
+        waveNumber.text = $"Wave: {stageManager.CurrentWave} / {stageManager.MaxWave}";
     }
 
     private void OnEnable()
@@ -57,6 +79,9 @@ public class Hud : MonoBehaviour
         if (life != null)
             life.LifeChanged += UpdateLifeAmount;
 
+        if (stageManager != null)
+            stageManager.WaveChanged += UpdateWaveText;
+
     }
     private void OnDisable()
     {
@@ -66,6 +91,8 @@ public class Hud : MonoBehaviour
         if (life != null)
             life.LifeChanged -= UpdateLifeAmount;
 
+        if (stageManager != null)
+            stageManager.WaveChanged -= UpdateWaveText;
     }
 
 
