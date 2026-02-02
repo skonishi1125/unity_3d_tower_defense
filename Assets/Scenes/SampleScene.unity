@@ -299,9 +299,11 @@ MonoBehaviour:
   economyProvider: {fileID: 1280282523}
   lifeProvider: {fileID: 1498318528}
   stageManager: {fileID: 72494692}
+  stateManager: {fileID: 385021155}
   moneyAmount: {fileID: 1797265741}
   lifeAmount: {fileID: 527940112}
   waveNumber: {fileID: 894417795}
+  gameStateText: {fileID: 1862599225}
 --- !u!1 &138207882
 GameObject:
   m_ObjectHideFlags: 0
@@ -4529,7 +4531,7 @@ GameObject:
   - component: {fileID: 1862599226}
   - component: {fileID: 1862599225}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: StateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

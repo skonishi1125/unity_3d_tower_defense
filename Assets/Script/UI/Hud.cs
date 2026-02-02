@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 public class Hud : MonoBehaviour
@@ -10,10 +11,12 @@ public class Hud : MonoBehaviour
     [SerializeField] private MonoBehaviour economyProvider;
     [SerializeField] private MonoBehaviour lifeProvider;
     [SerializeField] private StageManager stageManager;
+    [SerializeField] private StateManager stateManager;
 
     [SerializeField] private TextMeshProUGUI moneyAmount;
     [SerializeField] private TextMeshProUGUI lifeAmount;
     [SerializeField] private TextMeshProUGUI waveNumber;
+    [SerializeField] private TextMeshProUGUI gameStateText;
 
     private IEconomy economy;
     private ILife life;
@@ -41,11 +44,37 @@ public class Hud : MonoBehaviour
         UpdateLifeAmount(life.CurrentLife);
 
         if (stageManager == null)
+        {
+            Debug.Log("Hud: stageManager自動割当");
             stageManager = FindFirstObjectByType<StageManager>();
+        }
+
+        if (stateManager == null)
+        {
+            Debug.Log("Hud: ステートManager自動割当");
+            stateManager = FindFirstObjectByType<StateManager>();
+        }
+
 
         if (waveNumber != null)
             UpdateWaveText();
 
+        if (gameStateText != null)
+            UpdateGameStateText();
+    }
+
+    private void UpdateGameStateText()
+    {
+        if (stateManager.State == GameState.Edit)
+        {
+            gameStateText.color = Color.white;
+            gameStateText.text = "【編集中】";
+        }
+        else if (stateManager.State == GameState.Playing)
+        {
+            gameStateText.color = Color.red;
+            gameStateText.text = "【戦闘中】";
+        }
     }
 
     private void UpdateMoneyAmount(float currentMoney)
@@ -82,6 +111,10 @@ public class Hud : MonoBehaviour
         if (stageManager != null)
             stageManager.WaveChanged += UpdateWaveText;
 
+        if (stateManager != null)
+            stateManager.StateChanged += UpdateGameStateText;
+
+
     }
     private void OnDisable()
     {
@@ -93,7 +126,9 @@ public class Hud : MonoBehaviour
 
         if (stageManager != null)
             stageManager.WaveChanged -= UpdateWaveText;
-    }
 
+        if (stateManager != null)
+            stateManager.StateChanged -= UpdateGameStateText;
+    }
 
 }

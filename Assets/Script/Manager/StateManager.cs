@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public enum GameState
 {
@@ -17,6 +18,8 @@ public class StateManager : MonoBehaviour
 
     [SerializeField] private LifeManager lifeManager;
     [SerializeField] private GameInput gameInput;
+
+    public event Action StateChanged;
 
     private void Awake()
     {
@@ -58,13 +61,28 @@ public class StateManager : MonoBehaviour
     {
         // ゲーム開始時はEditモードから
         State = GameState.Edit;
+        Time.timeScale = 0f;
+        StateChanged?.Invoke();
     }
+
 
     private void ToggleModePressed()
     {
         Debug.Log("statemanager: togglemode!");
-        // State変更
-        // InputSystemも一緒に切り替える
+        if (State == GameState.Playing)
+        {
+            State = GameState.Edit;
+            Time.timeScale = 0f;
+        }
+        else if (State == GameState.Edit)
+        {
+            State = GameState.Playing;
+            Time.timeScale = 1f;
+        }
+
+        StateChanged?.Invoke();
+
+        // TODO: InputSystemも一緒に切り替える？
     }
 
     public void GameOver()
