@@ -506,6 +506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 230092162}
   gameInput: {fileID: 2110131667}
+  stateManager: {fileID: 385021155}
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64

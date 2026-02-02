@@ -36,7 +36,7 @@ public class TowerCombat : MonoBehaviour
     private void Update()
     {
         // Ghost中などは、タイマーを走らせない
-        if (tower.StateType != TowerStateType.Battle)
+        if (tower.CurrentTowerState != TowerState.Battle)
             return;
 
         attackTimer -= Time.deltaTime;

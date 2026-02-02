@@ -1,13 +1,20 @@
 ﻿using UnityEngine;
+public enum BuildMode
+{
+    None = 0,
+    Build = 1,
+    Demolish = 2,
+}
 
 public class BuildController : MonoBehaviour
 {
     private Camera mainCamera;
     [SerializeField] private GridSystem grid;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private StateManager stateManager;
 
     [Header("Place Setting")]
-    private BuildMode currentBuildMode = BuildMode.Edit;
+    private BuildMode currentBuildMode = BuildMode.Build;
     [SerializeField] private LayerMask groundLayerMask;
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private Transform cellHighlight;
@@ -31,19 +38,31 @@ public class BuildController : MonoBehaviour
         mainCamera = Camera.main;
 
         if (gameInput == null)
+        {
+            Debug.Log("BM: gameInputを自動割当します");
             gameInput = FindFirstObjectByType<GameInput>();
+        }
 
         if (grid == null)
+        {
+            Debug.Log("BM: GridSystemを自動割当します");
             grid = FindFirstObjectByType<GridSystem>();
+        }
 
         // as: キャストできるならそうする。無理ならnull。
         // MonoBehaviourとして受け取ったが、実際はIEconomyとして扱えるようにする
         economy = economyProvider as IEconomy;
         if (economy == null)
         {
-            Debug.LogError("economyProvider must implement IEconomy. (Assign EconomyManager to economyProvider)");
+            Debug.LogError("BM: economyProvider には IEconomyが必須です");
             enabled = false;
             return;
+        }
+
+        if (stateManager == null)
+        {
+            Debug.Log("BM: StateManagerがインスペクタ未割り当てのため自動割当します。");
+            stateManager = FindFirstObjectByType<StateManager>();
         }
     }
 
@@ -78,7 +97,7 @@ public class BuildController : MonoBehaviour
         Vector2Int cell = grid.WorldToCell(hit.point);
 
         // 建造モード, 配置不可セルにマウスがある場合はエフェクトを出さない。
-        if (currentBuildMode == BuildMode.Edit && grid.IsBlocked(cell))
+        if (currentBuildMode == BuildMode.Build && grid.IsBlocked(cell))
         {
             if (ghostInstance != null)
                 ghostInstance.SetActive(false);
@@ -101,7 +120,7 @@ public class BuildController : MonoBehaviour
 
         // Ghost表示処理
         // Ghostは建造モードのときだけ表示する。
-        if (currentBuildMode == BuildMode.Edit)
+        if (currentBuildMode == BuildMode.Build)
         {
             EnsureGhost();
             if (ghostInstance != null)
@@ -129,7 +148,7 @@ public class BuildController : MonoBehaviour
         var tower = ghostInstance.GetComponent<Tower>();
         if (tower != null)
         {
-            tower.SetState(TowerStateType.Ghost);
+            tower.SetState(TowerState.Ghost);
             ghostCost = tower.Status.GetCost();
         }
 
@@ -210,7 +229,7 @@ public class BuildController : MonoBehaviour
             var tower = Instantiate(towerPrefab, cellCenter, rotate);
             var c = tower.GetComponent<Tower>();
             if (c != null)
-                c.SetState(TowerStateType.Battle);
+                c.SetState(TowerState.Battle);
             if (!grid.TryAddTower(cell, tower))
             {
                 Destroy(tower);
@@ -230,7 +249,7 @@ public class BuildController : MonoBehaviour
     private void PressEdit()
     {
         Debug.Log("InputSystemで: Build Mode: Edit");
-        currentBuildMode = BuildMode.Edit;
+        currentBuildMode = BuildMode.Build;
     }
 
     private void PressDemolish()
@@ -243,17 +262,49 @@ public class BuildController : MonoBehaviour
     {
         Debug.Log("InputSystemで: 左クリック");
 
-        if (currentBuildMode == BuildMode.Edit)
+        if (currentBuildMode == BuildMode.Build)
             PlaceTower();
         else if (currentBuildMode == BuildMode.Demolish)
             DemolishTower();
     }
 
-    //private void PressRotate()
-    //{
-    //    Debug.Log("InputSystemで: 右クリック");
+    private void PressRotate()
+    {
+        Debug.Log("InputSystemで: 右クリック");
 
-    //}
+        // 3条件をここで集約
+        if (!CanRotateGhost())
+            return;
+
+        if (ghostInstance.TryGetComponent<Tower>(out var ghostTower))
+            ghostTower.Rotation();
+    }
+
+    private bool CanRotateGhost()
+    {
+        if (stateManager == null)
+            return false;
+        if (stateManager.State != GameState.Edit)
+            return false;
+
+        if (currentBuildMode != BuildMode.Build)
+            return false;
+
+        if (ghostInstance == null)
+            return false;
+        if (!ghostInstance.activeInHierarchy) // TODO: 詳細に調べる
+            return false;
+
+        if (!ghostInstance.TryGetComponent<Tower>(out var tower))
+            return false;
+        if (tower.CurrentTowerState != TowerState.Ghost)
+            return false;
+
+        // ゲーム全体が編集モードで
+        // 編集中の状態が建築モードで
+        // TowerがGhost状態のときは、回転できる
+        return true;
+    }
 
     private void OnEnable()
     {
@@ -261,7 +312,7 @@ public class BuildController : MonoBehaviour
         gameInput.SelectBuildRequested += PressEdit;
         gameInput.SelectDemolishRequested += PressDemolish;
         gameInput.ConfirmPressed += PressConfirm;
-        //gameInput.RotatePressed += PressRotate;
+        gameInput.RotatePressed += PressRotate;
     }
 
     private void OnDisable()
@@ -270,6 +321,7 @@ public class BuildController : MonoBehaviour
         gameInput.SelectBuildRequested -= PressEdit;
         gameInput.SelectDemolishRequested -= PressDemolish;
         gameInput.ConfirmPressed -= PressConfirm;
+        gameInput.RotatePressed -= PressRotate;
     }
 
 

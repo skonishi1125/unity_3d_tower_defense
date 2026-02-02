@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public enum TowerStateType
+public enum TowerState
 {
     None,
     Ghost = 1,
@@ -9,9 +9,7 @@ public enum TowerStateType
 
 public class Tower : MonoBehaviour
 {
-    private GameInput gameInput;
-
-    public TowerStateType StateType;
+    public TowerState CurrentTowerState;
 
     public TowerStatus Status;
 
@@ -24,10 +22,6 @@ public class Tower : MonoBehaviour
 
     private void Awake()
     {
-        gameInput = FindFirstObjectByType<GameInput>();
-        if (gameInput == null)
-            Debug.LogWarning("Tower: gameInput未登録");
-
         TargetRotation = transform.rotation;
 
         if (attackRangeVisual == null)
@@ -40,31 +34,15 @@ public class Tower : MonoBehaviour
         Status = GetComponent<TowerStatus>();
     }
 
-    // ゴースト状態のものは回転できる
     private void Update()
     {
-        if (StateType == TowerStateType.Ghost)
+        // Towerの回転処理などはBuildController側で持つ
+        if (CurrentTowerState == TowerState.Ghost)
             RotateSmoothly();
     }
 
-    private void PressRotate()
-    {
-        Debug.Log("tower: InputSystemで: 右クリック");
-        Rotation();
-    }
-    private void OnEnable()
-    {
-        gameInput.RotatePressed += PressRotate;
-    }
-
-    private void OnDisable()
-    {
-        gameInput.RotatePressed -= PressRotate;
-    }
-
-
     // 右に90°回転させよう
-    private void Rotation()
+    public void Rotation()
     {
         // 絶対回転(world座標の、常に右を向けという処理になる)
         // transform.rotation = Quaternion.LookRotation(Vector3.right);
@@ -77,8 +55,6 @@ public class Tower : MonoBehaviour
         // 今回はSlerpを使いたいので、クォータニオンとして回転させる
         Quaternion delta = Quaternion.Euler(0f, 90f, 0f); // y軸90°
         TargetRotation = TargetRotation * delta;
-
-
     }
 
     private void RotateSmoothly()
@@ -99,13 +75,13 @@ public class Tower : MonoBehaviour
     }
 
 
-    public void SetState(TowerStateType type)
+    public void SetState(TowerState type)
     {
-        StateType = type;
+        CurrentTowerState = type;
 
-        switch (StateType)
+        switch (CurrentTowerState)
         {
-            case TowerStateType.Ghost:
+            case TowerState.Ghost:
                 if (attackRangeVisual != null)
                 {
                     attackRangeVisual.SetActive(true);
@@ -113,7 +89,7 @@ public class Tower : MonoBehaviour
                 }
 
                 break;
-            case TowerStateType.Battle:
+            case TowerState.Battle:
                 if (attackRangeVisual != null)
                 {
                     attackRangeVisual.SetActive(false);
