@@ -71,16 +71,21 @@ public class BuildController : MonoBehaviour
 
     private void Update()
     {
-
         // ホバー更新（Place / Demolish のときだけ）
         if (CurrentBuildMode != BuildMode.None)
             DisplayPlaceableEffect();
     }
 
-
+    // Ghostの出現処理
     // 配置場所のグリッドに、四角くハイライト + Ghostを出す
     private void DisplayPlaceableEffect()
     {
+        // Playing（戦闘中）は、Ghostを出さない
+        // ※画面にGhostがある状態から戦闘に遷移したときは、ESCが押されたときに別途処理でActiveをfalseにしている
+        if (stateManager.State == GameState.Playing)
+            return;
+
+        // 地面判定でない部分には、Ghostを出さない
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, groundLayerMask))
         {
@@ -91,7 +96,7 @@ public class BuildController : MonoBehaviour
 
         Vector2Int cell = grid.WorldToCell(hit.point);
 
-        // 建造モード, 配置不可セルにマウスがある場合はエフェクトを出さない。
+        // 建造モード, 配置不可セルにマウスがある場合はGhostを出さない
         if (CurrentBuildMode == BuildMode.Build && grid.IsBlocked(cell))
         {
             if (ghostInstance != null)
@@ -235,6 +240,13 @@ public class BuildController : MonoBehaviour
     }
 
     // Key Config
+    private void PressToggleMode()
+    {
+        // BuildController側での責務は、ghostとセルハイライトを切ることだけ
+        // GameStateを切り替える処理は、StateManager側が受け持っている
+        if (cellHighlight != null) cellHighlight.gameObject.SetActive(false);
+        if (ghostInstance != null) ghostInstance.SetActive(false);
+    }
     private void PressEdit()
     {
         Debug.Log("InputSystemで: Build Mode: Edit");
@@ -299,6 +311,7 @@ public class BuildController : MonoBehaviour
 
     private void OnEnable()
     {
+        gameInput.ToggleModeRequested += PressToggleMode;
         gameInput.SelectBuildRequested += PressEdit;
         gameInput.SelectDemolishRequested += PressDemolish;
         gameInput.ConfirmPressed += PressConfirm;
@@ -307,6 +320,7 @@ public class BuildController : MonoBehaviour
 
     private void OnDisable()
     {
+        gameInput.ToggleModeRequested -= PressToggleMode;
         gameInput.SelectBuildRequested -= PressEdit;
         gameInput.SelectDemolishRequested -= PressDemolish;
         gameInput.ConfirmPressed -= PressConfirm;
