@@ -4,9 +4,10 @@ public class BuildController : MonoBehaviour
 {
     private Camera mainCamera;
     [SerializeField] private GridSystem grid;
+    [SerializeField] private GameInput gameInput;
 
     [Header("Place Setting")]
-    private BuildMode currentBuildMode = BuildMode.Place;
+    private BuildMode currentBuildMode = BuildMode.Edit;
     [SerializeField] private LayerMask groundLayerMask;
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private Transform cellHighlight;
@@ -28,6 +29,10 @@ public class BuildController : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
+
+        if (gameInput == null)
+            gameInput = FindFirstObjectByType<GameInput>();
+
         if (grid == null)
             grid = FindFirstObjectByType<GridSystem>();
 
@@ -44,38 +49,18 @@ public class BuildController : MonoBehaviour
 
     private void Update()
     {
-        SwitchMode();
 
         // ホバー更新（Place / Demolish のときだけ）
         if (currentBuildMode != BuildMode.None)
             DisplayPlaceableEffect();
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (currentBuildMode == BuildMode.Place)
-                PlaceTower();
-            else if (currentBuildMode == BuildMode.Demolish)
-                DemolishTower();
-        }
-    }
-
-    private void SwitchMode()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("Build Mode: Place");
-            currentBuildMode = BuildMode.Place;
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            Debug.Log("Build Mode: Demolish");
-            currentBuildMode = BuildMode.Demolish;
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Debug.Log("Build Mode: None");
-            currentBuildMode = BuildMode.None;
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    if (currentBuildMode == BuildMode.Edit)
+        //        PlaceTower();
+        //    else if (currentBuildMode == BuildMode.Demolish)
+        //        DemolishTower();
+        //}
     }
 
 
@@ -93,7 +78,7 @@ public class BuildController : MonoBehaviour
         Vector2Int cell = grid.WorldToCell(hit.point);
 
         // 建造モード, 配置不可セルにマウスがある場合はエフェクトを出さない。
-        if (currentBuildMode == BuildMode.Place && grid.IsBlocked(cell))
+        if (currentBuildMode == BuildMode.Edit && grid.IsBlocked(cell))
         {
             if (ghostInstance != null)
                 ghostInstance.SetActive(false);
@@ -116,7 +101,7 @@ public class BuildController : MonoBehaviour
 
         // Ghost表示処理
         // Ghostは建造モードのときだけ表示する。
-        if (currentBuildMode == BuildMode.Place)
+        if (currentBuildMode == BuildMode.Edit)
         {
             EnsureGhost();
             if (ghostInstance != null)
@@ -235,6 +220,60 @@ public class BuildController : MonoBehaviour
         }
     }
 
+    // Key Config
+    private void PressToggleMode()
+    {
+        Debug.Log("InputSystemで: Build Mode: None");
+        currentBuildMode = BuildMode.None;
+    }
+
+    private void PressEdit()
+    {
+        Debug.Log("InputSystemで: Build Mode: Edit");
+        currentBuildMode = BuildMode.Edit;
+    }
+
+    private void PressDemolish()
+    {
+        Debug.Log("InputSystemで: Build Mode: Demolish");
+        currentBuildMode = BuildMode.Demolish;
+    }
+
+    private void PressConfirm()
+    {
+        Debug.Log("InputSystemで: 左クリック");
+
+        if (currentBuildMode == BuildMode.Edit)
+            PlaceTower();
+        else if (currentBuildMode == BuildMode.Demolish)
+            DemolishTower();
+    }
+
+    //private void PressRotate()
+    //{
+    //    Debug.Log("InputSystemで: 右クリック");
+
+    //}
+
+    private void OnEnable()
+    {
+        gameInput.ToggleModeRequested += PressToggleMode;
+        gameInput.SelectBuildRequested += PressEdit;
+        gameInput.SelectDemolishRequested += PressDemolish;
+        gameInput.ConfirmPressed += PressConfirm;
+        //gameInput.RotatePressed += PressRotate;
+    }
+
+    private void OnDisable()
+    {
+        gameInput.ToggleModeRequested -= PressToggleMode;
+        gameInput.SelectBuildRequested -= PressEdit;
+        gameInput.SelectDemolishRequested -= PressDemolish;
+        gameInput.ConfirmPressed -= PressConfirm;
+    }
+
+
+    // Debug
     // Cameraからマウスクリック位置に飛ばされるRayを赤色で可視化する
     private void DrawDebugLine(Ray ray, RaycastHit hit, Vector3 p, float s)
     {

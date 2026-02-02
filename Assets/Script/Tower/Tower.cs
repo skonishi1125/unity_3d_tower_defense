@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public enum TowerStateType
 {
@@ -10,6 +9,8 @@ public enum TowerStateType
 
 public class Tower : MonoBehaviour
 {
+    private GameInput gameInput;
+
     public TowerStateType StateType;
 
     public TowerStatus Status;
@@ -23,6 +24,10 @@ public class Tower : MonoBehaviour
 
     private void Awake()
     {
+        gameInput = FindFirstObjectByType<GameInput>();
+        if (gameInput == null)
+            Debug.LogWarning("Tower: gameInput未登録");
+
         TargetRotation = transform.rotation;
 
         if (attackRangeVisual == null)
@@ -39,12 +44,24 @@ public class Tower : MonoBehaviour
     private void Update()
     {
         if (StateType == TowerStateType.Ghost)
-        {
-            if (Input.GetMouseButtonDown(1))
-                Rotation();
             RotateSmoothly();
-        }
     }
+
+    private void PressRotate()
+    {
+        Debug.Log("tower: InputSystemで: 右クリック");
+        Rotation();
+    }
+    private void OnEnable()
+    {
+        gameInput.RotatePressed += PressRotate;
+    }
+
+    private void OnDisable()
+    {
+        gameInput.RotatePressed -= PressRotate;
+    }
+
 
     // 右に90°回転させよう
     private void Rotation()

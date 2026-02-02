@@ -505,6 +505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 230092162}
+  gameInput: {fileID: 2110131667}
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -841,6 +842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeManager: {fileID: 1498318528}
+  gameInput: {fileID: 2110131667}
 --- !u!1 &408516181
 GameObject:
   m_ObjectHideFlags: 0
