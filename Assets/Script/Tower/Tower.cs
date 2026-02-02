@@ -70,7 +70,7 @@ public class Tower : MonoBehaviour
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             TargetRotation,
-            Time.deltaTime * rotationSpeed
+            Time.unscaledDeltaTime * rotationSpeed // 編集中はゲーム内時間が止まるので、unscaled
         );
     }
 
