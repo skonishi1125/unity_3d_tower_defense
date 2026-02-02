@@ -122,7 +122,7 @@ public class BuildController : MonoBehaviour
         {
             if (cellHighlight != null)
             {
-                if (! cellHighlight.gameObject.activeSelf)
+                if (!cellHighlight.gameObject.activeSelf)
                     cellHighlight.gameObject.SetActive(true);
                 // 少しy軸を浮かせて、地面が光っているように演出
                 cellHighlight.position = cellCenter + Vector3.up * highlightYOffset;
@@ -131,7 +131,7 @@ public class BuildController : MonoBehaviour
             EnsureGhost(); // Ghostは建造モードのときだけ表示する
             if (ghostInstance != null)
             {
-                if (! ghostInstance.activeSelf)
+                if (!ghostInstance.activeSelf)
                     ghostInstance.SetActive(true);
                 ghostInstance.transform.position = cellCenter + Vector3.up * ghostYOffset;
             }
@@ -140,31 +140,14 @@ public class BuildController : MonoBehaviour
         {
             if (demolishCellHighlight != null)
             {
-                if (! demolishCellHighlight.gameObject.activeSelf)
-                    demolishCellHighlight.gameObject.SetActive (true);
+                if (!demolishCellHighlight.gameObject.activeSelf)
+                    demolishCellHighlight.gameObject.SetActive(true);
                 demolishCellHighlight.position = cellCenter + Vector3.up * highlightYOffset;
             }
 
             if (ghostInstance != null)
                 ghostInstance.SetActive(false);
         }
-    }
-
-    // Ghostと、どちらのCellHighlightをactiveにするか決定する
-    private void ApplyModeVisuals()
-    {
-        if (cellHighlight != null) cellHighlight.gameObject.SetActive(false);
-        if (demolishCellHighlight != null) demolishCellHighlight.gameObject.SetActive(false);
-
-        if (CurrentBuildMode == BuildMode.Build)
-            if (cellHighlight != null)
-                cellHighlight.gameObject.SetActive(true);
-        else if (CurrentBuildMode == BuildMode.Demolish)
-            if (demolishCellHighlight != null)
-                    demolishCellHighlight.gameObject.SetActive(true);
-
-        if (ghostInstance != null)
-            ghostInstance.SetActive(CurrentBuildMode == BuildMode.Build);
     }
 
     // 半透明なTower GameObjectを生成する。生成後は非activeとしておく
@@ -315,6 +298,29 @@ public class BuildController : MonoBehaviour
 
         if (ghostInstance.TryGetComponent<Tower>(out var ghostTower))
             ghostTower.Rotation();
+    }
+
+    // Ghostと、どちらのCellHighlightをactiveにするか決定する
+    private void ApplyModeVisuals()
+    {
+        if (cellHighlight != null)
+            cellHighlight.gameObject.SetActive(false);
+        if (demolishCellHighlight != null)
+            demolishCellHighlight.gameObject.SetActive(false);
+
+        if (CurrentBuildMode == BuildMode.Build)
+        {
+            if (cellHighlight != null)
+                cellHighlight.gameObject.SetActive(true);
+        }
+        else if (CurrentBuildMode == BuildMode.Demolish)
+        {
+            if (demolishCellHighlight != null)
+                demolishCellHighlight.gameObject.SetActive(true);
+        }
+
+        if (ghostInstance != null)
+            ghostInstance.SetActive(CurrentBuildMode == BuildMode.Build);
     }
 
     private bool CanRotateGhost()
