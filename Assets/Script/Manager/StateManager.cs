@@ -10,9 +10,6 @@ public enum GameState
 
 public class StateManager : MonoBehaviour
 {
-    public static StateManager Instance;
-
-    // ゲーム全体の状態
     public GameState State { get; private set; }
     public float elapsedTime { get; private set; }
 
@@ -68,21 +65,20 @@ public class StateManager : MonoBehaviour
 
     private void ToggleModePressed()
     {
-        Debug.Log("statemanager: togglemode!");
         if (State == GameState.Playing)
         {
+            gameInput.SetModeEdit(true);
             State = GameState.Edit;
             Time.timeScale = 0f;
         }
         else if (State == GameState.Edit)
         {
+            gameInput.SetModeEdit(false);
             State = GameState.Playing;
             Time.timeScale = 1f;
         }
 
         StateChanged?.Invoke();
-
-        // TODO: InputSystemも一緒に切り替える？
     }
 
     public void GameOver()

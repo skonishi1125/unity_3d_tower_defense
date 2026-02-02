@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class Hud : MonoBehaviour
@@ -7,16 +6,18 @@ public class Hud : MonoBehaviour
     // インターフェース系
     // EconomyManagerなどをSerializeFieldで割り当てて、
     // そこからIEconomyを抜き取り、コードで使う
-    // (EconomyManager em としないのは、SerializeFieldで割り当てられないから）
+    // (EconomyManager economyManager としないのは、SerializeFieldで割り当てられないから）
     [SerializeField] private MonoBehaviour economyProvider;
     [SerializeField] private MonoBehaviour lifeProvider;
     [SerializeField] private StageManager stageManager;
     [SerializeField] private StateManager stateManager;
+    [SerializeField] private BuildController buildController;
 
     [SerializeField] private TextMeshProUGUI moneyAmount;
     [SerializeField] private TextMeshProUGUI lifeAmount;
     [SerializeField] private TextMeshProUGUI waveNumber;
     [SerializeField] private TextMeshProUGUI gameStateText;
+    [SerializeField] private TextMeshProUGUI buildModeText;
 
     private IEconomy economy;
     private ILife life;
@@ -55,12 +56,39 @@ public class Hud : MonoBehaviour
             stateManager = FindFirstObjectByType<StateManager>();
         }
 
+        if (buildController == null)
+        {
+            Debug.Log("Hud: BuildController自動割当");
+            buildController = FindFirstObjectByType<BuildController>();
+        }
 
         if (waveNumber != null)
             UpdateWaveText();
 
         if (gameStateText != null)
             UpdateGameStateText();
+
+        if (buildModeText != null)
+            UpdateBuildModeText();
+
+    }
+
+    private void UpdateBuildModeText()
+    {
+        if (buildController.CurrentBuildMode == BuildMode.Build)
+        {
+            buildModeText.color = Color.white;
+            buildModeText.text = "建設する";
+        }
+        else if (buildController.CurrentBuildMode == BuildMode.Demolish)
+        {
+            buildModeText.color = Color.red;
+            buildModeText.text = "除去する";
+        }
+        else
+        {
+            buildModeText.text = " - ";
+        }
     }
 
     private void UpdateGameStateText()
@@ -114,6 +142,9 @@ public class Hud : MonoBehaviour
         if (stateManager != null)
             stateManager.StateChanged += UpdateGameStateText;
 
+        if (buildController != null)
+            buildController.BuildModeChanged += UpdateBuildModeText;
+
 
     }
     private void OnDisable()
@@ -129,6 +160,9 @@ public class Hud : MonoBehaviour
 
         if (stateManager != null)
             stateManager.StateChanged -= UpdateGameStateText;
+
+        if (buildController != null)
+            buildController.BuildModeChanged -= UpdateBuildModeText;
     }
 
 }

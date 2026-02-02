@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 public enum BuildMode
 {
     None = 0,
@@ -14,7 +15,7 @@ public class BuildController : MonoBehaviour
     [SerializeField] private StateManager stateManager;
 
     [Header("Place Setting")]
-    private BuildMode currentBuildMode = BuildMode.Build;
+    public BuildMode CurrentBuildMode = BuildMode.Build;
     [SerializeField] private LayerMask groundLayerMask;
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private Transform cellHighlight;
@@ -32,6 +33,8 @@ public class BuildController : MonoBehaviour
     // IEconomyであってもSerializeFieldとして付与するように設計している
     [SerializeField] private MonoBehaviour economyProvider;
     private IEconomy economy;
+
+    public event Action BuildModeChanged;
 
     private void Awake()
     {
@@ -70,16 +73,8 @@ public class BuildController : MonoBehaviour
     {
 
         // ホバー更新（Place / Demolish のときだけ）
-        if (currentBuildMode != BuildMode.None)
+        if (CurrentBuildMode != BuildMode.None)
             DisplayPlaceableEffect();
-
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    if (currentBuildMode == BuildMode.Edit)
-        //        PlaceTower();
-        //    else if (currentBuildMode == BuildMode.Demolish)
-        //        DemolishTower();
-        //}
     }
 
 
@@ -97,7 +92,7 @@ public class BuildController : MonoBehaviour
         Vector2Int cell = grid.WorldToCell(hit.point);
 
         // 建造モード, 配置不可セルにマウスがある場合はエフェクトを出さない。
-        if (currentBuildMode == BuildMode.Build && grid.IsBlocked(cell))
+        if (CurrentBuildMode == BuildMode.Build && grid.IsBlocked(cell))
         {
             if (ghostInstance != null)
                 ghostInstance.SetActive(false);
@@ -120,7 +115,7 @@ public class BuildController : MonoBehaviour
 
         // Ghost表示処理
         // Ghostは建造モードのときだけ表示する。
-        if (currentBuildMode == BuildMode.Build)
+        if (CurrentBuildMode == BuildMode.Build)
         {
             EnsureGhost();
             if (ghostInstance != null)
@@ -240,31 +235,27 @@ public class BuildController : MonoBehaviour
     }
 
     // Key Config
-    private void PressToggleMode()
-    {
-        Debug.Log("InputSystemで: Build Mode: None");
-        currentBuildMode = BuildMode.None;
-    }
-
     private void PressEdit()
     {
         Debug.Log("InputSystemで: Build Mode: Edit");
-        currentBuildMode = BuildMode.Build;
+        CurrentBuildMode = BuildMode.Build;
+        BuildModeChanged?.Invoke();
     }
 
     private void PressDemolish()
     {
         Debug.Log("InputSystemで: Build Mode: Demolish");
-        currentBuildMode = BuildMode.Demolish;
+        CurrentBuildMode = BuildMode.Demolish;
+        BuildModeChanged?.Invoke();
     }
 
     private void PressConfirm()
     {
         Debug.Log("InputSystemで: 左クリック");
 
-        if (currentBuildMode == BuildMode.Build)
+        if (CurrentBuildMode == BuildMode.Build)
             PlaceTower();
-        else if (currentBuildMode == BuildMode.Demolish)
+        else if (CurrentBuildMode == BuildMode.Demolish)
             DemolishTower();
     }
 
@@ -287,7 +278,7 @@ public class BuildController : MonoBehaviour
         if (stateManager.State != GameState.Edit)
             return false;
 
-        if (currentBuildMode != BuildMode.Build)
+        if (CurrentBuildMode != BuildMode.Build)
             return false;
 
         if (ghostInstance == null)
@@ -308,7 +299,6 @@ public class BuildController : MonoBehaviour
 
     private void OnEnable()
     {
-        gameInput.ToggleModeRequested += PressToggleMode;
         gameInput.SelectBuildRequested += PressEdit;
         gameInput.SelectDemolishRequested += PressDemolish;
         gameInput.ConfirmPressed += PressConfirm;
@@ -317,7 +307,6 @@ public class BuildController : MonoBehaviour
 
     private void OnDisable()
     {
-        gameInput.ToggleModeRequested -= PressToggleMode;
         gameInput.SelectBuildRequested -= PressEdit;
         gameInput.SelectDemolishRequested -= PressDemolish;
         gameInput.ConfirmPressed -= PressConfirm;
