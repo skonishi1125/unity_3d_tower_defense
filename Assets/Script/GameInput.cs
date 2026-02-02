@@ -1,9 +1,12 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
 {
     public GameInputSet Input { get; private set; }
+
+    public Vector2 PointerPosition { get; private set; }
 
     public event Action ToggleModeRequested; // Global: ESC
     public event Action SelectBuildRequested; // E
@@ -23,8 +26,10 @@ public class GameInput : MonoBehaviour
         // 最初は編集モードから始まるので、編集のマッピングを有効にする
         Input.Edit.Enable();
 
-        // 戦闘
+        // ゲーム全体
         Input.Global.ToggleMode.performed += _ => ToggleModeRequested?.Invoke();
+        Input.Global.Point.performed += OnPoint;
+        Input.Global.Point.canceled += OnPoint;
 
         // 編集モード
         Input.Edit.SelectBuild.performed += _ => SelectBuildRequested?.Invoke();
@@ -35,8 +40,12 @@ public class GameInput : MonoBehaviour
 
     private void OnDisable()
     {
-        // 戦闘
+        // ゲーム全体
         Input.Global.ToggleMode.performed -= _ => ToggleModeRequested?.Invoke();
+        // ↓だと、購読解除できない
+        // Input.Global.Point.performed -= ctx => PointerPosition = ctx.ReadValue<Vector2>();
+        Input.Global.Point.performed -= OnPoint;
+        Input.Global.Point.canceled -= OnPoint;
 
         // 編集モード
         Input.Edit.SelectBuild.performed -= _ => SelectBuildRequested?.Invoke();
@@ -49,6 +58,11 @@ public class GameInput : MonoBehaviour
 
         Input.Disable(); // これだけでいいかも？
 
+    }
+
+    private void OnPoint(InputAction.CallbackContext ctx)
+    {
+        PointerPosition = ctx.ReadValue<Vector2>();
     }
 
     // Globalは常に有効にしたまま、EditのInputSystemを有効 / 無効とする

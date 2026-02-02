@@ -91,7 +91,7 @@ public class BuildController : MonoBehaviour
             return;
 
         // 地面判定でない部分には、Ghostを出さない
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(gameInput.PointerPosition);
         if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, groundLayerMask))
         {
             if (cellHighlight != null) cellHighlight.gameObject.SetActive(false);
@@ -187,7 +187,7 @@ public class BuildController : MonoBehaviour
     // 塔の破壊処理
     private void DemolishTower()
     {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(gameInput.PointerPosition);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
@@ -205,7 +205,7 @@ public class BuildController : MonoBehaviour
 
     private void PlaceTower()
     {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(gameInput.PointerPosition);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))

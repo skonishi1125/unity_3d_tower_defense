@@ -100,6 +100,15 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""Value"",
+                    ""id"": ""b4fb2f83-dcf4-4c79-9285-92a27c637b65"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -111,6 +120,17 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""484152bc-b918-4014-9578-6841dc4cf308"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -227,6 +247,7 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
         // Global
         m_Global = asset.FindActionMap("Global", throwIfNotFound: true);
         m_Global_ToggleMode = m_Global.FindAction("ToggleMode", throwIfNotFound: true);
+        m_Global_Point = m_Global.FindAction("Point", throwIfNotFound: true);
         // Edit
         m_Edit = asset.FindActionMap("Edit", throwIfNotFound: true);
         m_Edit_SelectBuild = m_Edit.FindAction("SelectBuild", throwIfNotFound: true);
@@ -315,6 +336,7 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Global;
     private List<IGlobalActions> m_GlobalActionsCallbackInterfaces = new List<IGlobalActions>();
     private readonly InputAction m_Global_ToggleMode;
+    private readonly InputAction m_Global_Point;
     /// <summary>
     /// Provides access to input actions defined in input action map "Global".
     /// </summary>
@@ -330,6 +352,10 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Global/ToggleMode".
         /// </summary>
         public InputAction @ToggleMode => m_Wrapper.m_Global_ToggleMode;
+        /// <summary>
+        /// Provides access to the underlying input action "Global/Point".
+        /// </summary>
+        public InputAction @Point => m_Wrapper.m_Global_Point;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -359,6 +385,9 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
             @ToggleMode.started += instance.OnToggleMode;
             @ToggleMode.performed += instance.OnToggleMode;
             @ToggleMode.canceled += instance.OnToggleMode;
+            @Point.started += instance.OnPoint;
+            @Point.performed += instance.OnPoint;
+            @Point.canceled += instance.OnPoint;
         }
 
         /// <summary>
@@ -373,6 +402,9 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
             @ToggleMode.started -= instance.OnToggleMode;
             @ToggleMode.performed -= instance.OnToggleMode;
             @ToggleMode.canceled -= instance.OnToggleMode;
+            @Point.started -= instance.OnPoint;
+            @Point.performed -= instance.OnPoint;
+            @Point.canceled -= instance.OnPoint;
         }
 
         /// <summary>
@@ -562,6 +594,13 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleMode(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Point" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPoint(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Edit" which allows adding and removing callbacks.
