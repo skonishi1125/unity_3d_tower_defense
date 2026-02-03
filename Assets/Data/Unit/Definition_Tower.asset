@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad15824ced3f5954ba0feee203aa58b4, type: 3}
+  m_Name: Definition_Tower
+  m_EditorClassIdentifier: 
+  DisplayName: "\u30BF\u30EF\u30FCA"
+  Cost: 500
+  Description: "\u30D0\u30E9\u30F3\u30B9\u306E\u826F\u3044\u30B9\u30C6\u30FC\u30BF\u30B9\u3002\n\u30B3\u30B9\u30C8\u304C\u5C11\u3057\u9AD8\u3044\u3002"
+  Icon: {fileID: 21300000, guid: 1e10cc30ecaa89f4e8ec2627aab63e61, type: 3}
+  UnitPrefab: {fileID: 1994175516832729979, guid: 73df28dc35c26d740b666509ada8adfc, type: 3}
+  HotkeySlot: 2
