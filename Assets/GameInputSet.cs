@@ -175,6 +175,15 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Select1"",
+                    ""type"": ""Button"",
+                    ""id"": ""2b720f8c-f2f6-4e13-aef5-7f4f5684942c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -221,6 +230,28 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db0aefe7-e2f2-431e-9a43-1b693774e92a"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21ef27b4-9326-4473-8751-f89666a63c60"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -254,6 +285,7 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
         m_Edit_SelectDemolish = m_Edit.FindAction("SelectDemolish", throwIfNotFound: true);
         m_Edit_Confirm = m_Edit.FindAction("Confirm", throwIfNotFound: true);
         m_Edit_Rotate = m_Edit.FindAction("Rotate", throwIfNotFound: true);
+        m_Edit_Select1 = m_Edit.FindAction("Select1", throwIfNotFound: true);
     }
 
     ~@GameInputSet()
@@ -446,6 +478,7 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
     private readonly InputAction m_Edit_SelectDemolish;
     private readonly InputAction m_Edit_Confirm;
     private readonly InputAction m_Edit_Rotate;
+    private readonly InputAction m_Edit_Select1;
     /// <summary>
     /// Provides access to input actions defined in input action map "Edit".
     /// </summary>
@@ -473,6 +506,10 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Edit/Rotate".
         /// </summary>
         public InputAction @Rotate => m_Wrapper.m_Edit_Rotate;
+        /// <summary>
+        /// Provides access to the underlying input action "Edit/Select1".
+        /// </summary>
+        public InputAction @Select1 => m_Wrapper.m_Edit_Select1;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -511,6 +548,9 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
             @Rotate.started += instance.OnRotate;
             @Rotate.performed += instance.OnRotate;
             @Rotate.canceled += instance.OnRotate;
+            @Select1.started += instance.OnSelect1;
+            @Select1.performed += instance.OnSelect1;
+            @Select1.canceled += instance.OnSelect1;
         }
 
         /// <summary>
@@ -534,6 +574,9 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
             @Rotate.started -= instance.OnRotate;
             @Rotate.performed -= instance.OnRotate;
             @Rotate.canceled -= instance.OnRotate;
+            @Select1.started -= instance.OnSelect1;
+            @Select1.performed -= instance.OnSelect1;
+            @Select1.canceled -= instance.OnSelect1;
         }
 
         /// <summary>
@@ -637,5 +680,12 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRotate(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Select1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelect1(InputAction.CallbackContext context);
     }
 }
