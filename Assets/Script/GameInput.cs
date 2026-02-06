@@ -13,6 +13,7 @@ public class GameInput : MonoBehaviour
     public event Action SelectDemolishRequested; // D
     public event Action ConfirmPressed; // 左クリック
     public event Action RotatePressed; // 右クリック
+    public event Action<int> SelectUnitRequested;
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class GameInput : MonoBehaviour
         Input.Edit.SelectDemolish.performed += _ => SelectDemolishRequested?.Invoke();
         Input.Edit.Confirm.performed += _ => ConfirmPressed?.Invoke();
         Input.Edit.Rotate.performed += _ => RotatePressed?.Invoke();
+        Input.Edit.SelectUnit.performed += OnSelectUnitPerformed;
     }
 
     private void OnDisable()
@@ -52,6 +54,7 @@ public class GameInput : MonoBehaviour
         Input.Edit.SelectDemolish.performed -= _ => SelectDemolishRequested?.Invoke();
         Input.Edit.Confirm.performed -= _ => ConfirmPressed?.Invoke();
         Input.Edit.Rotate.performed -= _ => RotatePressed?.Invoke();
+        Input.Edit.SelectUnit.performed -= OnSelectUnitPerformed;
 
         Input.Edit.Disable();
         Input.Global.Disable();
@@ -72,6 +75,14 @@ public class GameInput : MonoBehaviour
             Input.Edit.Enable();
         else
             Input.Edit.Disable();
+    }
+
+    // SelectUnitで登録された数字キーの数字を返しつつ、イベントを実行
+    private void OnSelectUnitPerformed(InputAction.CallbackContext ctx)
+    {
+        // ctx.control.name には押されたキーの名称（"1"や"2"）が入る
+        if (int.TryParse(ctx.control.name, out int slot))
+            SelectUnitRequested?.Invoke(slot);
     }
 
 }

@@ -2,11 +2,17 @@
 
 public class UnitIcons : MonoBehaviour
 {
+    [SerializeField] private GameInput gameInput;
+    [SerializeField] private UnitSelection selection;
+
     [SerializeField] private UnitCatalog catalog;
     [SerializeField] private GameObject iconPrefab;
 
     private void Awake()
     {
+        if (gameInput == null)
+            gameInput = FindFirstObjectByType<GameInput>();
+
         if (catalog == null)
             Debug.LogError("UnitIcons: catalog未割り当て");
 
@@ -17,6 +23,16 @@ public class UnitIcons : MonoBehaviour
     private void Start()
     {
         CreateIconInChild();
+    }
+
+    private void OnEnable()
+    {
+        gameInput.SelectUnitRequested += OnSelectUnitRequested;
+    }
+
+    private void OnDisable()
+    {
+        gameInput.SelectUnitRequested -= OnSelectUnitRequested;
     }
 
     // 子要素にCatalogで登録された分だけ、Prefabを作る
@@ -37,6 +53,19 @@ public class UnitIcons : MonoBehaviour
                 unitIcon.SetInfo(unitDef);
 
 
+        }
+    }
+
+    private void OnSelectUnitRequested(int slot)
+    {
+        // カタログの中から、HotkeySlotが一致するものを探す
+        foreach (var unitDef in catalog.unitDefinitions)
+        {
+            if (unitDef.HotkeySlot == slot)
+            {
+                selection.Select(unitDef);
+                break;
+            }
         }
     }
 }
