@@ -925,7 +925,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Costs: \uFFE5999"
+  m_text: "Costs: \uFFE5-"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42dd4a4111a82ec459ccb248f2aae8d8, type: 2}
   m_sharedMaterial: {fileID: 1764616735808686575, guid: 42dd4a4111a82ec459ccb248f2aae8d8, type: 2}
@@ -1396,7 +1396,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30DB\u30D8\u30FC"
+  m_text: "\u3010\u672A\u9078\u629E\u3011"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42dd4a4111a82ec459ccb248f2aae8d8, type: 2}
   m_sharedMaterial: {fileID: 1764616735808686575, guid: 42dd4a4111a82ec459ccb248f2aae8d8, type: 2}
@@ -2314,7 +2314,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u4F4E\u30B3\u30B9\u30C8\u306A\u308A\u306E\u6027\u80FD\u3002\n\u5B89\u4FA1\u3067\u4F7F\u3044\u3064\u3076\u3057\u3084\u3059\u3044\u3002"
+  m_text: "\u30E6\u30CB\u30C3\u30C8\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42dd4a4111a82ec459ccb248f2aae8d8, type: 2}
   m_sharedMaterial: {fileID: 1764616735808686575, guid: 42dd4a4111a82ec459ccb248f2aae8d8, type: 2}
@@ -2341,8 +2341,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4954,6 +4954,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f341de0e7ce5442a4da56f7cde717b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugHohe: {fileID: 11400000, guid: fa5f1c49d018cd24b8ac522905a349e0, type: 2}
 --- !u!224 &1885943481
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5032,9 +5033,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1885943481}
   - {fileID: 1512727827}
   - {fileID: 1650831389}
+  - {fileID: 1885943481}
   - {fileID: 138207883}
   m_Father: {fileID: 104221468}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

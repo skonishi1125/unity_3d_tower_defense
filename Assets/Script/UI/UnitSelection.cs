@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-// 現在選択中のユニットを持つ
+// 現在選択中のユニットを管理するクラス
 // ユニットアイコンが選ばれたとき、ここで情報を更新して通知する
 public class UnitSelection : MonoBehaviour
 {
