@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 public enum BuildMode
 {
     None = 0,
@@ -85,6 +86,14 @@ public class BuildController : MonoBehaviour
     // 配置場所のグリッドに、四角くハイライト + Ghostを出す
     private void DisplayPlaceableEffect()
     {
+        // マウスポインタがUIにある場合は、Ghostを出さない
+        // EventSystem.current.IsPointerOverGameObject() でマウスがCanvas上にあるかどうか判定できる
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            HideHighlights();
+            return;
+        }
+
         // Playing（戦闘中）は、Ghostを出さない
         // ※画面にGhostがある状態から戦闘に遷移したときは、ESCが押されたときに別途処理でActiveをfalseにしている
         if (stateManager.State == GameState.Playing)
@@ -94,9 +103,7 @@ public class BuildController : MonoBehaviour
         Ray ray = mainCamera.ScreenPointToRay(gameInput.PointerPosition);
         if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, groundLayerMask))
         {
-            if (cellHighlight != null) cellHighlight.gameObject.SetActive(false);
-            if (demolishCellHighlight != null) demolishCellHighlight.gameObject.SetActive(false);
-            if (ghostInstance != null) ghostInstance.SetActive(false);
+            HideHighlights();
             return;
         }
 
@@ -148,6 +155,13 @@ public class BuildController : MonoBehaviour
             if (ghostInstance != null)
                 ghostInstance.SetActive(false);
         }
+    }
+
+    private void HideHighlights()
+    {
+        if (cellHighlight != null) cellHighlight.gameObject.SetActive(false);
+        if (demolishCellHighlight != null) demolishCellHighlight.gameObject.SetActive(false);
+        if (ghostInstance != null) ghostInstance.SetActive(false);
     }
 
     // 半透明なTower GameObjectを生成する。生成後は非activeとしておく
@@ -264,7 +278,6 @@ public class BuildController : MonoBehaviour
     }
     private void PressEdit()
     {
-        Debug.Log("InputSystemで: Build Mode: Edit");
         CurrentBuildMode = BuildMode.Build;
         ApplyModeVisuals();
         BuildModeChanged?.Invoke();
@@ -272,7 +285,6 @@ public class BuildController : MonoBehaviour
 
     private void PressDemolish()
     {
-        Debug.Log("InputSystemで: Build Mode: Demolish");
         CurrentBuildMode = BuildMode.Demolish;
         ApplyModeVisuals();
         BuildModeChanged?.Invoke();
@@ -280,7 +292,9 @@ public class BuildController : MonoBehaviour
 
     private void PressConfirm()
     {
-        Debug.Log("InputSystemで: 左クリック");
+        // UIクリック時は、建築や解体の実行をしない
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
 
         if (CurrentBuildMode == BuildMode.Build)
             PlaceTower();
@@ -290,8 +304,6 @@ public class BuildController : MonoBehaviour
 
     private void PressRotate()
     {
-        Debug.Log("InputSystemで: 右クリック");
-
         // 3条件をここで集約
         if (!CanRotateGhost())
             return;

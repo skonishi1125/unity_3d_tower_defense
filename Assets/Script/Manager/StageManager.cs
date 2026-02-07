@@ -18,7 +18,6 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("start!");
         BeginStage();
     }
 
