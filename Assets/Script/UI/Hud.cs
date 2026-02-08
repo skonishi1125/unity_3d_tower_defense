@@ -18,6 +18,8 @@ public class Hud : MonoBehaviour
     [SerializeField] private TextMeshProUGUI waveNumber;
     [SerializeField] private TextMeshProUGUI gameStateText;
     [SerializeField] private TextMeshProUGUI buildModeText;
+    [SerializeField] private GameObject EditStateUI;
+    [SerializeField] private GameObject PlayingStateUI;
 
     private IEconomy economy;
     private ILife life;
@@ -73,17 +75,27 @@ public class Hud : MonoBehaviour
 
     }
 
+    // Stateに応じたUIの切り替え
+    private void UpdateGameStateUI()
+    {
+        GameState state = stateManager.State;
+
+        // 全てのルートパネルを初期化し、stateに応じて呼び分ける
+        EditStateUI.SetActive(state == GameState.Edit);
+        PlayingStateUI.SetActive(state == GameState.Playing);
+    }
+
     private void UpdateBuildModeText()
     {
         if (buildController.CurrentBuildMode == BuildMode.Build)
         {
             buildModeText.color = Color.white;
-            buildModeText.text = "建設する";
+            buildModeText.text = "建築";
         }
         else if (buildController.CurrentBuildMode == BuildMode.Demolish)
         {
             buildModeText.color = Color.red;
-            buildModeText.text = "除去する";
+            buildModeText.text = "壊す";
         }
         else
         {
@@ -96,12 +108,12 @@ public class Hud : MonoBehaviour
         if (stateManager.State == GameState.Edit)
         {
             gameStateText.color = Color.white;
-            gameStateText.text = "【編集中】";
+            gameStateText.text = "【EDIT】";
         }
         else if (stateManager.State == GameState.Playing)
         {
             gameStateText.color = Color.red;
-            gameStateText.text = "【戦闘中】";
+            gameStateText.text = "【PLAY】";
         }
     }
 
@@ -140,7 +152,10 @@ public class Hud : MonoBehaviour
             stageManager.WaveChanged += UpdateWaveText;
 
         if (stateManager != null)
+        {
             stateManager.StateChanged += UpdateGameStateText;
+            stateManager.StateChanged += UpdateGameStateUI;
+        }
 
         if (buildController != null)
             buildController.BuildModeChanged += UpdateBuildModeText;
@@ -159,7 +174,10 @@ public class Hud : MonoBehaviour
             stageManager.WaveChanged -= UpdateWaveText;
 
         if (stateManager != null)
+        {
             stateManager.StateChanged -= UpdateGameStateText;
+            stateManager.StateChanged -= UpdateGameStateUI;
+        }
 
         if (buildController != null)
             buildController.BuildModeChanged -= UpdateBuildModeText;

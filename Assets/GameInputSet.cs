@@ -184,6 +184,15 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""eeb64a06-a94d-4797-8949-1477e8010071"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -252,6 +261,17 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
                     ""action"": ""SelectUnit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d9b9d12-3a3a-41a2-8386-35f0823a2d3b"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -286,6 +306,7 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
         m_Edit_Confirm = m_Edit.FindAction("Confirm", throwIfNotFound: true);
         m_Edit_Rotate = m_Edit.FindAction("Rotate", throwIfNotFound: true);
         m_Edit_SelectUnit = m_Edit.FindAction("SelectUnit", throwIfNotFound: true);
+        m_Edit_Zoom = m_Edit.FindAction("Zoom", throwIfNotFound: true);
     }
 
     ~@GameInputSet()
@@ -479,6 +500,7 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
     private readonly InputAction m_Edit_Confirm;
     private readonly InputAction m_Edit_Rotate;
     private readonly InputAction m_Edit_SelectUnit;
+    private readonly InputAction m_Edit_Zoom;
     /// <summary>
     /// Provides access to input actions defined in input action map "Edit".
     /// </summary>
@@ -510,6 +532,10 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Edit/SelectUnit".
         /// </summary>
         public InputAction @SelectUnit => m_Wrapper.m_Edit_SelectUnit;
+        /// <summary>
+        /// Provides access to the underlying input action "Edit/Zoom".
+        /// </summary>
+        public InputAction @Zoom => m_Wrapper.m_Edit_Zoom;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -551,6 +577,9 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
             @SelectUnit.started += instance.OnSelectUnit;
             @SelectUnit.performed += instance.OnSelectUnit;
             @SelectUnit.canceled += instance.OnSelectUnit;
+            @Zoom.started += instance.OnZoom;
+            @Zoom.performed += instance.OnZoom;
+            @Zoom.canceled += instance.OnZoom;
         }
 
         /// <summary>
@@ -577,6 +606,9 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
             @SelectUnit.started -= instance.OnSelectUnit;
             @SelectUnit.performed -= instance.OnSelectUnit;
             @SelectUnit.canceled -= instance.OnSelectUnit;
+            @Zoom.started -= instance.OnZoom;
+            @Zoom.performed -= instance.OnZoom;
+            @Zoom.canceled -= instance.OnZoom;
         }
 
         /// <summary>
@@ -687,5 +719,12 @@ public partial class @GameInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSelectUnit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Zoom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnZoom(InputAction.CallbackContext context);
     }
 }

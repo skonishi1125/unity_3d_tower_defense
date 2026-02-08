@@ -7,6 +7,7 @@ public class GameInput : MonoBehaviour
     public GameInputSet Input { get; private set; }
 
     public Vector2 PointerPosition { get; private set; }
+    public float ScrollDelta { get; private set; }
 
     public event Action ToggleModeRequested; // Global: ESC
     public event Action SelectBuildRequested; // E
@@ -14,6 +15,7 @@ public class GameInput : MonoBehaviour
     public event Action ConfirmPressed; // 左クリック
     public event Action RotatePressed; // 右クリック
     public event Action<int> SelectUnitRequested;
+    public event Action<float> ZoomRequested; // マウスホイール
 
     private void Awake()
     {
@@ -38,6 +40,8 @@ public class GameInput : MonoBehaviour
         Input.Edit.Confirm.performed += _ => ConfirmPressed?.Invoke();
         Input.Edit.Rotate.performed += _ => RotatePressed?.Invoke();
         Input.Edit.SelectUnit.performed += OnSelectUnitPerformed;
+        Input.Edit.Zoom.performed += OnZoom;
+        Input.Edit.Zoom.canceled += OnZoom;
     }
 
     private void OnDisable()
@@ -55,6 +59,8 @@ public class GameInput : MonoBehaviour
         Input.Edit.Confirm.performed -= _ => ConfirmPressed?.Invoke();
         Input.Edit.Rotate.performed -= _ => RotatePressed?.Invoke();
         Input.Edit.SelectUnit.performed -= OnSelectUnitPerformed;
+        Input.Edit.Zoom.performed -= OnZoom;
+        Input.Edit.Zoom.canceled -= OnZoom;
 
         Input.Edit.Disable();
         Input.Global.Disable();
@@ -83,6 +89,17 @@ public class GameInput : MonoBehaviour
         // ctx.control.name には押されたキーの名称（"1"や"2"）が入る
         if (int.TryParse(ctx.control.name, out int slot))
             SelectUnitRequested?.Invoke(slot);
+    }
+
+    private void OnZoom(InputAction.CallbackContext ctx)
+    {
+        Vector2 scrollValue = ctx.ReadValue<Vector2>();
+        ScrollDelta = scrollValue.y;
+
+        if (ScrollDelta != 0)
+            ZoomRequested?.Invoke(ScrollDelta);
+
+        Debug.Log(ScrollDelta);
     }
 
 }
