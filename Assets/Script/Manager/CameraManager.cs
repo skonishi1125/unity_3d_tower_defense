@@ -20,7 +20,9 @@ public class CameraManager : MonoBehaviour
             stateManager = FindFirstObjectByType<StateManager>();
         }
 
-        // 開始時のカメラ設定は、StateManager側でAwake時にInvokeされるので不要。
+        // 開始時のカメラ設定は、StateManager側でAwake時にInvokeされる
+        // ただしAwake時、こちらのOnEnableの購読が間に合わない可能性があるので、
+        // こちらでも実行しておく。
         RefreshCameraPriority();
     }
 
