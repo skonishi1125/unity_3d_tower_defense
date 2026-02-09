@@ -46,13 +46,19 @@ public class UnitIcons : MonoBehaviour
             if (key == 10)
                 key = 0;
 
-                GameObject createIcon = Instantiate(iconPrefab, this.transform);
+            GameObject createIcon = Instantiate(iconPrefab, this.transform);
             createIcon.name = $"icon_{key}";
+
             UnitIcon unitIcon = createIcon.GetComponent<UnitIcon>();
             if (unitIcon != null)
-                unitIcon.SetInfo(unitDef);
-
-
+            {
+                // アイコン単体のボタン処理に、`selection.Select()`を渡す
+                // クリックされたときに、この関数を走らせるという設計にしている
+                unitIcon.SetInfo(unitDef, (selectedDef) =>
+                {
+                    selection.Select(selectedDef);
+                });
+            }
         }
     }
 

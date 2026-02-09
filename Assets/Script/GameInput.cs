@@ -99,7 +99,7 @@ public class GameInput : MonoBehaviour
         if (ScrollDelta != 0)
             ZoomRequested?.Invoke(ScrollDelta);
 
-        Debug.Log(ScrollDelta);
+        //Debug.Log(ScrollDelta);
     }
 
 }

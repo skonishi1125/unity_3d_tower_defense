@@ -66,14 +66,14 @@ public class CameraManager : MonoBehaviour
             // Edit用カメラ
             overviewVCam.Priority = PriorityInactive;
             buildVCam.Priority = PriorityActive;
-            Debug.Log("camerachange: buildVCam");
+            //Debug.Log("camerachange: buildVCam");
         }
         else // Playing, リザルト画面など
         {
             // 通常カメラに
             overviewVCam.Priority = PriorityActive;
             buildVCam.Priority = PriorityInactive;
-            Debug.Log("camerachange: overviewVCam");
+            //Debug.Log("camerachange: overviewVCam");
         }
     }
 
