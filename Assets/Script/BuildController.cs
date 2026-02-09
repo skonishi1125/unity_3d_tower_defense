@@ -14,11 +14,11 @@ public class BuildController : MonoBehaviour
     [SerializeField] private GridSystem grid;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private StateManager stateManager;
+    [SerializeField] private UnitSelection unitSelection;
 
     [Header("Place Setting")]
     public BuildMode CurrentBuildMode = BuildMode.Build;
     [SerializeField] private LayerMask groundLayerMask;
-    [SerializeField] private GameObject towerPrefab;
     [SerializeField] private Transform cellHighlight;
     [SerializeField] private Transform demolishCellHighlight;
 
@@ -27,7 +27,6 @@ public class BuildController : MonoBehaviour
     [SerializeField] private float highlightYOffset = 0.01f;
     [SerializeField] private float ghostYOffset = 0.0f;
     [SerializeField] private Material ghostMaterial;
-    private float ghostCost;
 
     [Header("Dependencies")]
     // IEconomyを実装しているEconomyManagerを参照させる
@@ -44,14 +43,20 @@ public class BuildController : MonoBehaviour
 
         if (gameInput == null)
         {
-            Debug.Log("BM: gameInputを自動割当します");
+            Debug.Log("BC: gameInputを自動割当します");
             gameInput = FindFirstObjectByType<GameInput>();
         }
 
         if (grid == null)
         {
-            Debug.Log("BM: GridSystemを自動割当します");
+            Debug.Log("BC: GridSystemを自動割当します");
             grid = FindFirstObjectByType<GridSystem>();
+        }
+
+        if (unitSelection == null)
+        {
+            Debug.Log("BC: unitSelectionを自動割当します");
+            unitSelection = FindFirstObjectByType<UnitSelection>();
         }
 
         // as: キャストできるならそうする。無理ならnull。
@@ -167,18 +172,17 @@ public class BuildController : MonoBehaviour
     // 半透明なTower GameObjectを生成する。生成後は非activeとしておく
     private void EnsureGhost()
     {
+        // unitSelectionが取得できていなければ中断
+        if (unitSelection.Selected == null || unitSelection.Selected.UnitPrefab == null) return;
+
         // すでに作られていたら走らせないでよい
         if (ghostInstance != null) return;
-        if (towerPrefab == null) return;
 
-        ghostInstance = Instantiate(towerPrefab);
-        ghostInstance.name = "[Ghost] " + towerPrefab.name;
+        ghostInstance = Instantiate(unitSelection.Selected.UnitPrefab);
+        ghostInstance.name = "[Ghost] " + unitSelection.Selected.UnitPrefab.name;
         var tower = ghostInstance.GetComponent<Tower>();
         if (tower != null)
-        {
             tower.SetState(TowerState.Ghost);
-            ghostCost = tower.Status.GetCost();
-        }
 
         // 衝突判定無効化
         foreach (var col in ghostInstance.GetComponentsInChildren<Collider>())
@@ -250,18 +254,26 @@ public class BuildController : MonoBehaviour
             else if (ghostInstance != null)
                 rotate = ghostInstance.transform.rotation;
 
+            UnitDefinition selectedUnit = unitSelection.Selected;
+            if (selectedUnit == null) return;
+
             // 建築可否及びコストの消費
-            if (!economy.TrySpend(ghostCost))
+            if (!economy.TrySpend(selectedUnit.Cost))
                 return;
 
-            var tower = Instantiate(towerPrefab, cellCenter, rotate);
-            var c = tower.GetComponent<Tower>();
+            // 現在選択中のユニットのPrefabを使う
+            if (unitSelection.Selected == null) return;
+
+            var targetPrefab = unitSelection.Selected.UnitPrefab;
+
+            var towerObject = Instantiate(targetPrefab, cellCenter, rotate);
+            var c = towerObject.GetComponent<Tower>();
             if (c != null)
                 c.SetState(TowerState.Battle);
-            if (!grid.TryAddTower(cell, tower))
+            if (!grid.TryAddTower(cell, towerObject))
             {
-                Destroy(tower);
-                economy.Refund(ghostCost);
+                Destroy(towerObject);
+                economy.Refund(selectedUnit.Cost);
                 Debug.Log($"登録に失敗しました: {cell}");
             }
         }
@@ -304,9 +316,11 @@ public class BuildController : MonoBehaviour
 
     private void PressRotate()
     {
-        // 3条件をここで集約
         if (!CanRotateGhost())
+        {
+            Debug.Log("回転できません");
             return;
+        }
 
         if (ghostInstance.TryGetComponent<Tower>(out var ghostTower))
             ghostTower.Rotation();
@@ -339,26 +353,65 @@ public class BuildController : MonoBehaviour
     {
         if (stateManager == null)
             return false;
+
+        //Debug.Log("1");
+
+
         if (stateManager.State != GameState.Edit)
             return false;
+
+        //Debug.Log("2");
+
 
         if (CurrentBuildMode != BuildMode.Build)
             return false;
 
+        //Debug.Log("3");
+
+
         if (ghostInstance == null)
             return false;
+
+        //Debug.Log("4");
+
+
         if (!ghostInstance.activeInHierarchy) // TODO: 詳細に調べる
             return false;
 
+        //Debug.Log("5");
+
         if (!ghostInstance.TryGetComponent<Tower>(out var tower))
             return false;
+
+        //Debug.Log("6");
+
         if (tower.CurrentTowerState != TowerState.Ghost)
             return false;
+
+        //Debug.Log("7");
+
 
         // ゲーム全体が編集モードで
         // 編集中の状態が建築モードで
         // TowerがGhost状態のときは、回転できる
         return true;
+    }
+
+    // 選択中のユニットが変化したときの差し替え処理
+    private void OnUnitSelectionChanged(UnitDefinition newUnit)
+    {
+        // 1. 古いGhostがあれば削除する
+        if (ghostInstance != null)
+        {
+            Destroy(ghostInstance);
+            ghostInstance = null;
+        }
+
+        // 2. 新しいユニットがnull（未選択）ならここで終了
+        if (newUnit == null) return;
+
+        if (CurrentBuildMode == BuildMode.Build && newUnit != null)
+            EnsureGhost();
     }
 
     private void OnEnable()
@@ -368,6 +421,10 @@ public class BuildController : MonoBehaviour
         gameInput.SelectDemolishRequested += PressDemolish;
         gameInput.ConfirmPressed += PressConfirm;
         gameInput.RotatePressed += PressRotate;
+
+        if (unitSelection != null)
+            unitSelection.SelectedChanged += OnUnitSelectionChanged;
+
     }
 
     private void OnDisable()
@@ -377,6 +434,9 @@ public class BuildController : MonoBehaviour
         gameInput.SelectDemolishRequested -= PressDemolish;
         gameInput.ConfirmPressed -= PressConfirm;
         gameInput.RotatePressed -= PressRotate;
+
+        if (unitSelection != null)
+            unitSelection.SelectedChanged -= OnUnitSelectionChanged;
     }
 
 
