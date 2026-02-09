@@ -16,6 +16,8 @@ public class BuildController : MonoBehaviour
     [SerializeField] private StateManager stateManager;
     [SerializeField] private UnitSelection unitSelection;
 
+    private bool isPointerOverUI; // マウスがUI上にあるかどうかのフラグ
+
     [Header("Place Setting")]
     public BuildMode CurrentBuildMode = BuildMode.Build;
     [SerializeField] private LayerMask groundLayerMask;
@@ -82,6 +84,9 @@ public class BuildController : MonoBehaviour
 
     private void Update()
     {
+        // マウスがUI上に存在するかの確認
+        isPointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+
         // ホバー更新（Place / Demolish のときだけ）
         if (CurrentBuildMode != BuildMode.None)
             DisplayPlaceableEffect();
@@ -305,7 +310,7 @@ public class BuildController : MonoBehaviour
     private void PressConfirm()
     {
         // UIクリック時は、建築や解体の実行をしない
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        if (isPointerOverUI)
             return;
 
         if (CurrentBuildMode == BuildMode.Build)
