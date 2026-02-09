@@ -17,6 +17,7 @@ public class BuildController : MonoBehaviour
     [SerializeField] private UnitSelection unitSelection;
 
     private bool isPointerOverUI; // マウスがUI上にあるかどうかのフラグ
+    private Quaternion currentGhostRotation = Quaternion.identity; // Ghostの現在の回転値
 
     [Header("Place Setting")]
     public BuildMode CurrentBuildMode = BuildMode.Build;
@@ -187,7 +188,10 @@ public class BuildController : MonoBehaviour
         ghostInstance.name = "[Ghost] " + unitSelection.Selected.UnitPrefab.name;
         var tower = ghostInstance.GetComponent<Tower>();
         if (tower != null)
+        {
             tower.SetState(TowerState.Ghost);
+            tower.TargetRotation = currentGhostRotation;
+        }
 
         // 衝突判定無効化
         foreach (var col in ghostInstance.GetComponentsInChildren<Collider>())
@@ -328,7 +332,10 @@ public class BuildController : MonoBehaviour
         }
 
         if (ghostInstance.TryGetComponent<Tower>(out var ghostTower))
+        {
             ghostTower.Rotation();
+            currentGhostRotation = ghostTower.TargetRotation;
+        }
     }
 
     // Ghostと、どちらのCellHighlightをactiveにするか決定する

@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 public class Hud : MonoBehaviour
 {
@@ -20,6 +21,10 @@ public class Hud : MonoBehaviour
     [SerializeField] private TextMeshProUGUI buildModeText;
     [SerializeField] private GameObject EditStateUI;
     [SerializeField] private GameObject PlayingStateUI;
+
+    private Tween moneyColorTween;
+    private Color originalMoneyColor;
+    private Vector3 originalMoneyLocalPos;
 
     private IEconomy economy;
     private ILife life;
@@ -73,6 +78,13 @@ public class Hud : MonoBehaviour
         if (buildModeText != null)
             UpdateBuildModeText();
 
+        // 元の色の保存
+        if (moneyAmount != null)
+        {
+            originalMoneyColor = moneyAmount.color;
+            originalMoneyLocalPos = moneyAmount.transform.localPosition;
+        }
+
     }
 
     // Stateに応じたUIの切り替え
@@ -121,7 +133,7 @@ public class Hud : MonoBehaviour
     {
         float number = currentMoney;
         string formattedNumber = number.ToString("N0");
-        moneyAmount.text = $"{formattedNumber}";
+        moneyAmount.text = $"¥ {formattedNumber}";
     }
 
     private void UpdateLifeAmount(int currentLife)
@@ -140,10 +152,39 @@ public class Hud : MonoBehaviour
         waveNumber.text = $"Wave: {stageManager.CurrentWave} / {stageManager.MaxWave}";
     }
 
+    // お金が足りないとき、赤く点滅させる
+    private void AnimateInsufficientFunds()
+    {
+        if (moneyAmount == null) return;
+
+        // 連打対策
+        // 前のアニメーションがあればKillして、改めて走らせる
+        // 色と位置を元の場所にリセット
+        moneyColorTween?.Kill();
+        moneyAmount.transform.DOKill();
+        moneyAmount.color = originalMoneyColor;
+        moneyAmount.transform.localPosition = originalMoneyLocalPos;
+
+        moneyColorTween = moneyAmount.DOColor(Color.red, 0.1f)
+            .SetUpdate(true) // TimeScale = 0 でも動かす
+            .SetLoops(4, LoopType.Yoyo)
+            .OnComplete(() => moneyAmount.color = originalMoneyColor)
+            .SetLink(gameObject);
+
+        // テキスト自体の揺れモーション
+        // .3秒で、y軸に揺らす
+        moneyAmount.transform.DOShakePosition(0.3f, new Vector3(0f, 5f, 0f))
+            .SetUpdate(true)
+            .SetLink(gameObject);
+    }
+
     private void OnEnable()
     {
         if (economy != null)
+        {
             economy.MoneyChanged += UpdateMoneyAmount;
+            economy.OnInsufficientFunds += AnimateInsufficientFunds;
+        }
 
         if (life != null)
             life.LifeChanged += UpdateLifeAmount;
@@ -165,7 +206,10 @@ public class Hud : MonoBehaviour
     private void OnDisable()
     {
         if (economy != null)
+        {
             economy.MoneyChanged -= UpdateMoneyAmount;
+            economy.OnInsufficientFunds -= AnimateInsufficientFunds;
+        }
 
         if (life != null)
             life.LifeChanged -= UpdateLifeAmount;
