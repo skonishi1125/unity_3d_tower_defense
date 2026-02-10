@@ -8,6 +8,7 @@ public class TowerStatus : MonoBehaviour
     [SerializeField] private Status attackRange; // スカラー 攻撃する距離 3 = 3マス分にしたい
     [SerializeField] private Status viewingAngle; // 視野角 90° = ±45°の方向で広がることになる
     [SerializeField] private Status cost; // 建造費用
+    [SerializeField] private Status knockbackPower;
 
     public float GetMaxHp()
     {
@@ -38,6 +39,11 @@ public class TowerStatus : MonoBehaviour
     public float GetCost()
     {
         return cost.GetValue();
+    }
+
+    public float GetKnockbackPower()
+    {
+        return knockbackPower.GetValue();
     }
 
     // TowerCombatとか別箇所に書くと、Playモード中以外は取得できずにエラーになる

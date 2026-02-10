@@ -76,7 +76,9 @@ public class TowerCombat : MonoBehaviour
             .DOJump(transform.position, hopHeight, 1, hopDuration)
             .SetEase(Ease.OutQuad)
             .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
-        h.TakeDamage(status.GetAttack());
+
+        // ダメージ処理
+        h.TakeDamage(status.GetAttack(), status.GetKnockbackPower());
 
         // 攻撃が終わったら、インターバルリセット
         attackTimer = status.GetAttackInterval();

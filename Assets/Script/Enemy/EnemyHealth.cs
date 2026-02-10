@@ -6,6 +6,7 @@ public class EnemyHealth : MonoBehaviour
 {
     private Enemy enemy;
     private EnemyStatus status;
+    private EnemyMovement movement;
     private EnemyVfx vfx;
     private Slider healthBar;
 
@@ -19,6 +20,7 @@ public class EnemyHealth : MonoBehaviour
     {
         enemy = GetComponent<Enemy>();
         status = GetComponent<EnemyStatus>();
+        movement = GetComponent<EnemyMovement>();
         vfx = GetComponent<EnemyVfx>();
         healthBar = GetComponentInChildren<Slider>();
 
@@ -34,11 +36,15 @@ public class EnemyHealth : MonoBehaviour
         healthBar.value = currentHp / status.GetMaxHp();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, float knockback = 0f)
     {
         ReduceHp(damage);
         vfx?.PlayOnDamageVfx(); // イベントでも良いかもしれない。
         OnTakeDamaged?.Invoke();
+
+        // KB処理
+        if (knockback > 0f && movement != null)
+            movement.ApplyKnockback(knockback);
     }
 
     private void ReduceHp(float damage)

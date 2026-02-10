@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad15824ced3f5954ba0feee203aa58b4, type: 3}
-  m_Name: Definition_Fort
+  m_Name: 2_Definition_Arrow
   m_EditorClassIdentifier: 
-  DisplayName: "\u30D5\u30A9\u30FC\u30C8"
-  Cost: 300
-  Description: "\u9AD8\u706B\u529B\u306A\u653B\u6483\u304C\u7279\u5FB4\u3002\n\u653B\u6483\u901F\u5EA6\u306F\u9045\u3081\u3002\u6700\u5F8C\u306E\u4E00\u62BC\u3057\u306B\u3002"
+  DisplayName: "\u30A2\u30ED\u30FC"
+  Cost: 250
+  Description: "\u9060\u8DDD\u96E2\u653B\u6483\u304C\u5F97\u610F\u3002\n\u653B\u6483\u901F\u5EA6\u306F\u9045\u3081\u3002\u904E\u4FE1\u7981\u7269\u3002"
   Icon: {fileID: 21300000, guid: f179eb9cfcd44784abe25047635a4b56, type: 3}
-  UnitPrefab: {fileID: 8671865796400775776, guid: 4f713e65592fb824e96461d4e8e4ee4c, type: 3}
+  UnitPrefab: {fileID: 8671865796400775776, guid: 431e6ab0db1bb484f99bf42cce9fd8ad, type: 3}
   HotkeySlot: 2

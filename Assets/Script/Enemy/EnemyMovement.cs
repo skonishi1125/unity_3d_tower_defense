@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
@@ -14,6 +15,8 @@ public class EnemyMovement : MonoBehaviour
     // 右から左に動くゲーム想定なので、最初は必ず左に動くという意味合いにしておく
     private Vector3 firstDirection = Vector3.left;
     public int CurrentIndex;
+
+    private bool isKnockedBack = false;
 
     public event Action ReachedGoal;
 
@@ -35,7 +38,9 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
-        if (path == null || path.Count == 0)
+        // パス未指定
+        // もしくは、被弾してノックバック中は動かない
+        if (path == null || path.Count == 0 || isKnockedBack)
             return;
 
         Transform target = path.Get(CurrentIndex);
@@ -75,6 +80,12 @@ public class EnemyMovement : MonoBehaviour
 
         Move(to.normalized);
         RotateSmoothly();
+
+
+        //if (Input.GetKeyDown(KeyCode.A))
+        //    ApplyKnockback(1f);
+
+
     }
 
     private void Move(Vector3 dir)
@@ -105,4 +116,22 @@ public class EnemyMovement : MonoBehaviour
             Time.deltaTime * rotationSpeed
         );
     }
+
+    public void ApplyKnockback(float knockbackDistance)
+    {
+        isKnockedBack = true;
+
+        Vector3 knockbackDir = -transform.forward;
+
+        transform.DOMove(knockbackDir * knockbackDistance, 0.05f)
+            // 相対座標移動 今の位置から、進行方向とは逆の方向に下がらせる
+            .SetRelative(true)
+            .SetEase(Ease.OutCubic)
+            .OnComplete(() =>
+            {
+                isKnockedBack = false;
+            });
+    }
+
+
 }
