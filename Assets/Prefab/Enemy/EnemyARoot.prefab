@@ -598,7 +598,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LifeTime: 0
-  TraveledDistance: 0
 --- !u!114 &652011218109467956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,7 +639,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp:
-    baseValue: 20
+    baseValue: 30
     additiveBonus: 0
     multiplier: 1
   defense:
@@ -648,7 +647,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   speed:
-    baseValue: 3
+    baseValue: 1
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &8049122818346501371

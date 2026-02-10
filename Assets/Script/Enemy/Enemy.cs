@@ -3,21 +3,29 @@
 public class Enemy : MonoBehaviour
 {
     private EnemyMovement movement;
-    private EnemyStatus status;
 
     public float LifeTime = 0f; // インスペクタで見るためにpublicとしておく
-    public float TraveledDistance = 0f;
+
+    // 進んだ距離
+    public float TraveledDistance
+    {
+        get
+        {
+            if (movement == null)
+                return 0f;
+            return movement.GetTraveledDistance();
+        }
+    }
 
     private void Awake()
     {
         movement = GetComponent<EnemyMovement>();
-        status = GetComponent<EnemyStatus>();
     }
 
     private void Start()
     {
         LifeTime = 0f;
-        TraveledDistance = 0f;
+        //TraveledDistance = 0f;
         movement.ReachedGoal += OnReachedGoal;
     }
 
@@ -25,7 +33,7 @@ public class Enemy : MonoBehaviour
     {
         LifeTime += Time.deltaTime;
         // 距離 = 速さ * 時間
-        TraveledDistance += (status.GetSpeed() * Time.deltaTime);
+        //TraveledDistance += (status.GetSpeed() * Time.deltaTime);
     }
 
     private void OnDestroy()

@@ -18,6 +18,10 @@ public class EnemyMovement : MonoBehaviour
 
     private bool isKnockedBack = false;
 
+    // 距離
+    private float[] distanceToGoalCache; // 各種waypointからゴールまで
+    private float totalPathDistance; // スポーン地点からゴールまでの総合距離
+
     public event Action ReachedGoal;
 
     public void Awake()
@@ -30,10 +34,73 @@ public class EnemyMovement : MonoBehaviour
         path = waypoint;
         CurrentIndex = 0;
 
+        // ゴールから、各種Waypointごとの距離を計算しておく
+        CalculatePathDistances();
+
         // 初回の方向決定
         DetectTargetRotate(firstDirection);
         transform.rotation = Quaternion.LookRotation(firstDirection, Vector3.up);
 
+    }
+
+    // ゴールから、逆順に距離を足していく
+    // A -> B -> C -> ゴール の場合、
+    // * C: dist(c ~ ゴール) までが距離
+    // * B: dist(b ~ c) + dist(c ~ ゴール)
+    // * A: dist(a ~ b) dist(b ~ c) + dist(c ~ ゴール) という感じ
+    private void CalculatePathDistances()
+    {
+        if (path == null || path.Count == 0) return;
+
+        int count = path.Count;
+        distanceToGoalCache = new float[count];
+        float accumulatedDist = 0f; // 累計距離
+
+        // A B C D E F という配列のケース
+        // count = Waypointの数そのもの。 indexとは1ずつずれるので、count 4 = waypoint[3]を指す
+        // i = 6 - 2 = waypoint[4] (E) からスタート
+        // i = 4 (E) : E - F の距離測定。累計距離追加 distanceToGoalCache[4] 格納
+        // i = 3 (D) : D - E の距離測定。累計距離追加 distanceToGoalCache[3] 格納
+        // i = 2 (C) : C - D の距離測定。累計距離追加 distanceToGoalCache[2] 格納
+        // i = 1 (B) : B - C の距離測定。累計距離追加 distanceToGoalCache[1] 格納
+        // i = 0 (A) : A - B の距離測定。累計距離追加 distanceToGoalCache[0] 格納
+        for (int i = count - 2; i >= 0; i--)
+        {
+            float dist = Vector3.Distance(path.Get(i).position, path.Get(i + 1).position);
+            accumulatedDist += dist;
+            distanceToGoalCache[i] = accumulatedDist;
+        }
+
+        // 今回の例だと、 D の残り距離。 D = ゴールなので、0を入れておく
+        if (count > 0)
+            distanceToGoalCache[count - 1] = 0f;
+
+        // スタート地点から最初のWaypointまでの距離を足す
+        // 今回のゲーム設計だと最初のWaypoint = ほぼスタート地点なのであまり考えなくてよい
+        // 一応書いておく（ 正確にはSpawn地点とWaypoint[0]の距離を出す必要があるが、ある程度ざっくりでよい ）
+        float distToFirst = Vector3.Distance(transform.position, path.Get(0).position);
+        totalPathDistance = distToFirst + distanceToGoalCache[0];
+    }
+
+    // 現在地からゴールまでの残り距離を返す
+    public float GetRemainingDistance()
+    {
+        if (path == null || distanceToGoalCache == null) return 0f;
+        if (CurrentIndex >= path.Count) return 0f; // ゴール済
+
+        // 直近のWayPointまでの距離 例えばゲーム開始直後なら、
+        // Waypoint A - B の距離
+        float distToNextWp = Vector3.Distance(transform.position, path.Get(CurrentIndex).position);
+
+        // 例えばゲーム開始直後なら、
+        // A - B の距離 + distanceToGoalCache[1] (B から最後のWaypointまでの距離)
+        return distToNextWp + distanceToGoalCache[CurrentIndex];
+    }
+
+    // 全長 - 残り距離 = 進んだ距離を返す
+    public float GetTraveledDistance()
+    {
+        return totalPathDistance - GetRemainingDistance();
     }
 
     private void Update()
@@ -126,7 +193,6 @@ public class EnemyMovement : MonoBehaviour
         transform.DOMove(knockbackDir * knockbackDistance, 0.05f)
             // 相対座標移動 今の位置から、進行方向とは逆の方向に下がらせる
             .SetRelative(true)
-            .SetEase(Ease.OutCubic)
             .OnComplete(() =>
             {
                 isKnockedBack = false;
