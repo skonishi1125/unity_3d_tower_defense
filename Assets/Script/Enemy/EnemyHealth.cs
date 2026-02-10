@@ -13,6 +13,18 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] protected float currentHp;
     [SerializeField] protected bool isDead;
 
+    public float CurrentHp => currentHp;
+    public float MaxHp { get
+        {
+            if (status == null)
+            {
+                Debug.LogWarning("enemyHealth: MaxHpが取得できませんでした");
+                return 0;
+            }
+            return status.GetMaxHp();
+        }
+    }
+
     // HealthBar更新や被弾音（必要なら購読する）
     public event Action OnTakeDamaged;
 

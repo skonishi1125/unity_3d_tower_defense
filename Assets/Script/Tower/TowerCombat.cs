@@ -1,5 +1,4 @@
 ﻿using DG.Tweening;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -84,7 +83,7 @@ public class TowerCombat : MonoBehaviour
         attackTimer = status.GetAttackInterval();
     }
 
-    private bool TryGetTarget(out EnemyHealth attackEnemyHealth)
+    protected virtual bool TryGetTarget(out EnemyHealth attackEnemyHealth)
     {
         attackEnemyHealth = null;
 
@@ -102,7 +101,10 @@ public class TowerCombat : MonoBehaviour
         Vector3 towerPos = transform.position;
         Vector3 forwardDir = transform.forward;
 
-        float traveledDistance = 0f;
+        // 敵判定に使用する得点
+        // * 通常: 最も移動した敵（移動すればするほどスコアが上がる）
+        // * Weaker: 最も体力の割合が少ない敵　（少ないほどスコアを上げる）
+        float targetScore = 0f;
 
         foreach (var hit in hitEnemies)
         {
@@ -131,18 +133,24 @@ public class TowerCombat : MonoBehaviour
                 if (enemyHealth == null)
                     continue;
 
-                // 複数いたときは、最も移動している敵を攻撃するように書き換える
-                if (traveledDistance < enemy.TraveledDistance)
-                {
-                    //Debug.Log($"攻撃対象を更新。{enemy.gameObject.name}");
-                    attackEnemyHealth = enemyHealth;
-                    traveledDistance = enemy.TraveledDistance;
-                }
+                // 複数の敵から、攻撃対象を特定する
+                DetectAttackTarget(enemy, enemyHealth, ref attackEnemyHealth, ref targetScore);
             }
 
         }
 
         return attackEnemyHealth != null;
+    }
+
+    // 敵が複数検出された場合の、攻撃対象選択処理
+    protected virtual void DetectAttackTarget(Enemy enemy, EnemyHealth enemyHealth, ref EnemyHealth attackEnemyHealth, ref float score)
+    {
+        // 最も移動している敵をattackEnemyHealthに格納する
+        if (attackEnemyHealth == null || score < enemy.TraveledDistance)
+        {
+            attackEnemyHealth = enemyHealth;
+            score = enemy.TraveledDistance;
+        }
     }
 
 }
