@@ -52,6 +52,7 @@ public class EnemyHealth : MonoBehaviour
     {
         ReduceHp(damage);
         vfx?.PlayOnDamageVfx(); // イベントでも良いかもしれない。
+        vfx?.CreateOnDamageNumberVfx(transform, 10);
         OnTakeDamaged?.Invoke();
 
         // KB処理

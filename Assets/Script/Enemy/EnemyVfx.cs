@@ -13,6 +13,11 @@ public class EnemyVfx : MonoBehaviour
     [SerializeField] private Material onDamageMaterial;
     [SerializeField] private float onDamageVfxDuration = .1f;
 
+    // ダメージ数値
+    [Header("Attack Damage Number Vfx")]
+    [SerializeField] private GameObject damageNumberVfx;
+    [SerializeField] private Color damageNumberVfxColor = Color.white;
+
     private Coroutine onDamageVfxCo;
 
     protected virtual void Awake()
@@ -65,6 +70,13 @@ public class EnemyVfx : MonoBehaviour
 
         // もうこのCoroutineは走っていないという状態にしておく
         onDamageVfxCo = null;
+    }
+
+    public void CreateOnDamageNumberVfx(Transform target, float damage)
+    {
+        var go = Instantiate(damageNumberVfx, target.position, Quaternion.identity);
+        //var vfx = go.GetComponent<DamageNumberVfx>();
+        //vfx.Init(damage, damageNumberVfxColor);
     }
 
 

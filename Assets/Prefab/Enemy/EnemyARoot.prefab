@@ -664,6 +664,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onDamageMaterial: {fileID: 2100000, guid: 4cd38a0f27548e44f8be6a8aef990fa6, type: 2}
   onDamageVfxDuration: 0.1
+  damageNumberVfx: {fileID: 1546324238079276174, guid: 097ccbcee229d0e46a8d4e78fab79825, type: 3}
+  damageNumberVfxColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!136 &1996691571816596892
 CapsuleCollider:
   m_ObjectHideFlags: 0
