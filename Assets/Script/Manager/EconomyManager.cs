@@ -37,7 +37,7 @@ public sealed class EconomyManager : MonoBehaviour, IEconomy
 
         if (money < cost)
         {
-            Debug.Log($"所持金が足りません。必要: {cost} 所持金: {money}");
+            //Debug.Log($"所持金が足りません。必要: {cost} 所持金: {money}");
             OnInsufficientFunds?.Invoke();
             return false;
         }

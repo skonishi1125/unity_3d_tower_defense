@@ -19,6 +19,8 @@ public class Hud : MonoBehaviour
     [SerializeField] private TextMeshProUGUI waveNumber;
     [SerializeField] private TextMeshProUGUI gameStateText;
     [SerializeField] private TextMeshProUGUI buildModeText;
+    [SerializeField] private TextMeshProUGUI errorMessage;
+
     [SerializeField] private GameObject EditStateUI;
     [SerializeField] private GameObject PlayingStateUI;
 
@@ -39,8 +41,6 @@ public class Hud : MonoBehaviour
             enabled = false;
             return;
         }
-        // 初期表示（購読前にAwake通知が終わっている可能性があるため）
-        UpdateMoneyAmount(economy.CurrentMoney);
 
         life = lifeProvider as ILife;
         if (life == null)
@@ -49,7 +49,6 @@ public class Hud : MonoBehaviour
             enabled = false;
             return;
         }
-        UpdateLifeAmount(life.CurrentLife);
 
         if (stageManager == null)
         {
@@ -69,6 +68,68 @@ public class Hud : MonoBehaviour
             buildController = FindFirstObjectByType<BuildController>();
         }
 
+        // テキスト初期設定
+        SetUpText();
+
+    }
+
+
+    private void OnEnable()
+    {
+        if (economy != null)
+        {
+            economy.MoneyChanged += UpdateMoneyAmount;
+            economy.OnInsufficientFunds += AnimateInsufficientFunds;
+            economy.OnInsufficientFunds += DisplayErrorMessage;
+        }
+
+        if (life != null)
+            life.LifeChanged += UpdateLifeAmount;
+
+        if (stageManager != null)
+            stageManager.WaveChanged += UpdateWaveText;
+
+        if (stateManager != null)
+        {
+            stateManager.StateChanged += UpdateGameStateText;
+            stateManager.StateChanged += UpdateGameStateUI;
+        }
+
+        if (buildController != null)
+            buildController.BuildModeChanged += UpdateBuildModeText;
+
+
+    }
+    private void OnDisable()
+    {
+        if (economy != null)
+        {
+            economy.MoneyChanged -= UpdateMoneyAmount;
+            economy.OnInsufficientFunds -= AnimateInsufficientFunds;
+            economy.OnInsufficientFunds -= DisplayErrorMessage;
+        }
+
+        if (life != null)
+            life.LifeChanged -= UpdateLifeAmount;
+
+        if (stageManager != null)
+            stageManager.WaveChanged -= UpdateWaveText;
+
+        if (stateManager != null)
+        {
+            stateManager.StateChanged -= UpdateGameStateText;
+            stateManager.StateChanged -= UpdateGameStateUI;
+        }
+
+        if (buildController != null)
+            buildController.BuildModeChanged -= UpdateBuildModeText;
+    }
+
+    private void SetUpText()
+    {
+        if (lifeAmount != null)
+            UpdateLifeAmount(life.CurrentLife);
+
         if (waveNumber != null)
             UpdateWaveText();
 
@@ -78,12 +139,15 @@ public class Hud : MonoBehaviour
         if (buildModeText != null)
             UpdateBuildModeText();
 
-        // 元の色の保存
         if (moneyAmount != null)
         {
+            UpdateMoneyAmount(economy.CurrentMoney);
             originalMoneyColor = moneyAmount.color;
             originalMoneyLocalPos = moneyAmount.transform.localPosition;
         }
+
+        if (errorMessage != null)
+            errorMessage.text = ""; // Object自体を消すのではなく、テキストだけ空にする
 
     }
 
@@ -178,53 +242,22 @@ public class Hud : MonoBehaviour
             .SetLink(gameObject);
     }
 
-    private void OnEnable()
+    private void DisplayErrorMessage()
     {
-        if (economy != null)
-        {
-            economy.MoneyChanged += UpdateMoneyAmount;
-            economy.OnInsufficientFunds += AnimateInsufficientFunds;
-        }
+        errorMessage.DOKill();
+        errorMessage.alpha = 1f;
+        errorMessage.text = "所持金が足りません。";
 
-        if (life != null)
-            life.LifeChanged += UpdateLifeAmount;
-
-        if (stageManager != null)
-            stageManager.WaveChanged += UpdateWaveText;
-
-        if (stateManager != null)
-        {
-            stateManager.StateChanged += UpdateGameStateText;
-            stateManager.StateChanged += UpdateGameStateUI;
-        }
-
-        if (buildController != null)
-            buildController.BuildModeChanged += UpdateBuildModeText;
-
-
-    }
-    private void OnDisable()
-    {
-        if (economy != null)
-        {
-            economy.MoneyChanged -= UpdateMoneyAmount;
-            economy.OnInsufficientFunds -= AnimateInsufficientFunds;
-        }
-
-        if (life != null)
-            life.LifeChanged -= UpdateLifeAmount;
-
-        if (stageManager != null)
-            stageManager.WaveChanged -= UpdateWaveText;
-
-        if (stateManager != null)
-        {
-            stateManager.StateChanged -= UpdateGameStateText;
-            stateManager.StateChanged -= UpdateGameStateUI;
-        }
-
-        if (buildController != null)
-            buildController.BuildModeChanged -= UpdateBuildModeText;
+        errorMessage.DOFade(0f, 1f)
+            .SetDelay(3f)
+            .OnComplete(() =>
+            {
+                // アニメーション完了後
+                errorMessage.text = "";
+                errorMessage.alpha = 1f;
+            })
+            .SetUpdate(true)
+            .SetLink(gameObject); // このUIが消えたらTweenも消す
     }
 
 }
