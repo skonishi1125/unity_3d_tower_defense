@@ -52,7 +52,10 @@ public class EnemyHealth : MonoBehaviour
     {
         ReduceHp(damage);
 
-        vfx?.PlayOnDamageVfx(); // イベントでも良いかもしれない。
+        // vfxのメソッドを直接読んでいる
+        // HealthとVFXが密結合ではあるが、1つのEnemyというPrefab内で完結しているので構わない
+        // 逆にPrefab内部で完結しないものはイベントとして購読させると良い。
+        vfx?.PlayOnDamageVfx();
         vfx?.CreateDamagePopup(damage);
         OnTakeDamaged?.Invoke();
 

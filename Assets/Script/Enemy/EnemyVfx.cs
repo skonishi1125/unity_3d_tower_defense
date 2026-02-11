@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyVfx : MonoBehaviour
 {
+    [SerializeField] private EnemyHealth health;
+
     private MeshRenderer[] mrs;
     // MeshRendererをkeyにした、Rendererのマテリアル配列
     // originalMaterials[mr] で、元マテリアルを配列で出せるような設計。
@@ -24,6 +26,9 @@ public class EnemyVfx : MonoBehaviour
 
     protected virtual void Awake()
     {
+        if (health == null)
+            health = GetComponent<EnemyHealth>();
+
         mrs = GetComponentsInChildren<MeshRenderer>();
         originalMaterials = new Dictionary<MeshRenderer, Material[]>(mrs.Length); // lengthを指定することでメモリの節約になる
 
