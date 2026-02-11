@@ -17,6 +17,8 @@ public class EnemyVfx : MonoBehaviour
     [Header("Attack Damage Number Vfx")]
     [SerializeField] private GameObject damageNumberVfx;
     [SerializeField] private Color damageNumberVfxColor = Color.white;
+    [SerializeField] private Vector3 damagePopupOffset = new Vector3(0, 2f, 0);
+    [SerializeField] private float randomRange = 0.5f;
 
     private Coroutine onDamageVfxCo;
 
@@ -72,11 +74,24 @@ public class EnemyVfx : MonoBehaviour
         onDamageVfxCo = null;
     }
 
-    public void CreateOnDamageNumberVfx(Transform target, float damage)
+    public void CreateDamagePopup(float damage)
     {
-        var go = Instantiate(damageNumberVfx, target.position, Quaternion.identity);
-        //var vfx = go.GetComponent<DamageNumberVfx>();
-        //vfx.Init(damage, damageNumberVfxColor);
+        if (damageNumberVfx == null) return;
+
+        // 生成位置を決定（敵の少し上 + ランダムなズレ）
+        Vector3 spawnPosition = transform.position + damagePopupOffset;
+        spawnPosition.x += Random.Range(-randomRange, randomRange);
+        spawnPosition.z += Random.Range(-randomRange, randomRange);
+
+        // プレハブを生成
+        GameObject popupObj = Instantiate(damageNumberVfx, spawnPosition, Quaternion.identity);
+
+        // スクリプトを取得してセットアップ
+        DamagePopUp popupScript = popupObj.GetComponent<DamagePopUp>();
+        if (popupScript != null)
+        {
+            popupScript.Setup(damage, damageNumberVfxColor);
+        }
     }
 
 

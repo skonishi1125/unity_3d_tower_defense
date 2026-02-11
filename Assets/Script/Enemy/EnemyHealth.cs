@@ -51,8 +51,9 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(float damage, float knockback = 0f)
     {
         ReduceHp(damage);
+
         vfx?.PlayOnDamageVfx(); // イベントでも良いかもしれない。
-        vfx?.CreateOnDamageNumberVfx(transform, 10);
+        vfx?.CreateDamagePopup(damage);
         OnTakeDamaged?.Invoke();
 
         // KB処理
