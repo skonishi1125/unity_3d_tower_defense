@@ -10,7 +10,8 @@ public class RoadGenerator : MonoBehaviour
     private readonly List<Vector2Int> lastRoadCells = new();
 
     [Header("Source")]
-    [SerializeField] private Transform[] points;
+    [SerializeField] private Waypoint waypoint;
+    private Transform[] waypointPath;
 
     // 床1枚分のプレート
     [Header("Prefab")]
@@ -19,26 +20,37 @@ public class RoadGenerator : MonoBehaviour
     [Header("Road Shape")]
     public const float RoadThickness = 0.02f; // つまり、上には.01f分だけ浮き出るということ
 
+    private void Awake()
+    {
+        if (waypoint  == null)
+        {
+            Debug.Log("RoadGenerator: wayPointを割り当ててください。");
+            waypoint = FindFirstObjectByType<Waypoint>();
+        }
+    }
 
     private void Start()
     {
+        if (waypoint != null)
+            waypointPath = waypoint.WaypointPath;
+
         Generate();
     }
 
     public void Generate()
     {
         // 道は2点間で作るので、長さが2未満なら何もしない
-        if (points == null || points.Length < 2) return;
+        if (waypointPath == null || waypointPath.Length < 2) return;
         if (segmentPrefab == null) return;
 
         Clear(); // 見た目Objectの削除
         ClearRoadCellsOnGrid(); // グリッドシステムのデータの削除
 
-        for (int i = 0; i < points.Length - 1; i++)
+        for (int i = 0; i < waypointPath.Length - 1; i++)
         {
             // 例えば、point 0 と 1 が 1区間
-            Transform a = points[i];
-            Transform b = points[i + 1];
+            Transform a = waypointPath[i];
+            Transform b = waypointPath[i + 1];
             if (a == null || b == null) continue;
 
             RegisterBlockAndPlaceTiles(a.position, b.position);
