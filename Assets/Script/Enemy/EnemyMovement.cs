@@ -193,6 +193,7 @@ public class EnemyMovement : MonoBehaviour
         transform.DOMove(knockbackDir * knockbackDistance, 0.05f)
             // 相対座標移動 今の位置から、進行方向とは逆の方向に下がらせる
             .SetRelative(true)
+            .SetLink(gameObject) // Destroy時停止させる
             .OnComplete(() =>
             {
                 isKnockedBack = false;

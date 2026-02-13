@@ -1141,7 +1141,7 @@ MonoBehaviour:
   ghostMaterial: {fileID: 2100000, guid: 35ca1ebb3f5beb24aa520c6b44192041, type: 2}
   economyProvider: {fileID: 1280282523}
   currentUnitNumber: 0
-  maxBuildableUnitNumber: 10
+  maxBuildableUnitNumber: 5
 --- !u!1 &305883093
 GameObject:
   m_ObjectHideFlags: 0
