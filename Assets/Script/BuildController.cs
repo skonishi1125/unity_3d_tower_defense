@@ -11,6 +11,7 @@ public enum BuildMode
 public class BuildController : MonoBehaviour
 {
     private Camera mainCamera;
+
     [SerializeField] private GridSystem grid;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private StateManager stateManager;
@@ -38,7 +39,14 @@ public class BuildController : MonoBehaviour
     [SerializeField] private MonoBehaviour economyProvider;
     private IEconomy economy;
 
+    [Header("Buildable Unit Detail")]
+    [SerializeField] private int currentUnitNumber = 0;
+    [SerializeField] private int maxBuildableUnitNumber = 10;
+    public int CurrentUnitNumber => currentUnitNumber;
+    public int MaxBuildableUnitNumber => maxBuildableUnitNumber;
+
     public event Action BuildModeChanged;
+    public event Action BulitUnitChanged;
 
     private void Awake()
     {
@@ -222,7 +230,11 @@ public class BuildController : MonoBehaviour
             Vector2Int cell = grid.WorldToCell(hit.point);
             GameObject tower;
             if (grid.TryRemoveTower(cell, out tower))
+            {
                 Destroy(tower);
+                currentUnitNumber--;
+                BulitUnitChanged?.Invoke();
+            }
             else
                 Debug.Log($"何も配置されていません: {cell}");
 
@@ -232,6 +244,12 @@ public class BuildController : MonoBehaviour
 
     private void PlaceTower()
     {
+        if (IsBuildCapReached())
+        {
+            Debug.Log("最大建設上限です。");
+            return;
+        }
+
         Ray ray = mainCamera.ScreenPointToRay(gameInput.PointerPosition);
         RaycastHit hit;
 
@@ -285,8 +303,16 @@ public class BuildController : MonoBehaviour
                 economy.Refund(selectedUnit.Cost);
                 Debug.Log($"登録に失敗しました: {cell}");
             }
+
+            currentUnitNumber++;
+            BulitUnitChanged?.Invoke();
+
         }
     }
+
+    // 最大建設数に届いていたら、trueを返す
+    public bool IsBuildCapReached() => currentUnitNumber >= maxBuildableUnitNumber;
+
 
     // Key Config
     private void PressToggleMode()
@@ -450,6 +476,7 @@ public class BuildController : MonoBehaviour
         if (unitSelection != null)
             unitSelection.SelectedChanged -= OnUnitSelectionChanged;
     }
+
 
 
     // Debug

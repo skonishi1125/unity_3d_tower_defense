@@ -8,12 +8,14 @@ public class Hud : MonoBehaviour
     // EconomyManagerなどをSerializeFieldで割り当てて、
     // そこからIEconomyを抜き取り、コードで使う
     // (EconomyManager economyManager としないのは、SerializeFieldで割り当てられないから）
+    [Header("Managers")]
     [SerializeField] private MonoBehaviour economyProvider;
     [SerializeField] private MonoBehaviour lifeProvider;
     [SerializeField] private StageManager stageManager;
     [SerializeField] private StateManager stateManager;
     [SerializeField] private BuildController buildController;
 
+    [Header("Hud Texts")]
     [SerializeField] private TextMeshProUGUI moneyAmount;
     [SerializeField] private TextMeshProUGUI lifeAmount;
     [SerializeField] private TextMeshProUGUI waveNumber;
@@ -21,6 +23,11 @@ public class Hud : MonoBehaviour
     [SerializeField] private TextMeshProUGUI buildModeText;
     [SerializeField] private TextMeshProUGUI errorMessage;
 
+    [Header("Number Of Unit Setting")]
+    [SerializeField] private TextMeshProUGUI numberOfUnitText;
+    [SerializeField] private const float CautionRatio = .6f;
+
+    [Header("UIs")]
     [SerializeField] private GameObject EditStateUI;
     [SerializeField] private GameObject PlayingStateUI;
 
@@ -96,10 +103,34 @@ public class Hud : MonoBehaviour
         }
 
         if (buildController != null)
+        {
             buildController.BuildModeChanged += UpdateBuildModeText;
+            buildController.BulitUnitChanged += UpdateNumberOfUnitText;
+        }
+    }
 
+    private void UpdateNumberOfUnitText()
+    {
+        int currentNum = buildController.CurrentUnitNumber;
+        int MaxNum = buildController.MaxBuildableUnitNumber;
+
+        numberOfUnitText.text = $"{currentNum}/{MaxNum}";
+
+        // (float) (currentNum / MaxNum)とはしない。
+        // 整数同士の割り算は小数点以下が切り捨てられるので、今回 0 or 1しか返ってこない
+        // currentNumにのみfloatでキャストしてやれば、
+        // c#側がfloat / intの計算として、floatを返してくれるようになる
+        float ratio = (float)currentNum / MaxNum;
+
+        numberOfUnitText.color = ratio switch
+        {
+            >= 1.0f => Color.red, // 上限(100%)赤
+            >= CautionRatio => Color.yellow, // 黄色
+            _ => Color.white // デフォルトで白
+        };
 
     }
+
     private void OnDisable()
     {
         if (economy != null)
@@ -148,6 +179,9 @@ public class Hud : MonoBehaviour
 
         if (errorMessage != null)
             errorMessage.text = ""; // Object自体を消すのではなく、テキストだけ空にする
+
+        if (numberOfUnitText != null)
+            UpdateNumberOfUnitText();
 
     }
 
