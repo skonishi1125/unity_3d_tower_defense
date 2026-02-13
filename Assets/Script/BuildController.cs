@@ -47,6 +47,7 @@ public class BuildController : MonoBehaviour
 
     public event Action BuildModeChanged;
     public event Action BulitUnitChanged;
+    public event Action<string> DisplayBuildMessage; // 建築, 破壊時どちらもエラーを入れて通知させる
 
     private void Awake()
     {
@@ -236,7 +237,7 @@ public class BuildController : MonoBehaviour
                 BulitUnitChanged?.Invoke();
             }
             else
-                Debug.Log($"何も配置されていません: {cell}");
+                DisplayBuildMessage?.Invoke("何も建設されていません。");
 
         }
 
@@ -246,7 +247,7 @@ public class BuildController : MonoBehaviour
     {
         if (IsBuildCapReached())
         {
-            Debug.Log("最大建設上限です。");
+            DisplayBuildMessage?.Invoke("最大建設上限です。");
             return;
         }
 
@@ -267,7 +268,7 @@ public class BuildController : MonoBehaviour
             Vector2Int cell = grid.WorldToCell(hit.point);
             if (grid.IsBlocked(cell))
             {
-                Debug.Log($"その位置には配置できません。: {cell}");
+                DisplayBuildMessage?.Invoke("その位置には配置できません。");
                 return;
             }
 
@@ -301,7 +302,7 @@ public class BuildController : MonoBehaviour
             {
                 Destroy(towerObject);
                 economy.Refund(selectedUnit.Cost);
-                Debug.Log($"登録に失敗しました: {cell}");
+                Debug.LogWarning($"登録に失敗しました: {cell}");
             }
 
             currentUnitNumber++;
@@ -353,7 +354,7 @@ public class BuildController : MonoBehaviour
     {
         if (!CanRotateGhost())
         {
-            Debug.Log("回転できません");
+            //Debug.Log("回転できません");
             return;
         }
 

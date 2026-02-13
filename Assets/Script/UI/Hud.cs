@@ -4,11 +4,11 @@ using DG.Tweening;
 
 public class Hud : MonoBehaviour
 {
-    // インターフェース系
+    // ManagerやControllerなど、ゲームシステム系
     // EconomyManagerなどをSerializeFieldで割り当てて、
     // そこからIEconomyを抜き取り、コードで使う
-    // (EconomyManager economyManager としないのは、SerializeFieldで割り当てられないから）
-    [Header("Managers")]
+    // ※EconomyManager economyManager などクラス名で定義しないのはSerializeFieldで割り当てられないから
+    [Header("Game Systems")]
     [SerializeField] private MonoBehaviour economyProvider;
     [SerializeField] private MonoBehaviour lifeProvider;
     [SerializeField] private StageManager stageManager;
@@ -86,8 +86,10 @@ public class Hud : MonoBehaviour
         if (economy != null)
         {
             economy.MoneyChanged += UpdateMoneyAmount;
-            economy.OnInsufficientFunds += AnimateInsufficientFunds;
-            economy.OnInsufficientFunds += DisplayErrorMessage;
+            economy.OnInsufficientFunds += HandleAnimateInsufficientFunds;
+            //economy.OnInsufficientFunds += _ => AnimateInsufficientFunds(); ラムダで書くと、こんな感じだと思う
+
+            economy.OnInsufficientFunds += message => DisplayErrorMessage(message);
         }
 
         if (life != null)
@@ -106,29 +108,8 @@ public class Hud : MonoBehaviour
         {
             buildController.BuildModeChanged += UpdateBuildModeText;
             buildController.BulitUnitChanged += UpdateNumberOfUnitText;
+            buildController.DisplayBuildMessage += message => DisplayErrorMessage(message);
         }
-    }
-
-    private void UpdateNumberOfUnitText()
-    {
-        int currentNum = buildController.CurrentUnitNumber;
-        int MaxNum = buildController.MaxBuildableUnitNumber;
-
-        numberOfUnitText.text = $"{currentNum}/{MaxNum}";
-
-        // (float) (currentNum / MaxNum)とはしない。
-        // 整数同士の割り算は小数点以下が切り捨てられるので、今回 0 or 1しか返ってこない
-        // currentNumにのみfloatでキャストしてやれば、
-        // c#側がfloat / intの計算として、floatを返してくれるようになる
-        float ratio = (float)currentNum / MaxNum;
-
-        numberOfUnitText.color = ratio switch
-        {
-            >= 1.0f => Color.red, // 上限(100%)赤
-            >= CautionRatio => Color.yellow, // 黄色
-            _ => Color.white // デフォルトで白
-        };
-
     }
 
     private void OnDisable()
@@ -136,8 +117,8 @@ public class Hud : MonoBehaviour
         if (economy != null)
         {
             economy.MoneyChanged -= UpdateMoneyAmount;
-            economy.OnInsufficientFunds -= AnimateInsufficientFunds;
-            economy.OnInsufficientFunds -= DisplayErrorMessage;
+            economy.OnInsufficientFunds -= HandleAnimateInsufficientFunds;
+            economy.OnInsufficientFunds -= message => DisplayErrorMessage(message);
         }
 
         if (life != null)
@@ -153,7 +134,11 @@ public class Hud : MonoBehaviour
         }
 
         if (buildController != null)
+        {
             buildController.BuildModeChanged -= UpdateBuildModeText;
+            buildController.BulitUnitChanged -= UpdateNumberOfUnitText;
+            buildController.DisplayBuildMessage -= message => DisplayErrorMessage(message);
+        }
     }
 
     private void SetUpText()
@@ -250,6 +235,11 @@ public class Hud : MonoBehaviour
         waveNumber.text = $"Wave: {stageManager.CurrentWave} / {stageManager.MaxWave}";
     }
 
+    private void HandleAnimateInsufficientFunds(string _)
+    {
+        AnimateInsufficientFunds();
+    }
+
     // お金が足りないとき、赤く点滅させる
     private void AnimateInsufficientFunds()
     {
@@ -276,11 +266,11 @@ public class Hud : MonoBehaviour
             .SetLink(gameObject);
     }
 
-    private void DisplayErrorMessage()
+    private void DisplayErrorMessage(string message)
     {
         errorMessage.DOKill();
         errorMessage.alpha = 1f;
-        errorMessage.text = "所持金が足りません。";
+        errorMessage.text = message;
 
         errorMessage.DOFade(0f, 1f)
             .SetDelay(3f)
@@ -292,6 +282,28 @@ public class Hud : MonoBehaviour
             })
             .SetUpdate(true)
             .SetLink(gameObject); // このUIが消えたらTweenも消す
+    }
+
+    private void UpdateNumberOfUnitText()
+    {
+        int currentNum = buildController.CurrentUnitNumber;
+        int MaxNum = buildController.MaxBuildableUnitNumber;
+
+        numberOfUnitText.text = $"{currentNum}/{MaxNum}";
+
+        // (float) (currentNum / MaxNum)とはしない。
+        // 整数同士の割り算は小数点以下が切り捨てられるので、今回 0 or 1しか返ってこない
+        // currentNumにのみfloatでキャストしてやれば、
+        // c#側がfloat / intの計算として、floatを返してくれるようになる
+        float ratio = (float)currentNum / MaxNum;
+
+        numberOfUnitText.color = ratio switch
+        {
+            >= 1.0f => Color.red, // 上限(100%)赤
+            >= CautionRatio => Color.yellow, // 黄色
+            _ => Color.white // デフォルトで白
+        };
+
     }
 
 }

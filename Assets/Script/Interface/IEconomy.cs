@@ -8,7 +8,7 @@ public interface IEconomy
     float CurrentMoney { get; }
 
     event Action<float> MoneyChanged;
-    event Action OnInsufficientFunds; // 支払い失敗のイベント
+    event Action<string> OnInsufficientFunds; // 支払い失敗のイベント
 
     bool TrySpend(float cost);
 

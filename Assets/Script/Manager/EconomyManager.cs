@@ -15,7 +15,7 @@ public sealed class EconomyManager : MonoBehaviour, IEconomy
     // public float CurrentMoney { get; private set; }
 
     public event Action<float> MoneyChanged;
-    public event Action OnInsufficientFunds;
+    public event Action<string> OnInsufficientFunds;
 
     private void Awake()
     {
@@ -37,8 +37,7 @@ public sealed class EconomyManager : MonoBehaviour, IEconomy
 
         if (money < cost)
         {
-            //Debug.Log($"所持金が足りません。必要: {cost} 所持金: {money}");
-            OnInsufficientFunds?.Invoke();
+            OnInsufficientFunds?.Invoke("所持金が足りません。");
             return false;
         }
 
