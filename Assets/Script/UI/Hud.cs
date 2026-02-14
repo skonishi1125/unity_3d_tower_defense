@@ -90,10 +90,10 @@ public class Hud : MonoBehaviour
         if (economy != null)
         {
             economy.MoneyChanged += UpdateMoneyAmount;
+            economy.OnInsufficientFunds += HandleDisplayErrorFund;
             economy.OnInsufficientFunds += HandleAnimateInsufficientFunds;
-            //economy.OnInsufficientFunds += _ => AnimateInsufficientFunds(); ラムダで書くと、こんな感じだと思う
-
-            economy.OnInsufficientFunds += message => DisplayErrorMessage(message);
+            // ラムダで書くと、こんな感じにはなるがアンチパターンである
+            // economy.OnInsufficientFunds += _ => AnimateInsufficientFunds();
         }
 
         if (life != null)
@@ -112,8 +112,8 @@ public class Hud : MonoBehaviour
         {
             buildController.BuildModeChanged += UpdateBuildModeText;
             buildController.BulidUnitChanged += UpdateNumberOfUnitText;
-            buildController.BuildErrorOccured += (message, _) => DisplayErrorMessage(message);
-            buildController.BuildErrorOccured += (_, ErrorType) => AnimateMaxUnitNumber(_, ErrorType);
+            buildController.BuildErrorOccured += HandleDisplayErrorBuild;
+            buildController.BuildErrorOccured += HandleAnimateMaxUnitNumber;
         }
     }
 
@@ -122,8 +122,8 @@ public class Hud : MonoBehaviour
         if (economy != null)
         {
             economy.MoneyChanged -= UpdateMoneyAmount;
+            economy.OnInsufficientFunds -= HandleDisplayErrorFund;
             economy.OnInsufficientFunds -= HandleAnimateInsufficientFunds;
-            economy.OnInsufficientFunds -= message => DisplayErrorMessage(message);
         }
 
         if (life != null)
@@ -142,8 +142,8 @@ public class Hud : MonoBehaviour
         {
             buildController.BuildModeChanged -= UpdateBuildModeText;
             buildController.BulidUnitChanged -= UpdateNumberOfUnitText;
-            buildController.BuildErrorOccured -= (message, _) => DisplayErrorMessage(message);
-            buildController.BuildErrorOccured -= (_, ErrorType) => AnimateMaxUnitNumber(_, ErrorType);
+            buildController.BuildErrorOccured -= HandleDisplayErrorBuild;
+            buildController.BuildErrorOccured -= HandleAnimateMaxUnitNumber;
         }
     }
 
@@ -276,8 +276,13 @@ public class Hud : MonoBehaviour
             .SetLink(gameObject);
     }
 
+    private void HandleAnimateMaxUnitNumber(string _, BuildErrorType type)
+    {
+        AnimateMaxUnitNumber(type);
+    }
+
     // 最大建設上限に達したとき、ユニットの表記を赤くして、揺らす
-    private void AnimateMaxUnitNumber(string _, BuildErrorType type)
+    private void AnimateMaxUnitNumber(BuildErrorType type)
     {
         if (numberOfUnitText == null) return;
         if (type != BuildErrorType.Maximum) return;
@@ -296,6 +301,15 @@ public class Hud : MonoBehaviour
         numberOfUnitText.transform.DOShakePosition(0.3f, new Vector3(0f, 5f, 0f))
             .SetUpdate(true)
             .SetLink(gameObject);
+    }
+
+    private void HandleDisplayErrorFund(string message)
+    {
+        DisplayErrorMessage(message);
+    }
+
+    private void HandleDisplayErrorBuild(string message, BuildErrorType _) {
+        DisplayErrorMessage(message);
     }
 
     private void DisplayErrorMessage(string message)
