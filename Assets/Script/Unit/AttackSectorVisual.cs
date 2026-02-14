@@ -7,14 +7,14 @@ public class AttackSectorVisual : MonoBehaviour
     [SerializeField] private int segments = 24;      // 円弧の分割数（見栄えと軽さのトレードオフ）
     [SerializeField] private float yOffset = 0.02f;  // 地面Z-fighting防止のため少し浮かす
 
-    private TowerStatus status;
+    private UnitStatus status;
     private MeshFilter mf;
     private Mesh mesh;
 
     private void Awake()
     {
         // 攻撃範囲の詳細, 作る想定のMeshを用意
-        status = GetComponentInParent<TowerStatus>();
+        status = GetComponentInParent<UnitStatus>();
         mf = GetComponent<MeshFilter>();
         mesh = new Mesh { name = "AttackSectorMesh" };
         mf.sharedMesh = mesh; // MeshRendererが描画するようにする

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GridSystem : MonoBehaviour
 {
-    private readonly Dictionary<Vector2Int, GameObject> towers = new();
+    private readonly Dictionary<Vector2Int, GameObject> Units = new();
     private readonly HashSet<Vector2Int> blocked = new(); // 指定のセルになにか含まれているかを高速で判定できる
 
     private float cellSize = 1f;
@@ -13,20 +13,20 @@ public class GridSystem : MonoBehaviour
     public Vector3 Origin => origin;
 
 
-    public bool IsBlocked(Vector2Int cell) => blocked.Contains(cell) || towers.ContainsKey(cell);
+    public bool IsBlocked(Vector2Int cell) => blocked.Contains(cell) || Units.ContainsKey(cell);
 
-    public bool TryAddTower(Vector2Int cell, GameObject tower)
+    public bool TryAddUnit(Vector2Int cell, GameObject unit)
     {
         if (IsBlocked(cell)) return false;
-        towers.Add(cell, tower);
+        Units.Add(cell, unit);
         return true;
     }
 
-    public bool TryRemoveTower(Vector2Int cell, out GameObject tower)
+    public bool TryRemoveUnit(Vector2Int cell, out GameObject unit)
     {
-        if (!towers.TryGetValue(cell, out tower)) return false;
+        if (!Units.TryGetValue(cell, out unit)) return false;
 
-        towers.Remove(cell);
+        Units.Remove(cell);
         return true;
     }
 

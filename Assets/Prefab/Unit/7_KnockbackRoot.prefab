@@ -517,13 +517,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8671865796400775776}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39b6493e388594b40ae5a091e6d9e01b, type: 3}
+  m_Script: {fileID: 11500000, guid: b86a513c411c26a418db2a0b8599c594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentTowerState: 0
-  Status: {fileID: 0}
-  TargetRotation: {x: 0, y: 0, z: 0, w: 0}
-  rotationSpeed: 50
+  Status: {fileID: 7477620236458772383}
+  rotationSpeed: 5
   attackRangeVisual: {fileID: 4540535348551607308}
   coolTimeUI: {fileID: 3852952616267364392}
 --- !u!114 &7477620236458772383

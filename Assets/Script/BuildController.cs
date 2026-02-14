@@ -192,7 +192,7 @@ public class BuildController : MonoBehaviour
         if (ghostInstance != null) ghostInstance.SetActive(false);
     }
 
-    // 半透明なTower GameObjectを生成する。生成後は非activeとしておく
+    // 半透明なUnitオブジェクトを生成する。生成後は非activeとしておく
     private void EnsureGhost()
     {
         // unitSelectionが取得できていなければ中断
@@ -203,11 +203,11 @@ public class BuildController : MonoBehaviour
 
         ghostInstance = Instantiate(unitSelection.Selected.UnitPrefab);
         ghostInstance.name = "[Ghost] " + unitSelection.Selected.UnitPrefab.name;
-        var tower = ghostInstance.GetComponent<Tower>();
-        if (tower != null)
+        var unit = ghostInstance.GetComponent<Unit>();
+        if (unit != null)
         {
-            tower.SetState(TowerState.Ghost);
-            tower.TargetRotation = currentGhostRotation;
+            unit.SetState(UnitState.Ghost);
+            unit.SetTargetRotation(currentGhostRotation);
         }
 
         // 衝突判定無効化
@@ -229,7 +229,7 @@ public class BuildController : MonoBehaviour
     }
 
     // 塔の破壊処理
-    private void DemolishTower()
+    private void DemolishUnit()
     {
         Ray ray = mainCamera.ScreenPointToRay(gameInput.PointerPosition);
         RaycastHit hit;
@@ -237,10 +237,10 @@ public class BuildController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
         {
             Vector2Int cell = grid.WorldToCell(hit.point);
-            GameObject tower;
-            if (grid.TryRemoveTower(cell, out tower))
+            GameObject unit;
+            if (grid.TryRemoveUnit(cell, out unit))
             {
-                Destroy(tower);
+                Destroy(unit);
                 currentUnitNumber--;
                 BulidUnitChanged?.Invoke();
             }
@@ -251,7 +251,7 @@ public class BuildController : MonoBehaviour
 
     }
 
-    private void PlaceTower()
+    private void PlaceUnit()
     {
         if (IsBuildCapReached())
         {
@@ -268,7 +268,7 @@ public class BuildController : MonoBehaviour
             //Vector3 p = hit.point;
             //float s = .2f;
             //DrawDebugLine(ray, hit, p, s);
-            //Instantiate(towerPrefab, hit.point, Quaternion.identity);
+            //Instantiate(unitPrefab, hit.point, Quaternion.identity);
 
             // グリッドを考慮して生成する場合
             // 小数点をすべて取り除き、1グリッド中の中央の座標をcellCenterとして取得。
@@ -283,10 +283,10 @@ public class BuildController : MonoBehaviour
             Vector3 cellCenter = grid.CellToWorldCenter(cell);
             //DrawDebugLine(ray, hit, cellCenter, .2f);
 
-            // GhostからTowerの実体を生成
+            // GhostからUnitの実体を生成
             Quaternion rotate = Quaternion.identity;
-            if (ghostInstance != null && ghostInstance.TryGetComponent<Tower>(out var ghostTower))
-                rotate = ghostTower.TargetRotation;
+            if (ghostInstance != null && ghostInstance.TryGetComponent<Unit>(out var ghostUnit))
+                rotate = ghostUnit.TargetRotation;
             else if (ghostInstance != null)
                 rotate = ghostInstance.transform.rotation;
 
@@ -302,13 +302,13 @@ public class BuildController : MonoBehaviour
 
             var targetPrefab = unitSelection.Selected.UnitPrefab;
 
-            var towerObject = Instantiate(targetPrefab, cellCenter, rotate);
-            var c = towerObject.GetComponent<Tower>();
+            var unitObject = Instantiate(targetPrefab, cellCenter, rotate);
+            var c = unitObject.GetComponent<Unit>();
             if (c != null)
-                c.SetState(TowerState.Battle);
-            if (!grid.TryAddTower(cell, towerObject))
+                c.SetState(UnitState.Battle);
+            if (!grid.TryAddUnit(cell, unitObject))
             {
-                Destroy(towerObject);
+                Destroy(unitObject);
                 economy.Refund(selectedUnit.Cost);
                 Debug.LogWarning($"登録に失敗しました: {cell}");
             }
@@ -353,9 +353,9 @@ public class BuildController : MonoBehaviour
             return;
 
         if (CurrentBuildMode == BuildMode.Build)
-            PlaceTower();
+            PlaceUnit();
         else if (CurrentBuildMode == BuildMode.Demolish)
-            DemolishTower();
+            DemolishUnit();
     }
 
     private void PressRotate()
@@ -366,10 +366,10 @@ public class BuildController : MonoBehaviour
             return;
         }
 
-        if (ghostInstance.TryGetComponent<Tower>(out var ghostTower))
+        if (ghostInstance.TryGetComponent<Unit>(out var ghostUnit))
         {
-            ghostTower.Rotation();
-            currentGhostRotation = ghostTower.TargetRotation;
+            ghostUnit.Rotation();
+            currentGhostRotation = ghostUnit.TargetRotation;
         }
     }
 
@@ -427,12 +427,12 @@ public class BuildController : MonoBehaviour
 
         //Debug.Log("5");
 
-        if (!ghostInstance.TryGetComponent<Tower>(out var tower))
+        if (!ghostInstance.TryGetComponent<Unit>(out var unit))
             return false;
 
         //Debug.Log("6");
 
-        if (tower.CurrentTowerState != TowerState.Ghost)
+        if (unit.CurrentUnitState != UnitState.Ghost)
             return false;
 
         //Debug.Log("7");
@@ -440,7 +440,7 @@ public class BuildController : MonoBehaviour
 
         // ゲーム全体が編集モードで
         // 編集中の状態が建築モードで
-        // TowerがGhost状態のときは、回転できる
+        // UnitがGhost状態のときは、回転できる
         return true;
     }
 

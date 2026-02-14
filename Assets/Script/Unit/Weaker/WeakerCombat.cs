@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class WeakerCombat : TowerCombat
+public class WeakerCombat : UnitCombat
 {
     // 通常、最も移動した敵を攻撃するが、
     // Weakerは最も体力の低い敵（倒しやすい敵）を対象とする

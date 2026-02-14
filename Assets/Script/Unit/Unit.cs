@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 
-public enum TowerState
+public enum UnitState
 {
     None,
     Ghost = 1,
     Battle = 2,
 }
 
-public class Tower : MonoBehaviour
+public class Unit : MonoBehaviour
 {
-    public TowerState CurrentTowerState;
+    public UnitState CurrentUnitState { get; private set; }
 
-    public TowerStatus Status;
+    public UnitStatus Status;
 
     // 建築時、確定した角度で建築する必要があるので参照する
-    public Quaternion TargetRotation;
+    public Quaternion TargetRotation { get; private set; }
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private GameObject attackRangeVisual;
     [SerializeField] private GameObject coolTimeUI;
@@ -31,13 +31,13 @@ public class Tower : MonoBehaviour
                 attackRangeVisual = t.gameObject;
         }
 
-        Status = GetComponent<TowerStatus>();
+        Status = GetComponent<UnitStatus>();
     }
 
     private void Update()
     {
-        // Towerの回転処理などはBuildController側で持つ
-        if (CurrentTowerState == TowerState.Ghost)
+        // Unitの回転処理などはBuildController側で持つ
+        if (CurrentUnitState == UnitState.Ghost)
             RotateSmoothly();
     }
 
@@ -75,13 +75,13 @@ public class Tower : MonoBehaviour
     }
 
 
-    public void SetState(TowerState type)
+    public void SetState(UnitState type)
     {
-        CurrentTowerState = type;
+        CurrentUnitState = type;
 
-        switch (CurrentTowerState)
+        switch (CurrentUnitState)
         {
-            case TowerState.Ghost:
+            case UnitState.Ghost:
                 if (attackRangeVisual != null)
                 {
                     attackRangeVisual.SetActive(true);
@@ -89,7 +89,7 @@ public class Tower : MonoBehaviour
                 }
 
                 break;
-            case TowerState.Battle:
+            case UnitState.Battle:
                 if (attackRangeVisual != null)
                 {
                     attackRangeVisual.SetActive(false);
@@ -100,6 +100,11 @@ public class Tower : MonoBehaviour
                 break;
         }
 
+    }
+
+    public void SetTargetRotation(Quaternion rotation)
+    {
+        TargetRotation = rotation;
     }
 
 }

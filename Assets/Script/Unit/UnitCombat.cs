@@ -2,10 +2,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TowerCombat : MonoBehaviour
+public class UnitCombat : MonoBehaviour
 {
-    private Tower tower;
-    private TowerStatus status;
+    private Unit unit;
+    private UnitStatus status;
 
     [Header("Attack")]
     private float attackTimer;
@@ -21,8 +21,8 @@ public class TowerCombat : MonoBehaviour
 
     private void Awake()
     {
-        tower = GetComponent<Tower>();
-        status = GetComponent<TowerStatus>();
+        unit = GetComponent<Unit>();
+        status = GetComponent<UnitStatus>();
         if (coolTimeBar == null)
             coolTimeBar = GetComponentInChildren<Slider>();
     }
@@ -35,7 +35,7 @@ public class TowerCombat : MonoBehaviour
     private void Update()
     {
         // Ghost中などは、タイマーを走らせない
-        if (tower.CurrentTowerState != TowerState.Battle)
+        if (unit.CurrentUnitState != UnitState.Battle)
             return;
 
         attackTimer -= Time.deltaTime;
@@ -102,7 +102,7 @@ public class TowerCombat : MonoBehaviour
         // 取得した敵を、以下の条件で振り分ける
         // * 視野角内かどうか
         // * 視野角内であれば、最も進んでいる敵を攻撃
-        Vector3 towerPos = transform.position;
+        Vector3 unitPos = transform.position;
         Vector3 forwardDir = transform.forward;
 
         // 敵判定に使用する得点
@@ -113,9 +113,9 @@ public class TowerCombat : MonoBehaviour
         foreach (var hit in hitEnemies)
         {
             Vector3 enemyPos = hit.transform.position;
-            Vector3 targetDir = (enemyPos - towerPos).normalized;
+            Vector3 targetDir = (enemyPos - unitPos).normalized;
 
-            // Towerから見た正面ベクトル と 敵ポジションを内積で比較
+            // Unitから見た正面ベクトル と 敵ポジションを内積で比較
             float dot = Vector3.Dot(forwardDir, targetDir);
 
             // GetViewingAngle()は、Degreeで返る。

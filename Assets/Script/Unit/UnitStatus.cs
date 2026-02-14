@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class TowerStatus : MonoBehaviour
+public class UnitStatus : MonoBehaviour
 {
     [SerializeField] private Status maxHp; // 0になると壊れる
     [SerializeField] private Status attack;
@@ -52,7 +52,7 @@ public class TowerStatus : MonoBehaviour
         return knockbackDuration.GetValue();
     }
 
-    // TowerCombatとか別箇所に書くと、Playモード中以外は取得できずにエラーになる
+    // UnitCombatとか別箇所に書くと、Playモード中以外は取得できずにエラーになる
     // (status.Get()...という形になるが、statusはAwakeしないと読まないので）
     private void OnDrawGizmos()
     {
