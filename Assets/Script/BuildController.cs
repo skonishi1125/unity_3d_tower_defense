@@ -8,6 +8,14 @@ public enum BuildMode
     Demolish = 2,
 }
 
+public enum BuildErrorType
+{
+    None = 0,
+    CannotBuild = 1,
+    NothingToDemolish = 2,
+    Maximum = 3,
+}
+
 public class BuildController : MonoBehaviour
 {
     private Camera mainCamera;
@@ -46,8 +54,8 @@ public class BuildController : MonoBehaviour
     public int MaxBuildableUnitNumber => maxBuildableUnitNumber;
 
     public event Action BuildModeChanged;
-    public event Action BulitUnitChanged;
-    public event Action<string> DisplayBuildMessage; // 建築, 破壊時どちらもエラーを入れて通知させる
+    public event Action BulidUnitChanged;
+    public event Action<string, BuildErrorType> BuildErrorOccured; // 建築, 破壊時どちらもエラーを入れて通知させる
 
     private void Awake()
     {
@@ -234,10 +242,10 @@ public class BuildController : MonoBehaviour
             {
                 Destroy(tower);
                 currentUnitNumber--;
-                BulitUnitChanged?.Invoke();
+                BulidUnitChanged?.Invoke();
             }
             else
-                DisplayBuildMessage?.Invoke("何も建設されていません。");
+                BuildErrorOccured?.Invoke("何も建設されていません。", BuildErrorType.NothingToDemolish);
 
         }
 
@@ -247,7 +255,7 @@ public class BuildController : MonoBehaviour
     {
         if (IsBuildCapReached())
         {
-            DisplayBuildMessage?.Invoke("最大建設上限です。");
+            BuildErrorOccured?.Invoke("最大建設上限です。", BuildErrorType.Maximum);
             return;
         }
 
@@ -268,7 +276,7 @@ public class BuildController : MonoBehaviour
             Vector2Int cell = grid.WorldToCell(hit.point);
             if (grid.IsBlocked(cell))
             {
-                DisplayBuildMessage?.Invoke("その位置には配置できません。");
+                BuildErrorOccured?.Invoke("その位置には配置できません。", BuildErrorType.CannotBuild);
                 return;
             }
 
@@ -306,7 +314,7 @@ public class BuildController : MonoBehaviour
             }
 
             currentUnitNumber++;
-            BulitUnitChanged?.Invoke();
+            BulidUnitChanged?.Invoke();
 
         }
     }

@@ -31,9 +31,13 @@ public class Hud : MonoBehaviour
     [SerializeField] private GameObject EditStateUI;
     [SerializeField] private GameObject PlayingStateUI;
 
-    private Tween moneyColorTween;
+    private Tween moneyTextTween;
     private Color originalMoneyColor;
     private Vector3 originalMoneyLocalPos;
+
+    private Tween numberOfUnitTextTween;
+    private Color originalNumberOfUnitColor;
+    private Vector3 originalNumberOfUnitLocalPos;
 
     private IEconomy economy;
     private ILife life;
@@ -107,8 +111,9 @@ public class Hud : MonoBehaviour
         if (buildController != null)
         {
             buildController.BuildModeChanged += UpdateBuildModeText;
-            buildController.BulitUnitChanged += UpdateNumberOfUnitText;
-            buildController.DisplayBuildMessage += message => DisplayErrorMessage(message);
+            buildController.BulidUnitChanged += UpdateNumberOfUnitText;
+            buildController.BuildErrorOccured += (message, _) => DisplayErrorMessage(message);
+            buildController.BuildErrorOccured += (_, ErrorType) => AnimateMaxUnitNumber(_, ErrorType);
         }
     }
 
@@ -136,8 +141,9 @@ public class Hud : MonoBehaviour
         if (buildController != null)
         {
             buildController.BuildModeChanged -= UpdateBuildModeText;
-            buildController.BulitUnitChanged -= UpdateNumberOfUnitText;
-            buildController.DisplayBuildMessage -= message => DisplayErrorMessage(message);
+            buildController.BulidUnitChanged -= UpdateNumberOfUnitText;
+            buildController.BuildErrorOccured -= (message, _) => DisplayErrorMessage(message);
+            buildController.BuildErrorOccured -= (_, ErrorType) => AnimateMaxUnitNumber(_, ErrorType);
         }
     }
 
@@ -166,7 +172,11 @@ public class Hud : MonoBehaviour
             errorMessage.text = ""; // Object自体を消すのではなく、テキストだけ空にする
 
         if (numberOfUnitText != null)
+        {
             UpdateNumberOfUnitText();
+            originalNumberOfUnitColor = numberOfUnitText.color;
+            originalNumberOfUnitLocalPos = numberOfUnitText.transform.localPosition;
+        }
 
     }
 
@@ -240,7 +250,7 @@ public class Hud : MonoBehaviour
         AnimateInsufficientFunds();
     }
 
-    // お金が足りないとき、赤く点滅させる
+    // お金が足りないとき、赤くして、揺らす
     private void AnimateInsufficientFunds()
     {
         if (moneyAmount == null) return;
@@ -248,12 +258,12 @@ public class Hud : MonoBehaviour
         // 連打対策
         // 前のアニメーションがあればKillして、改めて走らせる
         // 色と位置を元の場所にリセット
-        moneyColorTween?.Kill();
+        moneyTextTween?.Kill();
         moneyAmount.transform.DOKill();
         moneyAmount.color = originalMoneyColor;
         moneyAmount.transform.localPosition = originalMoneyLocalPos;
 
-        moneyColorTween = moneyAmount.DOColor(Color.red, 0.1f)
+        moneyTextTween = moneyAmount.DOColor(Color.red, 0.1f)
             .SetUpdate(true) // TimeScale = 0 でも動かす
             .SetLoops(4, LoopType.Yoyo)
             .OnComplete(() => moneyAmount.color = originalMoneyColor)
@@ -262,6 +272,28 @@ public class Hud : MonoBehaviour
         // テキスト自体の揺れモーション
         // .3秒で、y軸に揺らす
         moneyAmount.transform.DOShakePosition(0.3f, new Vector3(0f, 5f, 0f))
+            .SetUpdate(true)
+            .SetLink(gameObject);
+    }
+
+    // 最大建設上限に達したとき、ユニットの表記を赤くして、揺らす
+    private void AnimateMaxUnitNumber(string _, BuildErrorType type)
+    {
+        if (numberOfUnitText == null) return;
+        if (type != BuildErrorType.Maximum) return;
+
+        numberOfUnitTextTween?.Kill();
+        numberOfUnitText.transform.DOKill();
+        numberOfUnitText.color = originalNumberOfUnitColor;
+        numberOfUnitText.transform.localPosition = originalNumberOfUnitLocalPos;
+
+        numberOfUnitTextTween = numberOfUnitText.DOColor(Color.red, 0.1f)
+            .SetUpdate(true) // TimeScale = 0 でも動かす
+            .SetLoops(4, LoopType.Yoyo)
+            .OnComplete(() => numberOfUnitText.color = originalNumberOfUnitColor)
+            .SetLink(gameObject);
+
+        numberOfUnitText.transform.DOShakePosition(0.3f, new Vector3(0f, 5f, 0f))
             .SetUpdate(true)
             .SetLink(gameObject);
     }
