@@ -48,7 +48,7 @@ public class EnemyHealth : MonoBehaviour
         healthBar.value = currentHp / status.GetMaxHp();
     }
 
-    public void TakeDamage(float damage, float knockback = 0f)
+    public void TakeDamage(float damage, float kbPower = 0f, float kbDuration = 0f)
     {
         ReduceHp(damage);
 
@@ -60,8 +60,8 @@ public class EnemyHealth : MonoBehaviour
         OnTakeDamaged?.Invoke();
 
         // KB処理
-        if (knockback > 0f && movement != null)
-            movement.ApplyKnockback(knockback);
+        if (kbPower > 0f && movement != null)
+            movement.ApplyKnockback(kbPower, kbDuration);
     }
 
     private void ReduceHp(float damage)

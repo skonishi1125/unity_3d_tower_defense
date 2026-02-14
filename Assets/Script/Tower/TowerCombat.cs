@@ -77,7 +77,11 @@ public class TowerCombat : MonoBehaviour
             .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
 
         // ダメージ処理
-        h.TakeDamage(status.GetAttack(), status.GetKnockbackPower());
+        float damage = status.GetAttack();
+        float kbPower = status.GetKnockbackPower();
+        float kbDuration = status.GetKnockbackDuration();
+
+        h.TakeDamage(damage, kbPower, kbDuration);
 
         // 攻撃が終わったら、インターバルリセット
         attackTimer = status.GetAttackInterval();

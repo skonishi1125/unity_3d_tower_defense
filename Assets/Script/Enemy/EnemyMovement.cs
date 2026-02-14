@@ -6,17 +6,17 @@ public class EnemyMovement : MonoBehaviour
 {
     private EnemyStatus status;
 
+    [Header("Routing")]
     private Waypoint path;
-    // WayPointに到達したと見なす範囲の猶予
-    [SerializeField] private float arriveDistance = .1f;
+    [SerializeField] private float arriveDistance = .1f; // WP到達と見なす範囲の猶予
     private Quaternion targetRotation;
     private float rotationSpeed = 10f;
-
-    // 右から左に動くゲーム想定なので、最初は必ず左に動くという意味合いにしておく
-    private Vector3 firstDirection = Vector3.left;
+    private Vector3 firstDirection = Vector3.left;// 最初は必ず左に動く
     public int CurrentIndex;
 
+    // KB処理
     private bool isKnockedBack = false;
+    private Tween stunTween;
 
     // 距離
     private float[] distanceToGoalCache; // 各種waypointからゴールまで
@@ -184,20 +184,39 @@ public class EnemyMovement : MonoBehaviour
         );
     }
 
-    public void ApplyKnockback(float knockbackDistance)
+    public void ApplyKnockback(float knockbackDistance, float stunDuration)
     {
-        isKnockedBack = true;
+        // 実際KBする処理
+        if (knockbackDistance > 0f)
+        {
+            Vector3 knockbackDir = -transform.forward;
+            transform.DOMove(knockbackDir * knockbackDistance, 0.05f)
+                .SetRelative(true) // 相対座標移動 今の位置から、進行方向とは逆の方向に下がらせる
+                .SetLink(gameObject);
+        }
 
-        Vector3 knockbackDir = -transform.forward;
+        // スタン処理
+        if (stunDuration > 0f)
+        {
+            isKnockedBack = true;
 
-        transform.DOMove(knockbackDir * knockbackDistance, 0.05f)
-            // 相対座標移動 今の位置から、進行方向とは逆の方向に下がらせる
-            .SetRelative(true)
-            .SetLink(gameObject) // Destroy時停止させる
-            .OnComplete(() =>
+            float remainingTime = 0f;
+            if (stunTween != null && stunTween.IsActive())
+                remainingTime = stunTween.Duration() - stunTween.Elapsed();
+
+            // 例えば2秒のスタン中に、0.1秒のスタンが入った場合、上書きされるのを防ぐ
+            if (stunDuration >  remainingTime)
             {
-                isKnockedBack = false;
-            });
+                stunTween?.Kill();
+                stunTween = DOVirtual.DelayedCall(stunDuration, () =>
+                {
+                    isKnockedBack = false;
+                }).SetLink(gameObject); // Destroy時のエラー対策
+            }
+
+        }
+
+
     }
 
 
