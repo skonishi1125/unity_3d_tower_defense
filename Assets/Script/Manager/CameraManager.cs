@@ -21,8 +21,14 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private float maxDistance = 30f;
     private CinemachinePositionComposer buildPositionComposer;
 
+    [Header("Camera Shake")]
+    private CinemachineImpulseSource impulse;
+    [SerializeField] private float intensity = 2f;
+
     private void Awake()
     {
+        impulse = overviewVCam.GetComponent<CinemachineImpulseSource>();
+
         if (stateManager == null)
         {
             Debug.Log("CameraManager: stateManagerを自動割当します");
@@ -86,6 +92,21 @@ public class CameraManager : MonoBehaviour
 
         // 最大、最小範囲内に収める
         buildPositionComposer.CameraDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
+    }
+
+    private void HandleDeathShake()
+    {
+        DeathShake();
+    }
+
+    private void DeathShake()
+    {
+        // TODO: impulseを
+
+        // 上下左右にぐらぐら揺らす
+        Vector2 dir2D = Random.insideUnitCircle.normalized;
+        Vector3 velocity = new Vector3(dir2D.x, dir2D.y, 0f) * intensity;
+        impulse.GenerateImpulse(velocity);
     }
 
 }

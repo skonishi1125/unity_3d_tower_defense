@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public enum GameState
 {
     Edit,
     Playing,
+    Slowing,
     Result
 }
 
@@ -15,6 +17,8 @@ public class StateManager : MonoBehaviour
 
     [SerializeField] private LifeManager lifeManager;
     [SerializeField] private GameInput gameInput;
+
+    private bool isGameClear = false;
 
     public event Action StateChanged;
 
@@ -83,21 +87,42 @@ public class StateManager : MonoBehaviour
 
     public void GameOver()
     {
+        StartCoroutine(SlowMotionCo(false));
         Debug.Log("GAME OVER!");
-        // ゲームオーバー特有の処理をしたあと
+
         EndGame();
     }
 
     public void GameClear()
     {
+        StartCoroutine(SlowMotionCo(true));
+        Debug.Log("GAME CLEAR!");
+
         // クリア特有の処理をしたあと
         EndGame();
     }
 
+    // スロー演出を入れて、Slowingから別の関数に移る。
+    private IEnumerator SlowMotionCo(bool isGameClear)
+    {
+        State = GameState.Slowing;
+        //AudioManager.Instance?.StopBgm();
+        Time.timeScale = 0.5f;
+        yield return new WaitForSecondsRealtime(3f);
+        Time.timeScale = 1f;
+    }
+
     private void EndGame()
     {
-        // クリア、ゲームオーバー共通処理
-        // (もういちど、とか）
+        if (isGameClear)
+        {
+            // クリアの処理
+        }
+        else
+        {
+            // 失敗時の処理
+        }
+        // (共通で もういちど とか）
     }
 
 }
