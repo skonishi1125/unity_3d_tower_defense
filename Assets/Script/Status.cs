@@ -5,7 +5,6 @@ using UnityEngine;
 public class Status
 {
     [SerializeField] private float baseValue;
-    [SerializeField] private int baseIntValue;
     [SerializeField] private float additiveBonus = 0;
     [SerializeField] private float multiplier = 1f;
 
@@ -17,7 +16,9 @@ public class Status
 
     public int GetIntValue()
     {
-        return baseIntValue;
+        // (int)とせず、四捨五入の形で返す
+        // ↑だと、99.9999f 等の場合、99fが返る
+        return Mathf.RoundToInt(GetValue());
     }
 
     public void AddBonus(float v)

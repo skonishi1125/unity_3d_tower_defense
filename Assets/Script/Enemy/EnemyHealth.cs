@@ -27,6 +27,7 @@ public class EnemyHealth : MonoBehaviour
             return status.GetMaxHp();
         }
     }
+    public bool IsDead => isDead;
 
     public event Action OnTakeDamaged; // UI更新, 被弾音など必要なら購読する
 
@@ -51,6 +52,8 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(float damage, float kbPower = 0f, float kbDuration = 0f)
     {
+        if (isDead) return;
+
         ReduceHp(damage);
 
         // vfxのメソッドを直接読んでいる
@@ -76,9 +79,13 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
+        if (isDead) return;
+
         isDead = true;
         if (onEnemyDiedChannel != null)
             onEnemyDiedChannel.RaiseEvent(status.GetMoney());
+
+        vfx?.CreateMoneyPopup(status.GetMoney());
 
         Destroy(gameObject);
     }

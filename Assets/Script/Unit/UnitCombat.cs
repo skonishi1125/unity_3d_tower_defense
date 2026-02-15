@@ -134,7 +134,7 @@ public class UnitCombat : MonoBehaviour
                 if (enemy == null)
                     continue;
                 var enemyHealth = hit.GetComponentInParent<EnemyHealth>();
-                if (enemyHealth == null)
+                if (enemyHealth == null || enemyHealth.IsDead)
                     continue;
 
                 // 複数の敵から、攻撃対象を特定する

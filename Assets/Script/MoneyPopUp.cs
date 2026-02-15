@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-public class DamagePopUp : MonoBehaviour
+public class MoneyPopUp : MonoBehaviour
 {
     [SerializeField] private TextMeshPro textMesh;
 
@@ -18,10 +18,10 @@ public class DamagePopUp : MonoBehaviour
             textMesh = GetComponentInChildren<TextMeshPro>();
     }
 
-    // ダメージ表示生成後、この関数でセットアップする
-    public void Setup(float damageAmount, Color? color = null)
+    // 金額表示生成後、この関数でセットアップする
+    public void Setup(int moneyAmount, Color? color = null)
     {
-        textMesh.text = damageAmount.ToString("0"); // 小数点なし表示
+        textMesh.text = $"+¥{moneyAmount}";
         if (color.HasValue)
             textMesh.color = color.Value;
 
@@ -37,5 +37,5 @@ public class DamagePopUp : MonoBehaviour
                 Destroy(gameObject);
             });
     }
-}
 
+}

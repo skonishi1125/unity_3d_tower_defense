@@ -22,6 +22,11 @@ public class EnemyVfx : MonoBehaviour
     [SerializeField] private Vector3 damagePopupOffset = new Vector3(0, 2f, 0);
     [SerializeField] private float randomRange = 0.5f;
 
+    [Header("Display Money Number Vfx")]
+    [SerializeField] private GameObject moneyNumberVfx;
+    [SerializeField] private Color moneyNumberColor = Color.yellow;
+    [SerializeField] private Vector3 moneyPopupOffset = new Vector3(0, 2f, 0);
+
     private Coroutine onDamageVfxCo;
 
     protected virtual void Awake()
@@ -94,9 +99,19 @@ public class EnemyVfx : MonoBehaviour
         // スクリプトを取得してセットアップ
         DamagePopUp popupScript = popupObj.GetComponent<DamagePopUp>();
         if (popupScript != null)
-        {
             popupScript.Setup(damage, damageNumberVfxColor);
-        }
+    }
+
+    public void CreateMoneyPopup(int amount)
+    {
+        if (moneyNumberVfx == null) return;
+
+        Vector3 spawnPosition = transform.position + moneyPopupOffset;
+
+        GameObject popupObj = Instantiate(moneyNumberVfx, spawnPosition, Quaternion.identity);
+
+        MoneyPopUp script = popupObj.GetComponent<MoneyPopUp>();
+        script.Setup(amount, moneyNumberColor);
     }
 
 
