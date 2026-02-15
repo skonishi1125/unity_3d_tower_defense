@@ -10,7 +10,7 @@ public interface IEconomy
     event Action<float> MoneyChanged;
     event Action<string> OnInsufficientFunds; // 支払い失敗のイベント
 
-    bool TrySpend(float cost);
+    bool TrySpend(int cost);
 
     void Refund(float cost);
 

@@ -15,7 +15,7 @@ public class Unit : MonoBehaviour
 
     // 建築時、確定した角度で建築する必要があるので参照する
     public Quaternion TargetRotation { get; private set; }
-    [SerializeField] private float rotationSpeed = 5f;
+    private float rotationSpeed = 20f;
     [SerializeField] private GameObject attackRangeVisual;
     [SerializeField] private GameObject coolTimeUI;
 

@@ -7,14 +7,18 @@ using UnityEngine;
 public sealed class EconomyManager : MonoBehaviour, IEconomy
 {
     [Header("Initial Values")]
-    [SerializeField] private float initialMoney = 100f;
+    [SerializeField] private int initialMoney = 100;
 
     private float money; // このManager内で使うだけの変数
+
+    [Header("Broadcasting Events")]
+    [SerializeField] private IntEventChannelSO onEnemyDiedChannel;
+
     public float CurrentMoney => money;// 外部から現在金額を参照するため専用の変数
     // moneyとCurrentMoneyの関係は、下記設計と似ている
     // public float CurrentMoney { get; private set; }
 
-    public event Action<float> MoneyChanged;
+    public event Action<float> MoneyChanged; // HUD更新用
     public event Action<string> OnInsufficientFunds;
 
     private void Awake()
@@ -24,10 +28,28 @@ public sealed class EconomyManager : MonoBehaviour, IEconomy
 
     private void Start()
     {
-        MoneyChanged?.Invoke(money); // HUDなど更新
+        MoneyChanged?.Invoke(money);
     }
 
-    public bool TrySpend(float cost)
+    private void OnEnable()
+    {
+        if (onEnemyDiedChannel != null)
+            onEnemyDiedChannel.OnEventRaised += AddMoney;
+    }
+
+    private void OnDisable()
+    {
+        if (onEnemyDiedChannel != null)
+            onEnemyDiedChannel.OnEventRaised -= AddMoney;
+    }
+
+    public void AddMoney(int amount)
+    {
+        money += amount;
+        MoneyChanged?.Invoke(money);
+    }
+
+    public bool TrySpend(int cost)
     {
         if (cost < 0f)
         {

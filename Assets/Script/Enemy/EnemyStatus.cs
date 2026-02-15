@@ -5,6 +5,7 @@ public class EnemyStatus : MonoBehaviour
     public Status maxHp;
     public Status defense;
     public Status speed;
+    public Status money;
 
     public float GetMaxHp()
     {
@@ -19,6 +20,11 @@ public class EnemyStatus : MonoBehaviour
     public float GetSpeed()
     {
         return speed.GetValue();
+    }
+
+    public int GetMoney()
+    {
+        return money.GetIntValue();
     }
 
 

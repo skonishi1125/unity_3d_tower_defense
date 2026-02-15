@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
-    private Enemy enemy;
     private EnemyStatus status;
     private EnemyMovement movement;
     private EnemyVfx vfx;
@@ -12,6 +11,10 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] protected float currentHp;
     [SerializeField] protected bool isDead;
+
+    // 金額データを流すためのもの
+    [Header("Broadcasting Events")]
+    [SerializeField] private IntEventChannelSO onEnemyDiedChannel;
 
     public float CurrentHp => currentHp;
     public float MaxHp { get
@@ -25,12 +28,10 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    // HealthBar更新や被弾音（必要なら購読する）
-    public event Action OnTakeDamaged;
+    public event Action OnTakeDamaged; // UI更新, 被弾音など必要なら購読する
 
     private void Awake()
     {
-        enemy = GetComponent<Enemy>();
         status = GetComponent<EnemyStatus>();
         movement = GetComponent<EnemyMovement>();
         vfx = GetComponent<EnemyVfx>();
@@ -76,9 +77,10 @@ public class EnemyHealth : MonoBehaviour
     private void Die()
     {
         isDead = true;
+        if (onEnemyDiedChannel != null)
+            onEnemyDiedChannel.RaiseEvent(status.GetMoney());
+
         Destroy(gameObject);
-        Debug.Log("died!");
-        // スコアを入れたり、お金を増やしたり
     }
 
 }

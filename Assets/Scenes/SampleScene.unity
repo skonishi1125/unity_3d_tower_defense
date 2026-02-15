@@ -4259,6 +4259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialMoney: 1000
+  onEnemyDiedChannel: {fileID: 11400000, guid: 9d1bd930cf360924f8b8df188c20bfc7, type: 2}
 --- !u!1 &1296165229
 GameObject:
   m_ObjectHideFlags: 0

@@ -626,6 +626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHp: 0
   isDead: 0
+  onEnemyDiedChannel: {fileID: 11400000, guid: 9d1bd930cf360924f8b8df188c20bfc7, type: 2}
 --- !u!114 &8464919303904844148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,14 +641,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp:
     baseValue: 30
+    baseIntValue: 0
     additiveBonus: 0
     multiplier: 1
   defense:
     baseValue: 0
+    baseIntValue: 0
     additiveBonus: 0
     multiplier: 1
   speed:
     baseValue: 1
+    baseIntValue: 0
+    additiveBonus: 0
+    multiplier: 1
+  money:
+    baseValue: 0
+    baseIntValue: 100
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &8049122818346501371
@@ -662,10 +671,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfc1378a62b044d44a5e020bfd211d1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: {fileID: 0}
   onDamageMaterial: {fileID: 2100000, guid: 4cd38a0f27548e44f8be6a8aef990fa6, type: 2}
   onDamageVfxDuration: 0.1
   damageNumberVfx: {fileID: 1546324238079276174, guid: 097ccbcee229d0e46a8d4e78fab79825, type: 3}
   damageNumberVfxColor: {r: 1, g: 1, b: 1, a: 1}
+  damagePopupOffset: {x: 0, y: 2, z: 0}
+  randomRange: 0.5
 --- !u!136 &1996691571816596892
 CapsuleCollider:
   m_ObjectHideFlags: 0

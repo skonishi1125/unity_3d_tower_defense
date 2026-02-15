@@ -5,6 +5,7 @@ using UnityEngine;
 public class Status
 {
     [SerializeField] private float baseValue;
+    [SerializeField] private int baseIntValue;
     [SerializeField] private float additiveBonus = 0;
     [SerializeField] private float multiplier = 1f;
 
@@ -12,6 +13,11 @@ public class Status
     public float GetValue()
     {
         return (baseValue + additiveBonus) * multiplier;
+    }
+
+    public int GetIntValue()
+    {
+        return baseIntValue;
     }
 
     public void AddBonus(float v)
