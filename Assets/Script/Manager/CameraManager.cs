@@ -22,12 +22,13 @@ public class CameraManager : MonoBehaviour
     private CinemachinePositionComposer buildPositionComposer;
 
     [Header("Camera Shake")]
-    private CinemachineImpulseSource impulse;
+    [SerializeField] private CinemachineImpulseSource impulse;
     [SerializeField] private float intensity = 2f;
 
     private void Awake()
     {
-        impulse = overviewVCam.GetComponent<CinemachineImpulseSource>();
+        if (impulse == null)
+            impulse = GetComponent<CinemachineImpulseSource>();
 
         if (stateManager == null)
         {
@@ -48,7 +49,10 @@ public class CameraManager : MonoBehaviour
     private void OnEnable()
     {
         if (stateManager != null)
+        {
             stateManager.StateChanged += RefreshCameraPriority;
+            stateManager.OnGameOver += DeathShake;
+        }
 
         if (gameInput != null)
             gameInput.ZoomRequested += OnZoomRequested;
@@ -58,7 +62,10 @@ public class CameraManager : MonoBehaviour
     private void OnDisable()
     {
         if (stateManager != null)
+        {
             stateManager.StateChanged -= RefreshCameraPriority;
+            stateManager.OnGameOver -= DeathShake;
+        }
 
         if (gameInput != null)
             gameInput.ZoomRequested -= OnZoomRequested;
@@ -94,15 +101,8 @@ public class CameraManager : MonoBehaviour
         buildPositionComposer.CameraDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
     }
 
-    private void HandleDeathShake()
-    {
-        DeathShake();
-    }
-
     private void DeathShake()
     {
-        // TODO: impulseを
-
         // 上下左右にぐらぐら揺らす
         Vector2 dir2D = Random.insideUnitCircle.normalized;
         Vector3 velocity = new Vector3(dir2D.x, dir2D.y, 0f) * intensity;

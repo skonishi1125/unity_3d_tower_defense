@@ -21,6 +21,7 @@ public class StateManager : MonoBehaviour
     private bool isGameClear = false;
 
     public event Action StateChanged;
+    public event Action OnGameOver;
 
     private void Awake()
     {
@@ -87,6 +88,7 @@ public class StateManager : MonoBehaviour
 
     public void GameOver()
     {
+        OnGameOver?.Invoke();
         StartCoroutine(SlowMotionCo(false));
         Debug.Log("GAME OVER!");
 
