@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -19,6 +20,8 @@ public class StateManager : MonoBehaviour
     [Header("Flags")]
     private bool isGameClear = false;
 
+    [Header("UIs")]
+    [SerializeField] private GameObject gameOverUI;
     public float elapsedTime { get; private set; }
     public event Action StateChanged;
     public event Action OnGameOver;
@@ -49,6 +52,18 @@ public class StateManager : MonoBehaviour
         if (gameInput != null)
             gameInput.ToggleModeRequested += ToggleModePressed;
 
+        // リトライボタンの押された処理をstaticで管理している
+        // これで、リトライボタンが画面にいくつもあっても、
+        // どれか押されたときにReloadSceneを走らせるという設計にできている。
+        RetryButton.OnRetryRequested += ReloadScene;
+
+    }
+
+    // リトライ処理などで、現状シーンを再読込する
+    private void ReloadScene()
+    {
+        var scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
     }
 
     private void OnDisable()
@@ -66,6 +81,11 @@ public class StateManager : MonoBehaviour
         State = GameState.Edit;
         Time.timeScale = 0f;
         StateChanged?.Invoke();
+
+        // GameOverUIが表示されていたら、非公開にする
+        if (gameOverUI != null)
+            gameOverUI.SetActive(false);
+
     }
 
 
@@ -100,7 +120,6 @@ public class StateManager : MonoBehaviour
         yield return StartCoroutine(SlowMotionCo(false));
 
         // スロー終了後に以下が実行される
-        Debug.Log("GAME OVER!");
         EndGame();
     }
 
@@ -123,23 +142,31 @@ public class StateManager : MonoBehaviour
     private IEnumerator SlowMotionCo(bool isGameClear)
     {
         State = GameState.Slowing;
+        StateChanged?.Invoke();
         //AudioManager.Instance?.StopBgm();
         Time.timeScale = 0.5f;
         yield return new WaitForSecondsRealtime(3f);
-        Time.timeScale = 1f; // 0にしちゃってもいいかも。1にすると、リザルト画面放置してるとどんどんゴールされて不具合につながりそう。
+        // Time.timeScale = 1f;
+        // 0にしちゃってもいいかも。1にすると、リザルト画面放置してるとどんどんゴールされて不具合につながりそう。
+        Time.timeScale = 0f;
     }
 
     private void EndGame()
     {
+        State = GameState.Result;
+        StateChanged?.Invoke();
+
         if (isGameClear)
         {
             // クリアの処理
         }
         else
         {
-            // 失敗時の処理
+            // ゲームオーバーUIの表示
+            if (gameOverUI != null)
+                gameOverUI.SetActive(true);
+
         }
-        // (共通で もういちど とか）
     }
 
 }
