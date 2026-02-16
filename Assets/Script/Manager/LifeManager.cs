@@ -31,7 +31,7 @@ public class LifeManager : MonoBehaviour, ILife
         life = Mathf.Max(0, life - amount);
         LifeChanged?.Invoke(life);
 
-        if (life == 0 && ! isLifeZero)
+        if (life == 0 && !isLifeZero)
         {
             isLifeZero = true;
             LifeZero?.Invoke();
@@ -45,4 +45,17 @@ public class LifeManager : MonoBehaviour, ILife
         life += amount;
         LifeChanged?.Invoke(life);
     }
+
+    // ゲームオーバー処理確認用
+    [ContextMenu("Debug/Life Zero")]
+    private void DebugLifeZero()
+    {
+        life = 0;
+        isLifeZero = true;
+        LifeZero?.Invoke();
+        Debug.Log("DebugLifeZero 実行");
+    }
+
+
+
 }

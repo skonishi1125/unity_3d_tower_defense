@@ -5076,7 +5076,6 @@ MonoBehaviour:
   minDistance: 3
   maxDistance: 15
   impulse: {fileID: 1602563394}
-  intensity: 2
 --- !u!114 &1602563394
 MonoBehaviour:
   m_ObjectHideFlags: 0

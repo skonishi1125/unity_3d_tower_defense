@@ -13,15 +13,16 @@ public enum GameState
 public class StateManager : MonoBehaviour
 {
     public GameState State { get; private set; }
-    public float elapsedTime { get; private set; }
-
     [SerializeField] private LifeManager lifeManager;
     [SerializeField] private GameInput gameInput;
 
+    [Header("Flags")]
     private bool isGameClear = false;
 
+    public float elapsedTime { get; private set; }
     public event Action StateChanged;
     public event Action OnGameOver;
+    public event Action OnGameClear;
 
     private void Awake()
     {
@@ -89,29 +90,43 @@ public class StateManager : MonoBehaviour
     public void GameOver()
     {
         OnGameOver?.Invoke();
-        StartCoroutine(SlowMotionCo(false));
-        Debug.Log("GAME OVER!");
+        StartCoroutine(GameOverSequence());
+    }
 
+    // SlowMotionCoが終わるまで待機するためのメソッド
+    // Coroutineを直列化して、Coroutineの完了を待てるようにする
+    private IEnumerator GameOverSequence()
+    {
+        yield return StartCoroutine(SlowMotionCo(false));
+
+        // スロー終了後に以下が実行される
+        Debug.Log("GAME OVER!");
         EndGame();
     }
 
     public void GameClear()
     {
-        StartCoroutine(SlowMotionCo(true));
-        Debug.Log("GAME CLEAR!");
+        OnGameClear?.Invoke();
+        StartCoroutine(GameClearSequence());
+    }
 
-        // クリア特有の処理をしたあと
+    private IEnumerator GameClearSequence()
+    {
+        yield return StartCoroutine(SlowMotionCo(false));
+
+        // スロー終了後に以下が実行される
+        Debug.Log("GAME CLEAR!");
         EndGame();
     }
 
-    // スロー演出を入れて、Slowingから別の関数に移る。
+    // スロー演出を入れて、クリア / ゲームオーバーと別の関数に移る。
     private IEnumerator SlowMotionCo(bool isGameClear)
     {
         State = GameState.Slowing;
         //AudioManager.Instance?.StopBgm();
         Time.timeScale = 0.5f;
         yield return new WaitForSecondsRealtime(3f);
-        Time.timeScale = 1f;
+        Time.timeScale = 1f; // 0にしちゃってもいいかも。1にすると、リザルト画面放置してるとどんどんゴールされて不具合につながりそう。
     }
 
     private void EndGame()
