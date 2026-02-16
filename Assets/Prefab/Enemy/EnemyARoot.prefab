@@ -640,7 +640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp:
-    baseValue: 30
+    baseValue: 1
     additiveBonus: 0
     multiplier: 1
   defense:
@@ -676,6 +676,7 @@ MonoBehaviour:
   randomRange: 0.5
   moneyNumberVfx: {fileID: 2701998110312723528, guid: 59c5c720c7fd41442b4703df30b7998c, type: 3}
   moneyNumberColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  moneyPopupOffset: {x: 0, y: 2, z: 0}
 --- !u!136 &1996691571816596892
 CapsuleCollider:
   m_ObjectHideFlags: 0

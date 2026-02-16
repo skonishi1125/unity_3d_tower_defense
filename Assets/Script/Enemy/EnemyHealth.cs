@@ -30,6 +30,7 @@ public class EnemyHealth : MonoBehaviour
     public bool IsDead => isDead;
 
     public event Action OnTakeDamaged; // UI更新, 被弾音など必要なら購読する
+    public event Action OnDied;
 
     private void Awake()
     {
@@ -87,6 +88,7 @@ public class EnemyHealth : MonoBehaviour
 
         vfx?.CreateMoneyPopup(status.GetMoney());
 
+        OnDied?.Invoke();
         Destroy(gameObject);
     }
 

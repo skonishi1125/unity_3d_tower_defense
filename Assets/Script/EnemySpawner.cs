@@ -2,11 +2,15 @@
 
 public class EnemySpawner : MonoBehaviour
 {
+    [SerializeField] private StageManager stageManager;
     [SerializeField] private Waypoint waypoint;
     private Transform spawnTransform;
 
     private void Start()
     {
+        if (stageManager == null)
+            stageManager = FindFirstObjectByType<StageManager>();
+
         // 初期スポーン設定
         if (waypoint == null)
             waypoint = FindFirstObjectByType<Waypoint>();
@@ -27,6 +31,11 @@ public class EnemySpawner : MonoBehaviour
 
         spawnHeight += RoadGenerator.RoadThickness * .5f;
         go.transform.position = spawnTransform.position + Vector3.up * spawnHeight;
+
+        // カウント加算 + 敵のイベントをStageManagerに読ませる
+        var enemy = go.GetComponent<Enemy>();
+        if (enemy != null)
+            stageManager.RegisterEnemy(enemy);
 
         // 移動, rotate初期化
         var mover = go.GetComponent<EnemyMovement>();

@@ -7,14 +7,18 @@ public class StageManager : MonoBehaviour
     [SerializeField] private StageConfig stageConfig;
     [SerializeField] private EnemySpawner enemySpawner;
 
+    [Header("Stage Information")]
     private int currentWaveIndex = 0;
     private bool isRunning = false;
     private Coroutine stageRoutine;
+    private int activeEnemyCount = 0;
+    private bool isBossWaveSpawnComplete = false;
 
     public int CurrentWave => currentWaveIndex + 1;
     public int MaxWave => stageConfig.waves.Length;
 
     public event Action WaveChanged;
+    public event Action OnAllWavesCompleted; // 全てのWave呼出済み && 画面上に敵がいない
 
     private void Start()
     {
@@ -28,8 +32,6 @@ public class StageManager : MonoBehaviour
 
         isRunning = true;
         stageRoutine = StartCoroutine(RunStage());
-
-
     }
 
     // ステージ全体
@@ -58,11 +60,8 @@ public class StageManager : MonoBehaviour
 
     private IEnumerator RunWave(WaveConfig wave)
     {
-        // ボスウェーブのとき、なにかするならここで
         if (wave.isBossWave)
-        {
             Debug.Log("boss!");
-        }
 
         // 開始前待機時間
         yield return new WaitForSeconds(wave.startDelay);
@@ -73,10 +72,13 @@ public class StageManager : MonoBehaviour
                 yield break;
 
             yield return StartCoroutine(SpawnGroup(group));
-
         }
 
-
+        if (wave.isBossWave)
+        {
+            isBossWaveSpawnComplete = true;
+            CheckWaveCompletion();
+        }
 
     }
 
@@ -99,6 +101,32 @@ public class StageManager : MonoBehaviour
             enemySpawner.Spawn(enemyPrefab);
 
             yield return new WaitForSeconds(group.spawnInterval);
+        }
+    }
+
+    // スポナーで敵を生成したとき、
+    // * こちらの関数でカウント加算
+    // * イベントに購読し、敵が消えたときにカウント減算されるようにする
+    public void RegisterEnemy(Enemy enemy)
+    {
+        activeEnemyCount++;
+        enemy.OnDespawned += HandleEnemyDespawned;
+    }
+
+    private void HandleEnemyDespawned(Enemy enemy)
+    {
+        enemy.OnDespawned -= HandleEnemyDespawned;
+        activeEnemyCount--;
+
+        CheckWaveCompletion();
+    }
+
+    private void CheckWaveCompletion()
+    {
+        // ボスウェーブの全スポーンが終わり、かつ画面に敵がいない場合
+        if (isBossWaveSpawnComplete && activeEnemyCount <= 0)
+        {
+            OnAllWavesCompleted?.Invoke();
         }
     }
 

@@ -15,6 +15,7 @@ public class StateManager : MonoBehaviour
 {
     public GameState State { get; private set; }
     [SerializeField] private LifeManager lifeManager;
+    [SerializeField] private StageManager stageManager;
     [SerializeField] private GameInput gameInput;
 
     [Header("Flags")]
@@ -22,6 +23,8 @@ public class StateManager : MonoBehaviour
 
     [Header("UIs")]
     [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private GameObject gameClearUI;
+
     public float elapsedTime { get; private set; }
     public event Action StateChanged;
     public event Action OnGameOver;
@@ -31,6 +34,9 @@ public class StateManager : MonoBehaviour
     {
         if (lifeManager == null)
             lifeManager = FindFirstObjectByType<LifeManager>();
+
+        if (stageManager == null)
+            stageManager = FindFirstObjectByType<StageManager>();
 
         if (gameInput == null)
             gameInput = FindFirstObjectByType<GameInput>();
@@ -49,6 +55,9 @@ public class StateManager : MonoBehaviour
         if (lifeManager != null)
             lifeManager.LifeZero += GameOver;
 
+        if (stageManager != null)
+            stageManager.OnAllWavesCompleted += HandleAllWavesCompleted;
+
         if (gameInput != null)
             gameInput.ToggleModeRequested += ToggleModePressed;
 
@@ -59,20 +68,41 @@ public class StateManager : MonoBehaviour
 
     }
 
-    // リトライ処理などで、現状シーンを再読込する
-    private void ReloadScene()
-    {
-        var scene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(scene.name);
-    }
-
     private void OnDisable()
     {
         if (lifeManager != null)
             lifeManager.LifeZero -= GameOver;
 
+        if (stageManager != null)
+            stageManager.OnAllWavesCompleted -= HandleAllWavesCompleted;
+
         if (gameInput != null)
             gameInput.ToggleModeRequested -= ToggleModePressed;
+
+        RetryButton.OnRetryRequested -= ReloadScene;
+    }
+
+    private void HandleAllWavesCompleted()
+    {
+        Debug.Log("handle");
+
+        // Waveが終わった瞬間、ライフが0になった時を考慮する必要がある
+        if (State != GameState.Playing)
+            return;
+
+        Debug.Log("handle playing");
+
+        if (lifeManager.CurrentLife > 0)
+            GameClear();
+        else
+        {
+            Debug.Log("Handle側のGameover");
+            // ライフ側のイベントと二重実行にならないように、
+            // GameOver側でStateをチェックしている。ライフ側のイベントが先に走った場合、
+            // Slowingになっているので、そもそもこの処理まで辿り着かないようにしている
+            GameOver(); 
+        }
+
     }
 
     private void SetUpGame()
@@ -82,9 +112,12 @@ public class StateManager : MonoBehaviour
         Time.timeScale = 0f;
         StateChanged?.Invoke();
 
-        // GameOverUIが表示されていたら、非公開にする
+        // 各種UIが表示されていたら、非公開にする
         if (gameOverUI != null)
             gameOverUI.SetActive(false);
+
+        if (gameClearUI != null)
+            gameClearUI.SetActive(false);
 
     }
 
@@ -109,6 +142,9 @@ public class StateManager : MonoBehaviour
 
     public void GameOver()
     {
+        if (State != GameState.Playing)
+            return;
+
         OnGameOver?.Invoke();
         StartCoroutine(GameOverSequence());
     }
@@ -117,7 +153,7 @@ public class StateManager : MonoBehaviour
     // Coroutineを直列化して、Coroutineの完了を待てるようにする
     private IEnumerator GameOverSequence()
     {
-        yield return StartCoroutine(SlowMotionCo(false));
+        yield return StartCoroutine(SlowMotionCo());
 
         // スロー終了後に以下が実行される
         EndGame();
@@ -125,13 +161,17 @@ public class StateManager : MonoBehaviour
 
     public void GameClear()
     {
+        if (State != GameState.Playing)
+            return;
+
+        isGameClear = true;
         OnGameClear?.Invoke();
         StartCoroutine(GameClearSequence());
     }
 
     private IEnumerator GameClearSequence()
     {
-        yield return StartCoroutine(SlowMotionCo(false));
+        yield return StartCoroutine(SlowMotionCo());
 
         // スロー終了後に以下が実行される
         Debug.Log("GAME CLEAR!");
@@ -139,7 +179,7 @@ public class StateManager : MonoBehaviour
     }
 
     // スロー演出を入れて、クリア / ゲームオーバーと別の関数に移る。
-    private IEnumerator SlowMotionCo(bool isGameClear)
+    private IEnumerator SlowMotionCo()
     {
         State = GameState.Slowing;
         StateChanged?.Invoke();
@@ -159,6 +199,8 @@ public class StateManager : MonoBehaviour
         if (isGameClear)
         {
             // クリアの処理
+            if (gameClearUI != null)
+                gameClearUI.SetActive(true);
         }
         else
         {
@@ -167,6 +209,13 @@ public class StateManager : MonoBehaviour
                 gameOverUI.SetActive(true);
 
         }
+    }
+
+    // リトライ処理などで、現状シーンを再読込する
+    private void ReloadScene()
+    {
+        var scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
     }
 
 }
