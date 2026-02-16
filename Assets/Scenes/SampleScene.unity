@@ -4056,9 +4056,9 @@ MonoBehaviour:
   SignalCombinationMode: 0
   ReactionSettings:
     m_SecondaryNoise: {fileID: 0}
-    AmplitudeGain: 2
+    AmplitudeGain: 1
     FrequencyGain: 1
-    Duration: 0.3
+    Duration: 1
     m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &1072625652
 GameObject:
@@ -5129,7 +5129,7 @@ MonoBehaviour:
     DissipationMode: 2
     DissipationDistance: 100
     PropagationSpeed: 343
-  DefaultVelocity: {x: 1, y: -1, z: 0}
+  DefaultVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &1610278695
 GameObject:
   m_ObjectHideFlags: 0

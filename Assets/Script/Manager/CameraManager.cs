@@ -23,7 +23,6 @@ public class CameraManager : MonoBehaviour
 
     [Header("Camera Shake")]
     [SerializeField] private CinemachineImpulseSource impulse;
-    [SerializeField] private float intensity = 2f;
 
     private void Awake()
     {
@@ -103,10 +102,12 @@ public class CameraManager : MonoBehaviour
 
     private void DeathShake()
     {
-        // 上下左右にぐらぐら揺らす
-        Vector2 dir2D = Random.insideUnitCircle.normalized;
-        Vector3 velocity = new Vector3(dir2D.x, dir2D.y, 0f) * intensity;
-        impulse.GenerateImpulse(velocity);
+        Vector3 randomDirection = new Vector3(
+            Random.Range(-1f, 1f),
+            Random.Range(-1f, 1f),
+            0f
+        ).normalized;
+        impulse.GenerateImpulse(randomDirection);
     }
 
 }
