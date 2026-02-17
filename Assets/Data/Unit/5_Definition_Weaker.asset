@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad15824ced3f5954ba0feee203aa58b4, type: 3}
-  m_Name: 7_Definition_Knockback
+  m_Name: 5_Definition_Weaker
   m_EditorClassIdentifier: 
-  DisplayName: "\u30AD\u30E3\u30CE\u30F3"
+  DisplayName: "\u30B9\u30CA\u30A4\u30D7"
   Cost: 400
-  Description: "\u653B\u6483\u3057\u305F\u76F8\u624B\u3092\u30B9\u30BF\u30F3\u3055\u305B\u308B\u3002\n\u6B62\u307E\u3063\u305F\u6240\u3092\u307C\u3053\u307C\u3053\u306B\u3057\u3088\u3046\u3002"
+  Description: "\u7279\u6B8A\u30E6\u30CB\u30C3\u30C8\u3002\n\u6700\u3082\u4F53\u529B\u306E\u4F4E\u3044\u6575\u3092\u653B\u6483\u3059\u308B\u3002"
   Icon: {fileID: 21300000, guid: 3b1e84f31b05bb047bcc1b801979ada9, type: 3}
-  UnitPrefab: {fileID: 8671865796400775776, guid: b3456c000bb57d24ba7a16717fd49a22, type: 3}
-  HotkeySlot: 7
+  UnitPrefab: {fileID: 8671865796400775776, guid: a2e66dc98ffab634e8b37284a004c77c, type: 3}
+  HotkeySlot: 6

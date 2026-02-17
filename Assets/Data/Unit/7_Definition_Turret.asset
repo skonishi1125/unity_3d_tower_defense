@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad15824ced3f5954ba0feee203aa58b4, type: 3}
-  m_Name: 5_Definition_Turret
+  m_Name: 7_Definition_Turret
   m_EditorClassIdentifier: 
   DisplayName: "\u30BF\u30EC\u30C3\u30C8"
   Cost: 400
