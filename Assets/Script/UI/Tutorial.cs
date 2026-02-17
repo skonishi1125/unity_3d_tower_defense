@@ -2,7 +2,7 @@
 
 public class Tutorial : MonoBehaviour
 {
-    [SerializeField] private GameObject wrapper;
+    [SerializeField] private GameObject wrapper; // UI全体
 
     private void Awake()
     {
