@@ -200,7 +200,11 @@ public class StateManager : MonoBehaviour
         {
             // クリアの処理
             if (gameClearUI != null)
+            {
                 gameClearUI.SetActive(true);
+                if (gameClearUI.TryGetComponent<GameClearPanelController>(out var controller))
+                    controller.PlayClearSequence();
+            }
         }
         else
         {
