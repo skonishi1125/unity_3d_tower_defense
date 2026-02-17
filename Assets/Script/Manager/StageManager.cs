@@ -14,7 +14,7 @@ public class StageManager : MonoBehaviour
     private int activeEnemyCount = 0;
     private bool isBossWaveSpawnComplete = false;
 
-    public int CurrentWave => currentWaveIndex + 1;
+    public int CurrentWaveIndex => currentWaveIndex;
     public int MaxWave => stageConfig.waves.Length;
 
     public event Action WaveChanged;
@@ -43,11 +43,11 @@ public class StageManager : MonoBehaviour
                 yield break;
 
             var wave = stageConfig.waves[currentWaveIndex];
-            currentWaveIndex = i;
-            Debug.Log($"wave: {CurrentWave} 開始");
+            Debug.Log($"wave: {CurrentWaveIndex + 1} 開始");
             WaveChanged?.Invoke();
             // こちらが終わったら、またこのfor文が回ってWaveが動く。
             yield return StartCoroutine(RunWave(wave));
+            currentWaveIndex++;
         }
 
         // ステージ終了処理
@@ -60,9 +60,6 @@ public class StageManager : MonoBehaviour
 
     private IEnumerator RunWave(WaveConfig wave)
     {
-        if (wave.isBossWave)
-            Debug.Log("boss!");
-
         // 開始前待機時間
         yield return new WaitForSeconds(wave.startDelay);
 

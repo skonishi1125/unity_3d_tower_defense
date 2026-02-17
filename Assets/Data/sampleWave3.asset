@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab900bfe6a9d4a46bb9f6dc95eb7c79, type: 3}
   m_Name: sampleWave3
   m_EditorClassIdentifier: 
-  waveName: 
+  waveName: sample3
   enemyGroups:
   - enemyPrefab: {fileID: 8304212716229790698, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
     spawnCount: 3

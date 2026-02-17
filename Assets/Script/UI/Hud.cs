@@ -242,7 +242,7 @@ public class Hud : MonoBehaviour
 
     private void UpdateWaveText()
     {
-        waveNumber.text = $"Wave: {stageManager.CurrentWave} / {stageManager.MaxWave}";
+        waveNumber.text = $"Wave: {stageManager.CurrentWaveIndex + 1} / {stageManager.MaxWave}";
     }
 
     private void HandleAnimateInsufficientFunds(string _)
