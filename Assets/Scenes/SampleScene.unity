@@ -3148,7 +3148,7 @@ GameObject:
   - component: {fileID: 553469158}
   - component: {fileID: 553469157}
   m_Layer: 5
-  m_Name: Text
+  m_Name: BaseText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5851,7 +5851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3109902d0df75a43a18d99e92496905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialMoney: 2199
+  initialMoney: 1699
   onEnemyDiedChannel: {fileID: 11400000, guid: 9d1bd930cf360924f8b8df188c20bfc7, type: 2}
 --- !u!1 &1296165229
 GameObject:
@@ -7448,7 +7448,7 @@ GameObject:
   - component: {fileID: 1668668715}
   - component: {fileID: 1668668714}
   m_Layer: 5
-  m_Name: RankText
+  m_Name: ValueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8597,18 +8597,19 @@ MonoBehaviour:
   economyManager: {fileID: 1280282523}
   clearText: {fileID: 517235136}
   moneyPanel: {fileID: 1187193181}
-  moneyText: {fileID: 478474006}
   rankPanel: {fileID: 1715964746}
   rankTextPanel: {fileID: 595334891}
   buttonPanel: {fileID: 761993909}
   delayBeforeClearText: 0.5
+  delayBeforeButton: 1
   delayBeforeMoney: 1
   countUpDuration: 1
+  moneyText: {fileID: 478474006}
   delayBeforeRank: 1
   delayBeforeRankText: 1
-  delayBeforeButton: 1
-  rankText: {fileID: 1668668714}
-  messageText: {fileID: 1636886794}
+  rankBaseText: {fileID: 553469157}
+  rankValueText: {fileID: 1668668714}
+  rankMessageText: {fileID: 1636886794}
   rankConditions:
   - rank: 0
     minMoney: 2000

@@ -30,22 +30,26 @@ public class GameClearPanelController : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private GameObject clearText;
     [SerializeField] private GameObject moneyPanel;
-    [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private GameObject rankPanel;
     [SerializeField] private GameObject rankTextPanel;
     [SerializeField] private GameObject buttonPanel;
 
     [Header("Timings")]
     [SerializeField] private float delayBeforeClearText = 0.5f;
-    [SerializeField] private float delayBeforeMoney = 1.0f;
-    [SerializeField] private float countUpDuration = 1.0f;
-    [SerializeField] private float delayBeforeRank = 1.0f;
-    [SerializeField] private float delayBeforeRankText = 1.0f;
     [SerializeField] private float delayBeforeButton = 1.0f;
 
+    [Header("Money Data")]
+    [SerializeField] private float delayBeforeMoney = 1.0f;
+    [SerializeField] private float countUpDuration = 1.0f;
+    [SerializeField] private TextMeshProUGUI moneyText;
+
     [Header("Rank Data")]
-    [SerializeField] private TextMeshProUGUI rankText;
-    [SerializeField] private TextMeshProUGUI messageText;
+    [SerializeField] private float delayBeforeRank = 1.0f;
+    [SerializeField] private float delayBeforeRankValue = 1.0f;
+    [SerializeField] private float delayBeforeRankText = 1.0f;
+    [SerializeField] private TextMeshProUGUI rankBaseText;
+    [SerializeField] private TextMeshProUGUI rankValueText;
+    [SerializeField] private TextMeshProUGUI rankMessageText;
     [SerializeField] private List<RankCondition> rankConditions;
 
 
@@ -84,18 +88,26 @@ public class GameClearPanelController : MonoBehaviour
                 // カウントアップ演出が完了するまでここで待機する
                 yield return StartCoroutine(CountUpMoneyCo());
             }
-
         }
 
         // 3. ランク欄の表示 (ランク計算と一言は後で実装)
         yield return new WaitForSecondsRealtime(delayBeforeRank);
-        if (economyManager != null && rankPanel != null && rankText != null && messageText != null)
+        if (rankPanel != null)
         {
-            RankCondition rank = EvaluateRank((int)economyManager.CurrentMoney);
-            rankText.text = rank.rank.ToString();
-            messageText.text = rank.rankMessage;
-            rankPanel.SetActive(true);
+            if (economyManager != null && rankValueText != null && rankMessageText != null)
+            {
+                RankCondition rank = EvaluateRank((int)economyManager.CurrentMoney);
+                rankValueText.text = " "; // まだ空欄
+                rankPanel.SetActive(true);
+                yield return new WaitForSecondsRealtime(delayBeforeRankValue);
+                rankValueText.text = rank.rank.ToString();
+                rankValueText.transform.DOPunchScale(Vector3.one * 0.3f, 0.3f, 10, 1).SetUpdate(true);
+
+                // SetActive対応自体はこのあと
+                rankMessageText.text = rank.rankMessage;
+            }
         }
+
 
         // 4. ランクについての一言
         yield return new WaitForSecondsRealtime(delayBeforeRankText);
@@ -114,7 +126,8 @@ public class GameClearPanelController : MonoBehaviour
 
         Tween countTween = DOTween.To(
             () => currentDisplayMoney,
-            x => {
+            x =>
+            {
                 currentDisplayMoney = x;
                 moneyText.text = $"¥ {currentDisplayMoney.ToString("N0")}";
             },
@@ -149,9 +162,13 @@ public class GameClearPanelController : MonoBehaviour
         if (rankConditions.Count > 0)
             return rankConditions[rankConditions.Count - 1];
 
-        return new RankCondition {
-            rank = ClearRank.C, rankMessage = "C※リストが空でした。"
+        return new RankCondition
+        {
+            rank = ClearRank.C,
+            rankMessage = "C※リストが空でした。"
         };
     }
+
+
 
 }
