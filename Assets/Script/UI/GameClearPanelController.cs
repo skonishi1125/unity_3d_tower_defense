@@ -98,16 +98,15 @@ public class GameClearPanelController : MonoBehaviour
             {
                 RankCondition rank = EvaluateRank((int)economyManager.CurrentMoney);
                 rankValueText.text = " "; // まだ空欄
+                rankMessageText.text = rank.rankMessage; // 一言コメントをこの時点で入れておく
                 rankPanel.SetActive(true);
+
                 yield return new WaitForSecondsRealtime(delayBeforeRankValue);
+
                 rankValueText.text = rank.rank.ToString();
                 rankValueText.transform.DOPunchScale(Vector3.one * 0.3f, 0.3f, 10, 1).SetUpdate(true);
-
-                // SetActive対応自体はこのあと
-                rankMessageText.text = rank.rankMessage;
             }
         }
-
 
         // 4. ランクについての一言
         yield return new WaitForSecondsRealtime(delayBeforeRankText);
@@ -138,7 +137,7 @@ public class GameClearPanelController : MonoBehaviour
         // DOTweenが完了するまで待機
         yield return countTween.WaitForCompletion();
 
-        // 最終的な値の再代入と、スケールを少し大きくして元に戻す演出も加える
+        // 最終的な値の再代入
         moneyText.text = $"¥ {targetMoney.ToString("N0")}";
 
         // DOPunchScaleで一瞬テキストを拡大（1.3倍に設定、時間は0.3秒）
