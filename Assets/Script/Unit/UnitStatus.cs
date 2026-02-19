@@ -28,7 +28,7 @@ public class UnitStatus : MonoBehaviour
     public float GetAttackRange()
     {
         // 実際オブジェクトは0.5f分考慮した距離に配置されるので、
-        // こうすることで実質3マス分の範囲として考えることができる
+        // こうすることで実質1マス分の範囲として考えることができる
         return attackRange.GetValue() + .5f;
     }
 
@@ -50,6 +50,29 @@ public class UnitStatus : MonoBehaviour
     public float GetKnockbackDuration()
     {
         return knockbackDuration.GetValue();
+    }
+
+    public string GetKnockbackRankText()
+    {
+        float p = knockbackPower.GetValue();
+        float d = knockbackDuration.GetValue();
+
+        float score = p * d;
+
+        if (p <= 0f || d <= 0f)
+        {
+            return "弱い";
+        }
+
+        else if (score < 1.5f)
+        {
+            return "普通";
+        }
+
+        else
+        {
+            return "強い";
+        }
     }
 
     // UnitCombatとか別箇所に書くと、Playモード中以外は取得できずにエラーになる
