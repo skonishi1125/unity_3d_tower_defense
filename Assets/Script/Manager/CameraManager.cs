@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+    [SerializeField] private Tutorial tutorial;
+
+    // 編集画面時、マウスにカメラを追従させるための対象オブジェクト
+    [SerializeField] private GameObject originalCameraTarget;
+
     // カメラ優先度
     private const int PriorityActive = 20;
     private const int PriorityInactive = 10;
@@ -26,6 +31,15 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
+        if (tutorial == null)
+            Debug.LogWarning("CameraManagerにTutorialパネルが割り当てられていません。");
+
+        if (overviewVCam == null || buildVCam == null)
+            Debug.LogWarning("CameraManagerに該当のカメラが割り当てられていません。");
+
+        if (originalCameraTarget == null)
+            Debug.LogWarning("CameraManagerにcameraTargetが割り当てられていません。");
+
         if (impulse == null)
             impulse = GetComponent<CinemachineImpulseSource>();
 
@@ -56,6 +70,8 @@ public class CameraManager : MonoBehaviour
         if (gameInput != null)
             gameInput.ZoomRequested += OnZoomRequested;
 
+        if (tutorial != null)
+            tutorial.OnPanelActive += OnTutorialActiveStateChanged;
     }
 
     private void OnDisable()
@@ -68,6 +84,9 @@ public class CameraManager : MonoBehaviour
 
         if (gameInput != null)
             gameInput.ZoomRequested -= OnZoomRequested;
+
+        if (tutorial != null)
+            tutorial.OnPanelActive -= OnTutorialActiveStateChanged;
 
     }
 
@@ -108,6 +127,38 @@ public class CameraManager : MonoBehaviour
             0f
         ).normalized;
         impulse.GenerateImpulse(randomDirection);
+    }
+
+    private void OnTutorialActiveStateChanged(bool isTutorialActive)
+    {
+        bool enableTracking = !isTutorialActive;
+        SetTrackingEnabled(enableTracking);
+    }
+
+    // 現在のカメラターゲット情報を持たせておく
+    // 例えばチュートリアルを開いた場合などは、この値をnullにして、
+    // チュートリアル中にカメラ追従の動きをさせないようにする
+    private void SetTrackingEnabled(bool isEnabled)
+    {
+        if (buildVCam != null)
+        {
+            if (isEnabled)
+            {
+                buildVCam.Follow = originalCameraTarget.transform;
+                buildVCam.LookAt = originalCameraTarget.transform;
+            }
+            else
+            {
+                buildVCam.Follow = null;
+                buildVCam.LookAt = null;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("CameraManager: buildVCam が未割当です。");
+        }
+
+
     }
 
 }

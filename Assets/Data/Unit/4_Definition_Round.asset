@@ -15,6 +15,6 @@ MonoBehaviour:
   DisplayName: "\u30E9\u30A6\u30F3\u30C9"
   Cost: 300
   Description: "\u5E83\u3044\u653B\u6483\u7BC4\u56F2\u3092\u6301\u3064\u3002\n\u653B\u6483\u901F\u5EA6\u306F\u9045\u3081\u3002"
-  Icon: {fileID: 21300000, guid: f179eb9cfcd44784abe25047635a4b56, type: 3}
+  Icon: {fileID: 21300000, guid: 7aed4dffa74e70843b83d9aafbf6b5bb, type: 3}
   UnitPrefab: {fileID: 8671865796400775776, guid: 7b144e1b770d56449b1d5a646c98bb3b, type: 3}
   HotkeySlot: 4

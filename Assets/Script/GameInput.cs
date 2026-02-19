@@ -42,6 +42,9 @@ public class GameInput : MonoBehaviour
         Input.Edit.SelectUnit.performed += OnSelectUnitPerformed;
         Input.Edit.Zoom.performed += OnZoom;
         Input.Edit.Zoom.canceled += OnZoom;
+
+        // チュートリアル画面
+        Input.Tutorial.Confirm.performed += _ => ConfirmPressed?.Invoke();
     }
 
     private void OnDisable()
@@ -61,6 +64,10 @@ public class GameInput : MonoBehaviour
         Input.Edit.SelectUnit.performed -= OnSelectUnitPerformed;
         Input.Edit.Zoom.performed -= OnZoom;
         Input.Edit.Zoom.canceled -= OnZoom;
+
+        // チュートリアル画面
+        Input.Tutorial.Confirm.performed -= _ => ConfirmPressed?.Invoke();
+
 
         Input.Edit.Disable();
         Input.Global.Disable();
