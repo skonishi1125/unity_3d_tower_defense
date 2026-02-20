@@ -37,9 +37,9 @@ public class UnitStatus : MonoBehaviour
         return viewingAngle.GetValue();
     }
 
-    public float GetCost()
+    public int GetCost()
     {
-        return cost.GetValue();
+        return cost.GetIntValue();
     }
 
     public float GetKnockbackPower()

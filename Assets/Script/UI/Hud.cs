@@ -222,9 +222,9 @@ public class Hud : MonoBehaviour
         }
     }
 
-    private void UpdateMoneyAmount(float currentMoney)
+    private void UpdateMoneyAmount(int currentMoney)
     {
-        float number = currentMoney;
+        int number = currentMoney;
         string formattedNumber = number.ToString("N0");
         moneyAmount.text = $"¥ {formattedNumber}";
     }

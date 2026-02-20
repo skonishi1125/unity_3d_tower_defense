@@ -1,5 +1,4 @@
-﻿using System.Net;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,15 +50,14 @@ public class UnitDetailPanel : MonoBehaviour
     {
         iconImage.sprite = def.Icon;
         nameText.text = def.DisplayName;
-        costText.text = $"Costs: ¥ {def.Cost}";
         descriptionText.text = def.Description;
 
         if (def.UnitPrefab != null)
         {
             UnitStatus status = def.UnitPrefab.GetComponent<UnitStatus>();
-
             if (status != null)
             {
+                costText.text = $"Costs: ¥ {status.GetCost()}";
                 //damageText.text = $"ダメージ: {status.GetAttack()}";
                 float interval = status.GetAttackInterval();
                 if (interval > 0f)
@@ -94,6 +92,8 @@ public class UnitDetailPanel : MonoBehaviour
         damageText.text = "-";
         intervelText.text = "-";
         kbText.text = "-";
+        costText.text = $"Costs: ¥ - ";
+
     }
 
 }

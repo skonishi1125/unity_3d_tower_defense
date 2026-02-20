@@ -9,16 +9,16 @@ public sealed class EconomyManager : MonoBehaviour, IEconomy
     [Header("Initial Values")]
     [SerializeField] private int initialMoney = 100;
 
-    private float money; // このManager内で使うだけの変数
+    private int money; // このManager内で使うだけの変数
 
     [Header("Broadcasting Events")]
     [SerializeField] private IntEventChannelSO onEnemyDiedChannel;
 
-    public float CurrentMoney => money;// 外部から現在金額を参照するため専用の変数
+    public int CurrentMoney => money;// 外部から現在金額を参照するため専用の変数
     // moneyとCurrentMoneyの関係は、下記設計と似ている
-    // public float CurrentMoney { get; private set; }
+    // public int CurrentMoney { get; private set; }
 
-    public event Action<float> MoneyChanged; // HUD更新用
+    public event Action<int> MoneyChanged; // HUD更新用
     public event Action<string> OnInsufficientFunds;
 
     private void Awake()
@@ -51,7 +51,7 @@ public sealed class EconomyManager : MonoBehaviour, IEconomy
 
     public bool TrySpend(int cost)
     {
-        if (cost < 0f)
+        if (cost < 0)
         {
             Debug.LogError("costがマイナスです");
             return false;
@@ -68,7 +68,7 @@ public sealed class EconomyManager : MonoBehaviour, IEconomy
         return true;
     }
 
-    public void Refund(float cost)
+    public void Refund(int cost)
     {
         if (cost < 0f)
         {
@@ -80,16 +80,16 @@ public sealed class EconomyManager : MonoBehaviour, IEconomy
         MoneyChanged?.Invoke(money);
     }
 
-    public void AddMoney(float value)
-    {
-        if (value < 0f)
-        {
-            Debug.LogError("costがマイナスです");
-            return;
-        }
+    //public void AddMoney(float value)
+    //{
+    //    if (value < 0f)
+    //    {
+    //        Debug.LogError("costがマイナスです");
+    //        return;
+    //    }
 
-        money += value;
-        MoneyChanged?.Invoke(money);
-    }
+    //    money += value;
+    //    MoneyChanged?.Invoke(money);
+    //}
 
 }

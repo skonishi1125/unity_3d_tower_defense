@@ -13,9 +13,16 @@ public class UnitIcon : MonoBehaviour
     // UnitIconsがアイコンを生成するときに走らせる処理
     public void SetInfo(UnitDefinition def, Action<UnitDefinition> onClickAction)
     {
-        cost.text = $"¥{def.Cost}";
         image.sprite = def.Icon;
         hotKey.text = $"[{def.HotkeySlot}]";
+        if (def.UnitPrefab != null)
+        {
+            UnitStatus status = def.UnitPrefab.GetComponent<UnitStatus>();
+            if (status != null)
+                cost.text = $"¥{status.GetCost()}";
+            else
+                cost.text = $"¥ -";
+        }
 
         // ボタンリスナー設定
         // 一度外して、引数として渡されたメソッドをクリック時に走らせるように登録

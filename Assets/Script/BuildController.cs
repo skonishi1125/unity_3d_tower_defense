@@ -290,11 +290,18 @@ public class BuildController : MonoBehaviour
             else if (ghostInstance != null)
                 rotate = ghostInstance.transform.rotation;
 
-            UnitDefinition selectedUnit = unitSelection.Selected;
-            if (selectedUnit == null) return;
+            UnitDefinition selectedUnitDef = unitSelection.Selected;
+            if (selectedUnitDef == null) return;
 
             // 建築可否及びコストの消費
-            if (!economy.TrySpend(selectedUnit.Cost))
+            int cost = 0;
+            if (selectedUnitDef.UnitPrefab != null)
+            {
+                UnitStatus status = selectedUnitDef.UnitPrefab.GetComponent<UnitStatus>();
+                if (status != null)
+                    cost = status.GetCost();
+            }
+            if (!economy.TrySpend(cost))
                 return;
 
             // 現在選択中のユニットのPrefabを使う
@@ -309,7 +316,7 @@ public class BuildController : MonoBehaviour
             if (!grid.TryAddUnit(cell, unitObject))
             {
                 Destroy(unitObject);
-                economy.Refund(selectedUnit.Cost);
+                economy.Refund(cost);
                 Debug.LogWarning($"登録に失敗しました: {cell}");
             }
 

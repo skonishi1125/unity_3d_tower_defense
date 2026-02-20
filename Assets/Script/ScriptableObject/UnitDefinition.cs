@@ -4,7 +4,6 @@
 public sealed class UnitDefinition : ScriptableObject
 {
     public string DisplayName;
-    public int Cost;
     [TextArea] public string Description;
     public Sprite Icon;
 
