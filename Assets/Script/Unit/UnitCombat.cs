@@ -34,6 +34,11 @@ public class UnitCombat : MonoBehaviour
 
     private void Update()
     {
+        // ゲーム内時間が止まっているときは、処理を走らせない
+        // (Editモード中などは、敵を殴らせない）
+        if (Time.deltaTime == 0f)
+            return;
+
         // Ghost中などは、タイマーを走らせない
         if (unit.CurrentUnitState != UnitState.Battle)
             return;
