@@ -52,6 +52,10 @@ public class GameClearPanelController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rankMessageText;
     [SerializeField] private List<RankCondition> rankConditions;
 
+    [Header("Effects")]
+    [SerializeField] private ParticleSystem leftParticle;
+    [SerializeField] private ParticleSystem rightParticle;
+
 
     private void Awake()
     {
@@ -104,6 +108,9 @@ public class GameClearPanelController : MonoBehaviour
                 yield return new WaitForSecondsRealtime(delayBeforeRankValue);
 
                 rankValueText.text = rank.rank.ToString();
+                // 紙吹雪
+                if (leftParticle != null) leftParticle.Play();
+                if (rightParticle != null) rightParticle.Play();
                 rankValueText.transform.DOPunchScale(Vector3.one * 0.3f, 0.3f, 10, 1).SetUpdate(true);
             }
         }
@@ -112,8 +119,8 @@ public class GameClearPanelController : MonoBehaviour
         yield return new WaitForSecondsRealtime(delayBeforeRankText);
         if (rankTextPanel != null) rankTextPanel.SetActive(true);
 
-        // 5. ボタンパネル表示
-        yield return new WaitForSecondsRealtime(delayBeforeButton);
+            // 5. ボタンパネル表示
+            yield return new WaitForSecondsRealtime(delayBeforeButton);
         if (buttonPanel != null) buttonPanel.SetActive(true);
 
     }
