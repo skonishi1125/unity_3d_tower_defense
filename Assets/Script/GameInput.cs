@@ -109,4 +109,19 @@ public class GameInput : MonoBehaviour
         //Debug.Log(ScrollDelta);
     }
 
+    // 最初のPreStart, Tutorialが開いているときのinput処理
+    public void ActivePanelMode()
+    {
+        Input.Global.Disable();
+        Input.Edit.Disable();
+        Input.Tutorial.Enable();
+    }
+
+    public void InactivePanelMode()
+    {
+        Input.Global.Enable();
+        Input.Edit.Enable();
+        Input.Tutorial.Disable();
+    }
+
 }

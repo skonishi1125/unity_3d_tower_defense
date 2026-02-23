@@ -28,10 +28,7 @@ public class Tutorial : MonoBehaviour
 
     private void ActivePanel()
     {
-        gameInput.Input.Global.Disable();
-        gameInput.Input.Edit.Disable();
-        gameInput.Input.Tutorial.Enable();
-        Debug.Log("active");
+        gameInput.ActivePanelMode();
 
         wrapper.SetActive(true);
         OnPanelActive?.Invoke(true);
@@ -40,10 +37,7 @@ public class Tutorial : MonoBehaviour
     // x ボタンに付与する関数
     public void InactivePanel()
     {
-        gameInput.Input.Global.Enable();
-        gameInput.Input.Edit.Enable();
-        gameInput.Input.Tutorial.Disable();
-        Debug.Log("inactive");
+        gameInput.InactivePanelMode();
 
         wrapper.SetActive(false);
         OnPanelActive?.Invoke(false);

@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+    // 特定のUIを開いている間は、マウスカーソルにカメラを追従させなくする
     [SerializeField] private Tutorial tutorial;
+    [SerializeField] private PreStart prestart;
 
     // 編集画面時、マウスにカメラを追従させるための対象オブジェクト
     [SerializeField] private GameObject originalCameraTarget;
@@ -31,6 +33,9 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
+        if (prestart == null)
+            Debug.LogWarning("CameraManagerにprestartが割り当てられていません。");
+
         if (tutorial == null)
             Debug.LogWarning("CameraManagerにTutorialパネルが割り当てられていません。");
 
@@ -59,6 +64,12 @@ public class CameraManager : MonoBehaviour
         RefreshCameraPriority();
     }
 
+    private void Start()
+    {
+        // PreStartパネルから始まるので、カメラの追従は最初オフにしておく
+        SetTrackingEnabled(false);
+    }
+
     private void OnEnable()
     {
         if (stateManager != null)
@@ -72,6 +83,10 @@ public class CameraManager : MonoBehaviour
 
         if (tutorial != null)
             tutorial.OnPanelActive += OnTutorialActiveStateChanged;
+
+        if (prestart != null)
+            prestart.OnPreStartActive += OnTutorialActiveStateChanged;
+
     }
 
     private void OnDisable()
@@ -87,6 +102,9 @@ public class CameraManager : MonoBehaviour
 
         if (tutorial != null)
             tutorial.OnPanelActive -= OnTutorialActiveStateChanged;
+
+        if (prestart != null)
+            prestart.OnPreStartActive -= OnTutorialActiveStateChanged;
 
     }
 
