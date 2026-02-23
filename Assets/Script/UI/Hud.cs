@@ -319,7 +319,7 @@ public class Hud : MonoBehaviour
         errorMessage.text = message;
 
         errorMessage.DOFade(0f, 1f)
-            .SetDelay(3f)
+            .SetDelay(1f)
             .OnComplete(() =>
             {
                 // アニメーション完了後

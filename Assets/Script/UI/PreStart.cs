@@ -1,11 +1,15 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PreStart : MonoBehaviour
 {
     [SerializeField] private GameInput gameInput;
     [SerializeField] private GameObject guide;
+
+    // HudUIのチュートリアルボタン
+    [SerializeField] private GameObject tutorialButton;
 
     public event Action<bool> OnPreStartActive;
 
@@ -24,6 +28,9 @@ public class PreStart : MonoBehaviour
     {
         if (gameInput != null)
             gameInput.ActivePanelMode();
+
+        tutorialButton.SetActive(false);
+
     }
 
 
@@ -31,6 +38,7 @@ public class PreStart : MonoBehaviour
     public void CloseGuide()
     {
         guide.SetActive(false);
+        tutorialButton.SetActive(true);
         gameInput.InactivePanelMode();
         OnPreStartActive?.Invoke(false);
 

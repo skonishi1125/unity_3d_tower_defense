@@ -62,10 +62,10 @@ public class UnitDetailPanel : MonoBehaviour
                 float interval = status.GetAttackInterval();
                 if (interval > 0f)
                 {
-                    float attacksPerSec = 1.0f / interval;
+                    float attacksPerSec = 10f / interval;
                     float dps = status.GetAttack() / interval;
                     damageText.text = $"攻撃力: {status.GetAttack()} (DPS: {dps:F0})";
-                    intervelText.text = $"攻撃速度: {attacksPerSec:F1} 回/秒"; // F1 で小数点第1位まで表示 (ex: 5.0)
+                    intervelText.text = $"頻度: 10 秒あたり {attacksPerSec:F1} 回";
                 }
                 else
                 {
