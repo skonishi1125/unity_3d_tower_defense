@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: 7_Definition_Turret
   m_EditorClassIdentifier: 
   DisplayName: "\u30BF\u30EC\u30C3\u30C8"
-  Cost: 400
   Description: "\u9AD8\u901F\u7832\u53F0\u3002\n\u76F8\u624B\u3092\u7559\u3081\u308B\u6027\u80FD\u4EE5\u5916\u306F\u5F37\u529B\u3002"
-  Icon: {fileID: 21300000, guid: a41bacf4ad653634287b292441553c6e, type: 3}
+  Icon: {fileID: 21300000, guid: 4c7c40665828bb6459e06e4f16f4eaa9, type: 3}
   UnitPrefab: {fileID: 8671865796400775776, guid: a50512c5aa8de0c4e8adf4a8495996a1, type: 3}
   HotkeySlot: 7

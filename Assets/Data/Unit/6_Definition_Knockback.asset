@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: 6_Definition_Knockback
   m_EditorClassIdentifier: 
   DisplayName: "\u30AD\u30E3\u30CE\u30F3"
-  Cost: 400
   Description: "\u653B\u6483\u3057\u305F\u76F8\u624B\u3092\u30B9\u30BF\u30F3\u3055\u305B\u308B\u3002\n\u6B62\u307E\u3063\u305F\u6240\u3092\u307C\u3053\u307C\u3053\u306B\u3057\u3088\u3046\u3002"
-  Icon: {fileID: 21300000, guid: 87de2a77d95b1844cb516aa33afd2fd9, type: 3}
+  Icon: {fileID: 21300000, guid: 55041c3773341984b8a35d55c4d32166, type: 3}
   UnitPrefab: {fileID: 8671865796400775776, guid: b3456c000bb57d24ba7a16717fd49a22, type: 3}
   HotkeySlot: 6

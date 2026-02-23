@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: 9_Definition_Snail
   m_EditorClassIdentifier: 
   DisplayName: "\u3064\u3080\u308A\u3093"
-  Cost: 10
   Description: "\u975E\u5E38\u306B\u611B\u304F\u308B\u3057\u3044\u3002"
-  Icon: {fileID: 21300000, guid: d337a505c916181448d5739c3f1b1488, type: 3}
+  Icon: {fileID: 21300000, guid: d2847e88f68ae6946a1dba9011b9f5a7, type: 3}
   UnitPrefab: {fileID: 8671865796400775776, guid: 5fb67042b3592d74aac3b44062e692aa, type: 3}
   HotkeySlot: 9

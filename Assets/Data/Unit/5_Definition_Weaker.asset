@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: 5_Definition_Weaker
   m_EditorClassIdentifier: 
   DisplayName: "\u30B9\u30CA\u30A4\u30D7"
-  Cost: 400
   Description: "\u7279\u6B8A\u30E6\u30CB\u30C3\u30C8\u3002\n\u6700\u3082\u4F53\u529B\u306E\u4F4E\u3044\u6575\u3092\u653B\u6483\u3059\u308B\u3002"
-  Icon: {fileID: 21300000, guid: 541f6ae96e0a1804ba9bea7868d97977, type: 3}
+  Icon: {fileID: 21300000, guid: dccffe22997bdc648a2930762fb75106, type: 3}
   UnitPrefab: {fileID: 8671865796400775776, guid: a2e66dc98ffab634e8b37284a004c77c, type: 3}
   HotkeySlot: 5
