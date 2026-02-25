@@ -195,12 +195,12 @@ public class Hud : MonoBehaviour
         if (buildController.CurrentBuildMode == BuildMode.Build)
         {
             buildModeText.color = Color.white;
-            buildModeText.text = "建築";
+            buildModeText.text = "配置";
         }
         else if (buildController.CurrentBuildMode == BuildMode.Demolish)
         {
             buildModeText.color = Color.red;
-            buildModeText.text = "壊す";
+            buildModeText.text = "削除";
         }
         else
         {
