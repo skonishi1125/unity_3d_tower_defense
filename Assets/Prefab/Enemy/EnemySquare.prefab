@@ -562,7 +562,7 @@ GameObject:
   - component: {fileID: 8049122818346501371}
   - component: {fileID: 1996691571816596892}
   m_Layer: 8
-  m_Name: EnemyARoot
+  m_Name: EnemySquare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

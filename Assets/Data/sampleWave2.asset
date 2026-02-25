@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveName: sample2
   enemyGroups:
-  - enemyPrefab: {fileID: 8304212716229790698, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
-    spawnCount: 1
+  - enemyPrefab: {fileID: 8304212716229790698, guid: 8ec0175f8f762ad4fab755183952ab79, type: 3}
+    spawnCount: 3
     spawnInterval: 1
   startDelay: 0
   endDelay: 0
