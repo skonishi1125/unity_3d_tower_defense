@@ -6,6 +6,7 @@ public class StageManager : MonoBehaviour
 {
     [SerializeField] private StageConfig stageConfig;
     [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private BossAlert bossAlert;
 
     [Header("Stage Information")]
     private int currentWaveIndex = 0;
@@ -43,7 +44,18 @@ public class StageManager : MonoBehaviour
                 yield break;
 
             var wave = stageConfig.waves[currentWaveIndex];
-            Debug.Log($"wave: {CurrentWaveIndex + 1} 開始");
+
+            if (wave.isBossWave)
+            {
+                Debug.Log($"Boss Wave! wave: {CurrentWaveIndex + 1}");
+                if (bossAlert != null)
+                    bossAlert.Play();
+            }
+            else
+            {
+                Debug.Log($"wave: {CurrentWaveIndex + 1} 開始");
+            }
+
             WaveChanged?.Invoke();
             // こちらが終わったら、またこのfor文が回ってWaveが動く。
             yield return StartCoroutine(RunWave(wave));

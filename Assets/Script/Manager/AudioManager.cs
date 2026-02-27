@@ -37,11 +37,10 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySfx(AudioClip clip, float volume = 1f)
     {
-        Debug.Log("playsfx!");
         if (clip == null || sfxSource == null)
             return;
 
-        Debug.Log($"SFX {clip?.name} frame={Time.frameCount} vol={volume}");
+        //Debug.Log($"SFX {clip?.name} frame={Time.frameCount} vol={volume}");
         sfxSource.PlayOneShot(clip, master * sfx * Mathf.Clamp01(volume));
     }
 
