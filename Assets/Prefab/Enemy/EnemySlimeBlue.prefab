@@ -672,6 +672,7 @@ GameObject:
   - component: {fileID: 8464919303904844148}
   - component: {fileID: 8049122818346501371}
   - component: {fileID: 1996691571816596892}
+  - component: {fileID: 5370095485395016792}
   m_Layer: 8
   m_Name: EnemySlimeBlue
   m_TagString: Untagged
@@ -811,6 +812,19 @@ CapsuleCollider:
   m_Height: 0.25
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5370095485395016792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8304212716229790698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959972e10ea190645ad00cc4e7e2b706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hittedSfx: {fileID: 8300000, guid: 2374d9e4a97e8804db8e04828a82d044, type: 3}
 --- !u!1 &8951140515636142311
 GameObject:
   m_ObjectHideFlags: 0

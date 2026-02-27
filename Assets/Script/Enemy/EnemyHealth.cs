@@ -7,6 +7,7 @@ public class EnemyHealth : MonoBehaviour
     private EnemyStatus status;
     private EnemyMovement movement;
     private EnemyVfx vfx;
+    private EnemySfx sfx;
     private Slider healthBar;
 
     [SerializeField] protected float currentHp;
@@ -37,6 +38,7 @@ public class EnemyHealth : MonoBehaviour
         status = GetComponent<EnemyStatus>();
         movement = GetComponent<EnemyMovement>();
         vfx = GetComponent<EnemyVfx>();
+        sfx = GetComponent<EnemySfx>();
         healthBar = GetComponentInChildren<Slider>();
 
         currentHp = status.GetMaxHp();
@@ -72,6 +74,8 @@ public class EnemyHealth : MonoBehaviour
     private void ReduceHp(float damage)
     {
         currentHp -= damage;
+        if (sfx != null)
+            sfx.PlayHitted();
         UpdateHealthBar();
 
         if (currentHp <= 0)
