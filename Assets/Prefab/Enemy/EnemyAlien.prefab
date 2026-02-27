@@ -642,7 +642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp:
-    baseValue: 10
+    baseValue: 5
     additiveBonus: 0
     multiplier: 1
   defense:
@@ -650,7 +650,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   speed:
-    baseValue: 10
+    baseValue: 2
     additiveBonus: 0
     multiplier: 1
   money:

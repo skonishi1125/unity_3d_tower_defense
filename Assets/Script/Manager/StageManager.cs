@@ -7,6 +7,7 @@ public class StageManager : MonoBehaviour
     [SerializeField] private StageConfig stageConfig;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private BossAlert bossAlert;
+    [SerializeField] private ClearFlash clearFlash;
 
     [Header("Stage Information")]
     private int currentWaveIndex = 0;
@@ -135,6 +136,8 @@ public class StageManager : MonoBehaviour
         // ボスウェーブの全スポーンが終わり、かつ画面に敵がいない場合
         if (isBossWaveSpawnComplete && activeEnemyCount <= 0)
         {
+            if (clearFlash != null)
+                clearFlash.Play();
             OnAllWavesCompleted?.Invoke();
         }
     }

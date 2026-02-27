@@ -760,7 +760,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   speed:
-    baseValue: 10
+    baseValue: 1
     additiveBonus: 0
     multiplier: 1
   money:
