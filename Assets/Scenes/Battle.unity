@@ -6823,6 +6823,8 @@ MonoBehaviour:
   economyProvider: {fileID: 1280282523}
   currentUnitNumber: 0
   maxBuildableUnitNumber: 10
+  builtSfx: {fileID: 8300000, guid: b11443885f07b354aa2b9bac67c83aaf, type: 3}
+  demolishedSfx: {fileID: 8300000, guid: 2b04e34a553698c409b1bfb15a744dca, type: 3}
 --- !u!1 &305883093
 GameObject:
   m_ObjectHideFlags: 0
@@ -20661,7 +20663,7 @@ MonoBehaviour:
   delayBeforeClearText: 0.5
   delayBeforeButton: 1
   delayBeforeMoney: 1
-  countUpDuration: 1
+  countUpDuration: 2.2
   moneyText: {fileID: 478474006}
   delayBeforeRank: 1
   delayBeforeRankValue: 1
@@ -20688,6 +20690,9 @@ MonoBehaviour:
     rankColor: {r: 1, g: 1, b: 1, a: 0}
   leftParticle: {fileID: 1698097229}
   rightParticle: {fileID: 82701686}
+  drumrollSfx: {fileID: 8300000, guid: 4b9301443dbfb954b906855497346aa3, type: 3}
+  clearSfx: {fileID: 8300000, guid: b7c6118baed017b4d8279728b11bd4ab, type: 3}
+  clapSfx: {fileID: 8300000, guid: 876bd502b2b3f51448e007b9d8356289, type: 3}
 --- !u!1 &2086789177
 GameObject:
   m_ObjectHideFlags: 0

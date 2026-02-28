@@ -56,6 +56,11 @@ public class GameClearPanelController : MonoBehaviour
     [SerializeField] private ParticleSystem leftParticle;
     [SerializeField] private ParticleSystem rightParticle;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip drumrollSfx;
+    [SerializeField] private AudioClip clearSfx;
+    [SerializeField] private AudioClip clapSfx;
+
 
     private void Awake()
     {
@@ -86,6 +91,7 @@ public class GameClearPanelController : MonoBehaviour
         yield return new WaitForSecondsRealtime(delayBeforeMoney);
         if (moneyPanel != null)
         {
+            AudioManager.Instance?.PlaySfx(drumrollSfx);
             moneyPanel.SetActive(true);
             if (moneyText != null && economyManager != null)
             {
@@ -111,6 +117,11 @@ public class GameClearPanelController : MonoBehaviour
                 // 紙吹雪
                 if (leftParticle != null) leftParticle.Play();
                 if (rightParticle != null) rightParticle.Play();
+
+                // SE
+                AudioManager.Instance?.PlaySfx(clearSfx);
+                AudioManager.Instance?.PlaySfx(clapSfx);
+
                 rankValueText.transform.DOPunchScale(Vector3.one * 0.3f, 0.3f, 10, 1).SetUpdate(true);
             }
         }

@@ -17,12 +17,6 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 8304212716229790698, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
     spawnCount: 1
     spawnInterval: 1
-  - enemyPrefab: {fileID: 8304212716229790698, guid: d1aeaf46f47cb9c41bd910d9ddb2d289, type: 3}
-    spawnCount: 2
-    spawnInterval: 1
-  - enemyPrefab: {fileID: 8304212716229790698, guid: de2a131cd3693f048a2f585df85ef1ac, type: 3}
-    spawnCount: 2
-    spawnInterval: 1
-  startDelay: 3
+  startDelay: 1
   endDelay: 0
-  isBossWave: 0
+  isBossWave: 1

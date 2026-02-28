@@ -52,6 +52,11 @@ public class BuildController : MonoBehaviour
     [Header("Buildable Unit Detail")]
     [SerializeField] private int currentUnitNumber = 0;
     [SerializeField] private int maxBuildableUnitNumber = 10;
+
+    [Header("Build / Demolish SFX")]
+    [SerializeField] private AudioClip builtSfx;
+    [SerializeField] private AudioClip demolishedSfx;
+
     public int CurrentUnitNumber => currentUnitNumber;
     public int MaxBuildableUnitNumber => maxBuildableUnitNumber;
 
@@ -287,6 +292,7 @@ public class BuildController : MonoBehaviour
             {
                 Destroy(unit);
                 currentUnitNumber--;
+                AudioManager.Instance?.PlaySfx(demolishedSfx);
                 BulidUnitChanged?.Invoke();
             }
             else
@@ -366,6 +372,7 @@ public class BuildController : MonoBehaviour
             }
 
             currentUnitNumber++;
+            AudioManager.Instance?.PlaySfx(builtSfx);
             BulidUnitChanged?.Invoke();
 
         }
