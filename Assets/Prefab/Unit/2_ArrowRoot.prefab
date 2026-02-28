@@ -871,15 +871,15 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   attackInterval:
-    baseValue: 1
+    baseValue: 2
     additiveBonus: 0
     multiplier: 1
   attackRange:
-    baseValue: 7
+    baseValue: 5
     additiveBonus: 0
     multiplier: 1
   viewingAngle:
-    baseValue: 15
+    baseValue: 20
     additiveBonus: 0
     multiplier: 1
   cost:

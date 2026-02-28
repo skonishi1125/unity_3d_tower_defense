@@ -11957,7 +11957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3109902d0df75a43a18d99e92496905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialMoney: 1699
+  initialMoney: 2000
   onEnemyDiedChannel: {fileID: 11400000, guid: 9d1bd930cf360924f8b8df188c20bfc7, type: 2}
 --- !u!1 &1296165229
 GameObject:
@@ -21185,11 +21185,11 @@ PrefabInstance:
       objectReference: {fileID: 230092162}
     - target: {fileID: 625816759225023555, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.99
+      value: 6.24
       objectReference: {fileID: 0}
     - target: {fileID: 625816759225023555, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.12
+      value: 3.17
       objectReference: {fileID: 0}
     - target: {fileID: 1039339954392285764, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21291,6 +21291,18 @@ PrefabInstance:
       propertyPath: gridSystem
       value: 
       objectReference: {fileID: 230092162}
+    - target: {fileID: 8194306199322374244, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8194306199322374244, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8194306199322374244, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8541322345113729903, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
       propertyPath: gridSystem
       value: 

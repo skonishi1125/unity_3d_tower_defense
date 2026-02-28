@@ -552,19 +552,19 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   viewingAngle:
-    baseValue: 30
+    baseValue: 180
     additiveBonus: 0
     multiplier: 1
   cost:
-    baseValue: 400
+    baseValue: 700
     additiveBonus: 0
     multiplier: 1
   knockbackPower:
-    baseValue: 0.1
+    baseValue: 0.2
     additiveBonus: 0
     multiplier: 1
   knockbackDuration:
-    baseValue: 2
+    baseValue: 2.5
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &3040845086715322079

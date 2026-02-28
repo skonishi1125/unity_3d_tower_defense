@@ -867,7 +867,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   attack:
-    baseValue: 5
+    baseValue: 10
     additiveBonus: 0
     multiplier: 1
   attackInterval:
@@ -875,15 +875,15 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   attackRange:
-    baseValue: 3
+    baseValue: 3.5
     additiveBonus: 0
     multiplier: 1
   viewingAngle:
-    baseValue: 60
+    baseValue: 160
     additiveBonus: 0
     multiplier: 1
   cost:
-    baseValue: 500
+    baseValue: 1000
     additiveBonus: 0
     multiplier: 1
   knockbackPower:

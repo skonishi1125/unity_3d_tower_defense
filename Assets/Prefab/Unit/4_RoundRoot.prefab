@@ -869,7 +869,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   attack:
-    baseValue: 3
+    baseValue: 5
     additiveBonus: 0
     multiplier: 1
   attackInterval:
