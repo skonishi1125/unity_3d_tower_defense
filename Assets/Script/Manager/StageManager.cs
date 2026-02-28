@@ -57,7 +57,10 @@ public class StageManager : MonoBehaviour
                 Debug.Log($"wave: {CurrentWaveIndex + 1} 開始");
             }
 
-            WaveChanged?.Invoke();
+            // 初回は動作させない
+            if (i != 0)
+                WaveChanged?.Invoke();
+
             // こちらが終わったら、またこのfor文が回ってWaveが動く。
             yield return StartCoroutine(RunWave(wave));
             currentWaveIndex++;
