@@ -848,7 +848,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Status: {fileID: 7477620236458772383}
-  rotationSpeed: 5
   attackRangeVisual: {fileID: 4540535348551607308}
   coolTimeUI: {fileID: 3852952616267364392}
 --- !u!114 &7477620236458772383
@@ -864,7 +863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp:
-    baseValue: 0
+    baseValue: 10
     additiveBonus: 0
     multiplier: 1
   attack:
@@ -888,7 +887,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   knockbackPower:
-    baseValue: 0.5
+    baseValue: 0.1
     additiveBonus: 0
     multiplier: 1
   knockbackDuration:

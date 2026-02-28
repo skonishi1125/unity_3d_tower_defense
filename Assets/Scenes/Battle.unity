@@ -21183,6 +21183,14 @@ PrefabInstance:
       propertyPath: gridSystem
       value: 
       objectReference: {fileID: 230092162}
+    - target: {fileID: 625816759225023555, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 625816759225023555, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.12
+      objectReference: {fileID: 0}
     - target: {fileID: 1039339954392285764, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -21235,6 +21243,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Landscapes
       objectReference: {fileID: 0}
+    - target: {fileID: 2603541219282755191, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 2603541219282755191, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.06
+      objectReference: {fileID: 0}
     - target: {fileID: 2919536881676343378, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
       propertyPath: gridSystem
       value: 
@@ -21247,6 +21263,14 @@ PrefabInstance:
       propertyPath: gridSystem
       value: 
       objectReference: {fileID: 230092162}
+    - target: {fileID: 5223482843204144563, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5223482843204144563, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9.03
+      objectReference: {fileID: 0}
     - target: {fileID: 6259645024338264230, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
       propertyPath: gridSystem
       value: 
@@ -21255,6 +21279,14 @@ PrefabInstance:
       propertyPath: gridSystem
       value: 
       objectReference: {fileID: 230092162}
+    - target: {fileID: 7271696942223599291, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 7271696942223599291, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.56
+      objectReference: {fileID: 0}
     - target: {fileID: 7516407125692637342, guid: 13efb91b38adfb646bb0a82eeaf3f588, type: 3}
       propertyPath: gridSystem
       value: 
