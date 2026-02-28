@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 public enum BuildMode
@@ -23,6 +24,7 @@ public class BuildController : MonoBehaviour
     [SerializeField] private GridSystem grid;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private StateManager stateManager;
+    [SerializeField] private StageManager stageManager;
     [SerializeField] private UnitSelection unitSelection;
 
     private bool isPointerOverUI; // マウスがUI上にあるかどうかのフラグ
@@ -95,6 +97,12 @@ public class BuildController : MonoBehaviour
             stateManager = FindFirstObjectByType<StateManager>();
         }
 
+        if (stageManager == null)
+        {
+            Debug.Log("BM: StageManagerがインスペクタ未割り当てのため自動割当します。");
+            stageManager = FindFirstObjectByType<StageManager>();
+        }
+
         if (cellHighlight != null) cellHighlight.gameObject.SetActive(false);
         if (demolishCellHighlight != null) demolishCellHighlight.gameObject.SetActive(false);
 
@@ -108,6 +116,43 @@ public class BuildController : MonoBehaviour
         // ホバー更新（Place / Demolish のときだけ）
         if (CurrentBuildMode != BuildMode.None)
             DisplayPlaceableEffect();
+    }
+    private void OnEnable()
+    {
+        gameInput.ToggleModeRequested += PressToggleMode;
+        gameInput.SelectBuildRequested += PressEdit;
+        gameInput.SelectDemolishRequested += PressDemolish;
+        gameInput.ConfirmPressed += PressConfirm;
+        gameInput.RotatePressed += PressRotate;
+
+        if (unitSelection != null)
+            unitSelection.SelectedChanged += OnUnitSelectionChanged;
+
+        if (stageManager != null)
+            stageManager.OnAllWavesCompleted += InactiveBuildMode;
+
+    }
+
+    private void OnDisable()
+    {
+        gameInput.ToggleModeRequested -= PressToggleMode;
+        gameInput.SelectBuildRequested -= PressEdit;
+        gameInput.SelectDemolishRequested -= PressDemolish;
+        gameInput.ConfirmPressed -= PressConfirm;
+        gameInput.RotatePressed -= PressRotate;
+
+        if (unitSelection != null)
+            unitSelection.SelectedChanged -= OnUnitSelectionChanged;
+
+        if (stageManager != null)
+            stageManager.OnAllWavesCompleted -= InactiveBuildMode;
+    }
+
+
+    // クリアしたあと、BuildModeをnoneとしてGhostを出さないようにする
+    private void InactiveBuildMode()
+    {
+        CurrentBuildMode = BuildMode.None;
     }
 
     // Ghostの出現処理
@@ -467,32 +512,6 @@ public class BuildController : MonoBehaviour
         if (CurrentBuildMode == BuildMode.Build && newUnit != null)
             EnsureGhost();
     }
-
-    private void OnEnable()
-    {
-        gameInput.ToggleModeRequested += PressToggleMode;
-        gameInput.SelectBuildRequested += PressEdit;
-        gameInput.SelectDemolishRequested += PressDemolish;
-        gameInput.ConfirmPressed += PressConfirm;
-        gameInput.RotatePressed += PressRotate;
-
-        if (unitSelection != null)
-            unitSelection.SelectedChanged += OnUnitSelectionChanged;
-
-    }
-
-    private void OnDisable()
-    {
-        gameInput.ToggleModeRequested -= PressToggleMode;
-        gameInput.SelectBuildRequested -= PressEdit;
-        gameInput.SelectDemolishRequested -= PressDemolish;
-        gameInput.ConfirmPressed -= PressConfirm;
-        gameInput.RotatePressed -= PressRotate;
-
-        if (unitSelection != null)
-            unitSelection.SelectedChanged -= OnUnitSelectionChanged;
-    }
-
 
 
     // Debug

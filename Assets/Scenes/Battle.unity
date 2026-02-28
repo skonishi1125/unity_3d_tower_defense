@@ -6809,6 +6809,7 @@ MonoBehaviour:
   grid: {fileID: 230092162}
   gameInput: {fileID: 2110131667}
   stateManager: {fileID: 385021155}
+  stageManager: {fileID: 72494692}
   unitSelection: {fileID: 1885943480}
   CurrentBuildMode: 1
   groundLayerMask:
@@ -9548,6 +9549,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 738964008}
+  - component: {fileID: 738964009}
   m_Layer: 5
   m_Name: Wave
   m_TagString: Untagged
@@ -9575,6 +9577,20 @@ RectTransform:
   m_AnchoredPosition: {x: 760.136, y: 499.29}
   m_SizeDelta: {x: 399.7351, y: 81.435}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &738964009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738964007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dc57c1ee450e8343a69c1091bd38491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageManager: {fileID: 72494692}
+  waveText: {fileID: 894417795}
 --- !u!1 &761330120
 GameObject:
   m_ObjectHideFlags: 0
