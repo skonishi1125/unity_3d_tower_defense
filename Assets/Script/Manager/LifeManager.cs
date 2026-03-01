@@ -8,6 +8,10 @@ public class LifeManager : MonoBehaviour, ILife
     private int life;
     private bool isLifeZero = false;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip lifeDamagedSfx;
+    [SerializeField] private AudioClip lifeZeroSfx;
+
     public int CurrentLife => life;
 
     public event Action<int> LifeChanged;
@@ -34,7 +38,13 @@ public class LifeManager : MonoBehaviour, ILife
         if (life == 0 && !isLifeZero)
         {
             isLifeZero = true;
+            AudioManager.Instance?.PlaySfx(lifeZeroSfx);
             LifeZero?.Invoke();
+        }
+        else if (life != 0 && !isLifeZero)
+        {
+            // Zero以外は、ダメージ音を鳴らす
+            AudioManager.Instance?.PlaySfx(lifeDamagedSfx);
         }
     }
 

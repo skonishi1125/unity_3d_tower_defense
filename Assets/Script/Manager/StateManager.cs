@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -65,6 +66,7 @@ public class StateManager : MonoBehaviour
         // これで、リトライボタンが画面にいくつもあっても、
         // どれか押されたときにReloadSceneを走らせるという設計にできている。
         RetryButton.OnRetryRequested += ReloadScene;
+        BackToTitleButton.OnBackToTitleRequested += BackToTitleScene;
 
     }
 
@@ -80,6 +82,8 @@ public class StateManager : MonoBehaviour
             gameInput.ToggleModeRequested -= ToggleModePressed;
 
         RetryButton.OnRetryRequested -= ReloadScene;
+        BackToTitleButton.OnBackToTitleRequested -= BackToTitleScene;
+
     }
 
     private void HandleAllWavesCompleted()
@@ -220,6 +224,12 @@ public class StateManager : MonoBehaviour
     {
         var scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
+    }
+
+    // タイトルに戻る処理
+    private void BackToTitleScene()
+    {
+        SceneManager.LoadScene("Title");
     }
 
 }
