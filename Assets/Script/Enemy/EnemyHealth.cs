@@ -76,11 +76,6 @@ public class EnemyHealth : MonoBehaviour
     // 0のダメージはなく、最低 1 を返す
     private float CalculateDamageAndCondition(float damage, UnitStatus unitStatus)
     {
-        // 防御力取得
-        float defense = 0f;
-        if (status != null)
-            defense = status.GetDefense();
-
         // Metal特攻持ち かつ Metal の場合、3ダメージとして返す
         if (unitStatus.IsEffectiveMetal() && status.IsMetal())
             return 3f;
@@ -93,8 +88,18 @@ public class EnemyHealth : MonoBehaviour
         if (unitStatus.HasSpeedDown())
             status.speed.SetMultiplier(.5f);
 
-        // ダメージ計算
-        float real_damage = damage - defense;
+        float defense = 0f;
+        float real_damage = damage;
+        if (status != null)
+        {
+            // 先に既存のダメージで計算
+            defense = status.GetDefense();
+            real_damage = damage - defense;
+
+            // ArmorBreak持ちなら、ダメージ計算後に防御を下げる
+            if (unitStatus.HasArmorBreak())
+                status.defense.SetBonus(-2f);
+        }
 
         if (real_damage <= 1f)
             real_damage = 1f;

@@ -25,6 +25,10 @@ public class Status
     {
         additiveBonus += v;
     }
+    public void SetBonus(float v)
+    {
+        additiveBonus = v;
+    }
 
     public void AddMultiplier(float v)
     {

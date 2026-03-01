@@ -11,6 +11,7 @@ public enum ConditionType
 {
     None,
     SpeedDown,
+    ArmorBreak,
 }
 
 public class UnitStatus : MonoBehaviour
@@ -93,6 +94,7 @@ public class UnitStatus : MonoBehaviour
     public bool IsEffectiveSky() => effectiveType == EffectiveType.Sky;
     public bool IsEffectiveMetal() => effectiveType == EffectiveType.Metal;
     public bool HasSpeedDown() => conditionType == ConditionType.SpeedDown;
+    public bool HasArmorBreak() => conditionType == ConditionType.ArmorBreak;
 
     // UnitCombatとか別箇所に書くと、Playモード中以外は取得できずにエラーになる
     // (status.Get()...という形になるが、statusはAwakeしないと読まないので）
