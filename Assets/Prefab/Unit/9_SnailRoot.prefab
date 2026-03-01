@@ -883,7 +883,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   cost:
-    baseValue: 20
+    baseValue: 100
     additiveBonus: 0
     multiplier: 1
   knockbackPower:
@@ -891,7 +891,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   knockbackDuration:
-    baseValue: 0.3
+    baseValue: 0.25
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &814251476045304526

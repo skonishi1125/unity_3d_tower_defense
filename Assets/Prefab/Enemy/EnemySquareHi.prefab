@@ -653,7 +653,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   money:
-    baseValue: 50
+    baseValue: 100
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &8049122818346501371

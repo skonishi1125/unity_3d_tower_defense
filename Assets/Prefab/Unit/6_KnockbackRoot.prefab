@@ -556,7 +556,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   cost:
-    baseValue: 700
+    baseValue: 1500
     additiveBonus: 0
     multiplier: 1
   knockbackPower:

@@ -554,19 +554,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp:
-    baseValue: 100
+    baseValue: 20
     additiveBonus: 0
     multiplier: 1
   defense:
-    baseValue: 0
+    baseValue: 100
     additiveBonus: 0
     multiplier: 1
   speed:
-    baseValue: 0.3
+    baseValue: 0.2
     additiveBonus: 0
     multiplier: 1
   money:
-    baseValue: 200
+    baseValue: 100
     additiveBonus: 0
     multiplier: 1
 --- !u!114 &8049122818346501371

@@ -53,11 +53,11 @@ public class EnemyHealth : MonoBehaviour
         healthBar.value = currentHp / status.GetMaxHp();
     }
 
-    public void TakeDamage(float damage, float kbPower = 0f, float kbDuration = 0f)
+    public void TakeDamage(float pureDamage, float kbPower = 0f, float kbDuration = 0f)
     {
         if (isDead) return;
-
-        ReduceHp(damage);
+        float damage = CalculateDamage(pureDamage);
+        ReduceHp(CalculateDamage(damage));
 
         // vfxのメソッドを直接読んでいる
         // HealthとVFXが密結合ではあるが、1つのEnemyというPrefab内で完結しているので構わない
@@ -69,6 +69,23 @@ public class EnemyHealth : MonoBehaviour
         // KB処理
         if (kbPower > 0f && movement != null)
             movement.ApplyKnockback(kbPower, kbDuration);
+    }
+
+    // 防御力を考慮したダメージの計算
+    // 0のダメージはなく、最低 1 を返す
+    private float CalculateDamage(float damage)
+    {
+        float defense = 0f;
+        if (status != null)
+            defense = status.GetDefense();
+
+        float real_damage = damage - defense;
+
+        if (real_damage <= 1f)
+            real_damage = 1f;
+
+        return real_damage;
+
     }
 
     private void ReduceHp(float damage)
