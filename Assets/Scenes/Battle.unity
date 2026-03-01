@@ -673,7 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 853b3e57f45edec48ba97aa67a98cb56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageConfig: {fileID: 11400000, guid: 3a337bef9de12dc4b8f15166363dbe53, type: 2}
+  stageConfig: {fileID: 11400000, guid: 488dbcb2648a5f647810edf64d170c33, type: 2}
   enemySpawner: {fileID: 1470873432}
   bossAlert: {fileID: 2046676638}
   clearFlash: {fileID: 197609249}

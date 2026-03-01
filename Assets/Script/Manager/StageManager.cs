@@ -87,6 +87,9 @@ public class StageManager : MonoBehaviour
             yield return StartCoroutine(SpawnGroup(group));
         }
 
+        // 全ての敵のスポーンが完了した後、敵が0になるまで待機する
+        yield return new WaitUntil(() => activeEnemyCount <= 0);
+
         if (wave.isBossWave)
         {
             isBossWaveSpawnComplete = true;
