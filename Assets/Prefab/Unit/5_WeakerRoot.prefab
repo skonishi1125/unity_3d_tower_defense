@@ -894,6 +894,8 @@ MonoBehaviour:
     baseValue: 0
     additiveBonus: 0
     multiplier: 1
+  effectiveType: 0
+  conditionType: 1
 --- !u!114 &9205966635931230031
 MonoBehaviour:
   m_ObjectHideFlags: 0

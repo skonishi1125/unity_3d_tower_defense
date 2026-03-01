@@ -57,7 +57,7 @@ public class EnemyHealth : MonoBehaviour
     {
         if (isDead) return;
 
-        float damage = CalculateDamage(pureDamage, unitStatus);
+        float damage = CalculateDamageAndCondition(pureDamage, unitStatus);
         ReduceHp(damage);
 
         // vfxのメソッドを直接読んでいる
@@ -74,7 +74,7 @@ public class EnemyHealth : MonoBehaviour
 
     // 防御力を考慮したダメージの計算
     // 0のダメージはなく、最低 1 を返す
-    private float CalculateDamage(float damage, UnitStatus unitStatus)
+    private float CalculateDamageAndCondition(float damage, UnitStatus unitStatus)
     {
         // 防御力取得
         float defense = 0f;
@@ -88,6 +88,10 @@ public class EnemyHealth : MonoBehaviour
         // Sky 特攻持ち かつ Sky の場合、ダメージを2倍にする
         if (unitStatus.IsEffectiveSky() && status.IsSky())
             damage = damage * 2f;
+
+        // 鈍足デバフ持ちなら、敵を遅くする
+        if (unitStatus.HasSpeedDown())
+            status.speed.SetMultiplier(.5f);
 
         // ダメージ計算
         float real_damage = damage - defense;

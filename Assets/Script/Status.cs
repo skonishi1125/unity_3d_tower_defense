@@ -31,9 +31,15 @@ public class Status
         multiplier += v;
     }
 
+    public void SetMultiplier(float v)
+    {
+        multiplier = v;
+    }
+
     public void SetBaseValue(float v)
     {
         baseValue = v;
     }
+
 
 }
