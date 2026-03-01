@@ -1,11 +1,19 @@
 ﻿using UnityEngine;
 
+public enum EnemyType
+{
+    Normal,
+    Sky,
+    Metal
+}
+
 public class EnemyStatus : MonoBehaviour
 {
     public Status maxHp;
     public Status defense;
     public Status speed;
     public Status money;
+    public EnemyType enemyType = EnemyType.Normal;
 
     public float GetMaxHp()
     {
@@ -26,6 +34,10 @@ public class EnemyStatus : MonoBehaviour
     {
         return money.GetIntValue();
     }
+
+    public bool IsMetal() => enemyType == EnemyType.Metal;
+
+    public bool IsSky() => enemyType == EnemyType.Sky;
 
 
 }

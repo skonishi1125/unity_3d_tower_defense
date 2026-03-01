@@ -53,11 +53,12 @@ public class EnemyHealth : MonoBehaviour
         healthBar.value = currentHp / status.GetMaxHp();
     }
 
-    public void TakeDamage(float pureDamage, float kbPower = 0f, float kbDuration = 0f)
+    public void TakeDamage(float pureDamage, UnitStatus unitStatus, float kbPower = 0f, float kbDuration = 0f)
     {
         if (isDead) return;
-        float damage = CalculateDamage(pureDamage);
-        ReduceHp(CalculateDamage(damage));
+
+        float damage = CalculateDamage(pureDamage, unitStatus);
+        ReduceHp(damage);
 
         // vfxのメソッドを直接読んでいる
         // HealthとVFXが密結合ではあるが、1つのEnemyというPrefab内で完結しているので構わない
@@ -73,12 +74,22 @@ public class EnemyHealth : MonoBehaviour
 
     // 防御力を考慮したダメージの計算
     // 0のダメージはなく、最低 1 を返す
-    private float CalculateDamage(float damage)
+    private float CalculateDamage(float damage, UnitStatus unitStatus)
     {
+        // 防御力取得
         float defense = 0f;
         if (status != null)
             defense = status.GetDefense();
 
+        // Metal特攻持ち かつ Metal の場合、3ダメージとして返す
+        if (unitStatus.IsEffectiveMetal() && status.IsMetal())
+            return 3f;
+
+        // Sky 特攻持ち かつ Sky の場合、ダメージを2倍にする
+        if (unitStatus.IsEffectiveSky() && status.IsSky())
+            damage = damage * 2f;
+
+        // ダメージ計算
         float real_damage = damage - defense;
 
         if (real_damage <= 1f)

@@ -1,5 +1,18 @@
 ﻿using UnityEngine;
 
+public enum EffectiveType
+{
+    None,
+    Sky,
+    Metal
+}
+
+public enum ConditionType
+{
+    None,
+    SpeedDown,
+}
+
 public class UnitStatus : MonoBehaviour
 {
     [SerializeField] private Status maxHp; // 0になると壊れる
@@ -10,6 +23,8 @@ public class UnitStatus : MonoBehaviour
     [SerializeField] private Status cost; // 建造費用
     [SerializeField] private Status knockbackPower;
     [SerializeField] private Status knockbackDuration;
+    [SerializeField] private EffectiveType effectiveType = EffectiveType.None;
+    [SerializeField] private ConditionType conditionType = ConditionType.None;
 
     public float GetMaxHp()
     {
@@ -74,6 +89,10 @@ public class UnitStatus : MonoBehaviour
             return "強い";
         }
     }
+
+    public bool IsEffectiveSky() => effectiveType == EffectiveType.Sky;
+    public bool IsEffectiveMetal() => effectiveType == EffectiveType.Metal;
+    public bool HasSpeedDown() => conditionType == ConditionType.SpeedDown;
 
     // UnitCombatとか別箇所に書くと、Playモード中以外は取得できずにエラーになる
     // (status.Get()...という形になるが、statusはAwakeしないと読まないので）

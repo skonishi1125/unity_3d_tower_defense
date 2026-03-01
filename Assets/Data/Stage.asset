@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Stage
   m_EditorClassIdentifier: 
   waves:
-  - {fileID: 11400000, guid: 407f43c1bae51fa4e8aef9d3e2e67112, type: 2}
+  - {fileID: 11400000, guid: 79183185fa02f58448575601729f268a, type: 2}
   - {fileID: 11400000, guid: 0100f0736d24a5c49b881ba598713e0a, type: 2}
   - {fileID: 11400000, guid: 43053957f31376040b9bcc7454ecb8c8, type: 2}
+  - {fileID: 11400000, guid: 79183185fa02f58448575601729f268a, type: 2}

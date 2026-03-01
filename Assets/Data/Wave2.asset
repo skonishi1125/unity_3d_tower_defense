@@ -16,10 +16,10 @@ MonoBehaviour:
   enemyGroups:
   - enemyPrefab: {fileID: 8304212716229790698, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
     spawnCount: 2
-    spawnInterval: 5
+    spawnInterval: 3
   - enemyPrefab: {fileID: 8304212716229790698, guid: de2a131cd3693f048a2f585df85ef1ac, type: 3}
     spawnCount: 3
-    spawnInterval: 7
+    spawnInterval: 3
   startDelay: 2
   endDelay: 0
   isBossWave: 0

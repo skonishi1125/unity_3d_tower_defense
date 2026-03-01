@@ -764,6 +764,7 @@ MonoBehaviour:
     baseValue: 100
     additiveBonus: 0
     multiplier: 1
+  enemyType: 1
 --- !u!114 &8049122818346501371
 MonoBehaviour:
   m_ObjectHideFlags: 0

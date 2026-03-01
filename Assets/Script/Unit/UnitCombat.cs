@@ -86,7 +86,7 @@ public class UnitCombat : MonoBehaviour
         float kbPower = status.GetKnockbackPower();
         float kbDuration = status.GetKnockbackDuration();
 
-        h.TakeDamage(damage, kbPower, kbDuration);
+        h.TakeDamage(damage, status, kbPower, kbDuration);
 
         // 攻撃が終わったら、インターバルリセット
         attackTimer = status.GetAttackInterval();
