@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad15824ced3f5954ba0feee203aa58b4, type: 3}
   m_Name: 5_Definition_Weaker
   m_EditorClassIdentifier: 
-  DisplayName: "\u30B9\u30CA\u30A4\u30D7"
-  Description: "\u7279\u6B8A\u30E6\u30CB\u30C3\u30C8\u3002\n\u6700\u3082\u4F53\u529B\u306E\u4F4E\u3044\u6575\u3092\u653B\u6483\u3059\u308B\u3002"
+  DisplayName: "\u30C7\u30D0\u30D5\u30A1"
+  Description: "\u5F31\u4F53\u304C\u5F97\u610F\u306A\u7279\u6B8A\u30E6\u30CB\u30C3\u30C8\u3002\n\u7BC4\u56F2\u5185\u306E\u4F4E\u4F53\u529B\u306E\u6575\u3092\u653B\u6483\u3002\n\u540C\u6642\u306B\u76F8\u624B\u306E\u901F\u5EA6\u3092\u4E0B\u3052\u308B\u3002"
   Icon: {fileID: 21300000, guid: dccffe22997bdc648a2930762fb75106, type: 3}
   UnitPrefab: {fileID: 8671865796400775776, guid: a2e66dc98ffab634e8b37284a004c77c, type: 3}
   HotkeySlot: 5

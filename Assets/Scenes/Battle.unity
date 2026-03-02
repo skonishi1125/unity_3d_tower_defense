@@ -673,7 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 853b3e57f45edec48ba97aa67a98cb56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageConfig: {fileID: 11400000, guid: 3a337bef9de12dc4b8f15166363dbe53, type: 2}
+  stageConfig: {fileID: 11400000, guid: 488dbcb2648a5f647810edf64d170c33, type: 2}
   enemySpawner: {fileID: 1470873432}
   bossAlert: {fileID: 2046676638}
   clearFlash: {fileID: 197609249}
@@ -11982,7 +11982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3109902d0df75a43a18d99e92496905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialMoney: 2000
+  initialMoney: 20000
   onEnemyDiedChannel: {fileID: 11400000, guid: 9d1bd930cf360924f8b8df188c20bfc7, type: 2}
 --- !u!1 &1296165229
 GameObject:
@@ -20395,6 +20395,71 @@ Transform:
   - {fileID: 201637016}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2006848074
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.9056128
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.4140234
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295104640180814131, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8304212716229790698, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_Name
+      value: EnemyDumbbellHi
+      objectReference: {fileID: 0}
+    - target: {fileID: 8840367336999326539, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8840367336999326539, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
 --- !u!1 &2034447344
 GameObject:
   m_ObjectHideFlags: 0
@@ -21581,3 +21646,4 @@ SceneRoots:
   - {fileID: 8255155}
   - {fileID: 5464640012237429134}
   - {fileID: 98598045}
+  - {fileID: 2006848074}

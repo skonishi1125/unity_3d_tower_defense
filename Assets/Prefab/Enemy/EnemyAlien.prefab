@@ -657,6 +657,7 @@ MonoBehaviour:
     baseValue: 300
     additiveBonus: 0
     multiplier: 1
+  enemyType: 0
 --- !u!114 &8049122818346501371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -698,10 +699,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.125
-  m_Height: 0.25
+  m_Radius: 0.2
+  m_Height: 0.6
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!114 &6914411410503557685
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -887,13 +887,15 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   knockbackPower:
-    baseValue: 0.1
+    baseValue: 0.01
     additiveBonus: 0
     multiplier: 1
   knockbackDuration:
     baseValue: 0
     additiveBonus: 0
     multiplier: 1
+  effectiveType: 0
+  conditionType: 0
 --- !u!114 &814251476045304526
 MonoBehaviour:
   m_ObjectHideFlags: 0

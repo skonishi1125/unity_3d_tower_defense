@@ -554,19 +554,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp:
-    baseValue: 100
+    baseValue: 30
     additiveBonus: 0
     multiplier: 1
   defense:
-    baseValue: 0
+    baseValue: 100
     additiveBonus: 0
     multiplier: 1
   speed:
-    baseValue: 0.3
+    baseValue: 1.2
     additiveBonus: 0
     multiplier: 1
   money:
-    baseValue: 50
+    baseValue: 200
     additiveBonus: 0
     multiplier: 1
   enemyType: 2
@@ -611,10 +611,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.125
-  m_Height: 0.25
+  m_Radius: 0.45
+  m_Height: 0.8
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.14999998, z: 0.100000024}
 --- !u!114 &4883343918585727342
 MonoBehaviour:
   m_ObjectHideFlags: 0

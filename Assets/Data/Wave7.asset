@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dab900bfe6a9d4a46bb9f6dc95eb7c79, type: 3}
-  m_Name: Wave4
+  m_Name: Wave7
   m_EditorClassIdentifier: 
   waveName: 
   enemyGroups:
   - enemyPrefab: {fileID: 8304212716229790698, guid: 1d20027813ab9e44bb459c8aa166be76, type: 3}
     spawnCount: 1
-    spawnInterval: 1
-  - enemyPrefab: {fileID: 8304212716229790698, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
-    spawnCount: 2
-    spawnInterval: 5
-  - enemyPrefab: {fileID: 8304212716229790698, guid: de2a131cd3693f048a2f585df85ef1ac, type: 3}
-    spawnCount: 2
-    spawnInterval: 6
-  - enemyPrefab: {fileID: 8304212716229790698, guid: 1d20027813ab9e44bb459c8aa166be76, type: 3}
+    spawnInterval: 3
+  - enemyPrefab: {fileID: 8304212716229790698, guid: 609f921d4d02ef4418b7c9c70ad4da5d, type: 3}
     spawnCount: 1
-    spawnInterval: 1
-  - enemyPrefab: {fileID: 8304212716229790698, guid: d1aeaf46f47cb9c41bd910d9ddb2d289, type: 3}
+    spawnInterval: 3
+  - enemyPrefab: {fileID: 8304212716229790698, guid: 499748d474cf3274cb0c534905dc595e, type: 3}
     spawnCount: 2
-    spawnInterval: 10
+    spawnInterval: 1
+  - enemyPrefab: {fileID: 8304212716229790698, guid: de2a131cd3693f048a2f585df85ef1ac, type: 3}
+    spawnCount: 3
+    spawnInterval: 2
+  - enemyPrefab: {fileID: 8304212716229790698, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
+    spawnCount: 5
+    spawnInterval: 1
   startDelay: 2
   endDelay: 0
-  isBossWave: 0
+  isBossWave: 1

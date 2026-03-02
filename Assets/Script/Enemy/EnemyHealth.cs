@@ -76,9 +76,9 @@ public class EnemyHealth : MonoBehaviour
     // 0のダメージはなく、最低 1 を返す
     private float CalculateDamageAndCondition(float damage, UnitStatus unitStatus)
     {
-        // Metal特攻持ち かつ Metal の場合、3ダメージとして返す
+        // Metal特攻持ち かつ Metal の場合、6ダメージとして返す
         if (unitStatus.IsEffectiveMetal() && status.IsMetal())
-            return 3f;
+            return 6f;
 
         // Sky 特攻持ち かつ Sky の場合、ダメージを2倍にする
         if (unitStatus.IsEffectiveSky() && status.IsSky())
@@ -86,7 +86,7 @@ public class EnemyHealth : MonoBehaviour
 
         // 鈍足デバフ持ちなら、敵を遅くする
         if (unitStatus.HasSpeedDown())
-            status.speed.SetMultiplier(.5f);
+            status.speed.SetMultiplier(.75f);
 
         float defense = 0f;
         float real_damage = damage;

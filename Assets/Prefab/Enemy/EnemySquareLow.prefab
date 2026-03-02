@@ -653,9 +653,10 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   money:
-    baseValue: 25
+    baseValue: 30
     additiveBonus: 0
     multiplier: 1
+  enemyType: 0
 --- !u!114 &8049122818346501371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,10 +698,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.125
-  m_Height: 0.25
+  m_Radius: 0.45
+  m_Height: 0.9
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.28, z: 0}
 --- !u!114 &4883343918585727342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -713,7 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959972e10ea190645ad00cc4e7e2b706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hittedSfx: {fileID: 8300000, guid: 9020f57c69284fd4a9501129a3253831, type: 3}
+  hittedSfx: {fileID: 8300000, guid: dc6110a8c82ee854ca0f15b3e9213b13, type: 3}
 --- !u!1 &8951140515636142311
 GameObject:
   m_ObjectHideFlags: 0
