@@ -891,7 +891,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   knockbackDuration:
-    baseValue: 0.25
+    baseValue: 0.1
     additiveBonus: 0
     multiplier: 1
   effectiveType: 0

@@ -80,9 +80,9 @@ public class EnemyHealth : MonoBehaviour
         if (unitStatus.IsEffectiveMetal() && status.IsMetal())
             return 6f;
 
-        // Sky 特攻持ち かつ Sky の場合、ダメージを2倍にする
+        // Sky 特攻持ち かつ Sky の場合、ダメージを 3 倍にする
         if (unitStatus.IsEffectiveSky() && status.IsSky())
-            damage = damage * 2f;
+            damage = damage * 3f;
 
         // 鈍足デバフ持ちなら、敵を遅くする
         if (unitStatus.HasSpeedDown())

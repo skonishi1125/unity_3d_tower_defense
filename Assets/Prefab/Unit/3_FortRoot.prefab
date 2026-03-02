@@ -879,7 +879,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   viewingAngle:
-    baseValue: 180
+    baseValue: 215
     additiveBonus: 0
     multiplier: 1
   cost:

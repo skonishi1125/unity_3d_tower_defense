@@ -23,14 +23,18 @@ public class EnemySpawner : MonoBehaviour
     public void Spawn(GameObject enemyPrefab)
     {
         var go = Instantiate(enemyPrefab, spawnTransform.position, Quaternion.identity);
-        // 敵のスポーンy座標 = (Colliderの高さの半分) + (床の厚み * .5f)
-        float spawnHeight = 0f;
-        var col = go.GetComponent<Collider>();
-        if (col != null)
-            spawnHeight = col.bounds.extents.y;
 
-        spawnHeight += RoadGenerator.RoadThickness * .5f;
+
+        // 敵のスポーンy座標 = (Colliderの高さの半分) + (床の厚み * .5f)
+        //float spawnHeight = 0f;
+        //var col = go.GetComponent<Collider>();
+        //if (col != null)
+        //    spawnHeight = col.bounds.extents.y;
+
+        // プレハブの原点を足元に設定したので、床の厚みの半分のみを加算する
+        float spawnHeight = RoadGenerator.RoadThickness * 0.5f;
         go.transform.position = spawnTransform.position + Vector3.up * spawnHeight;
+
 
         // カウント加算 + 敵のイベントをStageManagerに読ませる
         var enemy = go.GetComponent<Enemy>();

@@ -867,7 +867,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   attack:
-    baseValue: 3
+    baseValue: 2
     additiveBonus: 0
     multiplier: 1
   attackInterval:
@@ -883,7 +883,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   cost:
-    baseValue: 300
+    baseValue: 250
     additiveBonus: 0
     multiplier: 1
   knockbackPower:
