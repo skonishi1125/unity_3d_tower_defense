@@ -650,7 +650,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   speed:
-    baseValue: 0.8
+    baseValue: 0.6
     additiveBonus: 0
     multiplier: 1
   money:

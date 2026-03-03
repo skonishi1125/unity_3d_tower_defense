@@ -18,6 +18,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] private LifeManager lifeManager;
     [SerializeField] private StageManager stageManager;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private SpeedButton speedButton;
 
     [Header("Flags")]
     private bool isGameClear = false;
@@ -41,6 +42,9 @@ public class StateManager : MonoBehaviour
 
         if (gameInput == null)
             gameInput = FindFirstObjectByType<GameInput>();
+
+        if (speedButton == null)
+            speedButton = FindFirstObjectByType<SpeedButton>();
 
         SetUpGame();
     }
@@ -138,7 +142,7 @@ public class StateManager : MonoBehaviour
         {
             gameInput.SetModeEdit(false);
             State = GameState.Playing;
-            Time.timeScale = 1f;
+            Time.timeScale = speedButton.CurrentSpeed;
         }
 
         StateChanged?.Invoke();

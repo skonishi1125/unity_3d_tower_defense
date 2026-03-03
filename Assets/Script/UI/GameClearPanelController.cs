@@ -87,7 +87,7 @@ public class GameClearPanelController : MonoBehaviour
         yield return new WaitForSecondsRealtime(delayBeforeClearText);
         clearText.SetActive(true);
 
-        // 2. 所持金欄の表示 (スロット演出は後で実装)
+        // 2. 所持金欄の表示
         yield return new WaitForSecondsRealtime(delayBeforeMoney);
         if (moneyPanel != null)
         {

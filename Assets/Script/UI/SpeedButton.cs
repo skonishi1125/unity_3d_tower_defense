@@ -12,6 +12,8 @@ public class SpeedButton : MonoBehaviour
 
     private int currentSpeedIndex = 0;
 
+    public float CurrentSpeed = 1.0f;
+
     private void Start()
     {
         UpdateTimeScaleAndUI();
@@ -27,6 +29,7 @@ public class SpeedButton : MonoBehaviour
 
     private void UpdateTimeScaleAndUI()
     {
+        CurrentSpeed = speedMultipliers[currentSpeedIndex];
         Time.timeScale = speedMultipliers[currentSpeedIndex];
 
         // テキストの更新
@@ -38,6 +41,7 @@ public class SpeedButton : MonoBehaviour
     {
         // シーン遷移時や破棄時にタイムスケールが倍速のままになるのを防ぐ
         Time.timeScale = 1.0f;
+        CurrentSpeed = 1.0f;
     }
 
 }

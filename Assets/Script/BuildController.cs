@@ -1,5 +1,4 @@
 ﻿using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 public enum BuildMode
@@ -136,6 +135,9 @@ public class BuildController : MonoBehaviour
         if (stageManager != null)
             stageManager.OnAllWavesCompleted += InactiveBuildMode;
 
+        if (stateManager != null)
+            stateManager.OnGameOver += InactiveBuildMode;
+
     }
 
     private void OnDisable()
@@ -151,6 +153,9 @@ public class BuildController : MonoBehaviour
 
         if (stageManager != null)
             stageManager.OnAllWavesCompleted -= InactiveBuildMode;
+
+        if (stateManager != null)
+            stateManager.OnGameOver -= InactiveBuildMode;
     }
 
 
@@ -506,15 +511,20 @@ public class BuildController : MonoBehaviour
     // 選択中のユニットが変化したときの差し替え処理
     private void OnUnitSelectionChanged(UnitDefinition newUnit)
     {
-        // 1. 古いGhostがあれば削除する
+        // 古いGhostがあれば削除する
         if (ghostInstance != null)
         {
             Destroy(ghostInstance);
             ghostInstance = null;
         }
 
-        // 2. 新しいユニットがnull（未選択）ならここで終了
+        // 2. 新しいユニットが null なら終了
         if (newUnit == null) return;
+
+        // ボタンが押されたときは、Buildにする
+        CurrentBuildMode = BuildMode.Build;
+        ApplyModeVisuals();
+        BuildModeChanged?.Invoke();
 
         if (CurrentBuildMode == BuildMode.Build && newUnit != null)
             EnsureGhost();
