@@ -98,7 +98,7 @@ public class EnemyHealth : MonoBehaviour
 
             // ArmorBreak持ちなら、ダメージ計算後に防御を下げる
             if (unitStatus.HasArmorBreak())
-                status.defense.SetBonus(-2f);
+                status.defense.SetBonus(-1f);
         }
 
         if (real_damage <= 1f)

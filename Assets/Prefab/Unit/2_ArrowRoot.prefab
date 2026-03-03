@@ -867,19 +867,19 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   attack:
-    baseValue: 7
+    baseValue: 4
     additiveBonus: 0
     multiplier: 1
   attackInterval:
-    baseValue: 3
+    baseValue: 1.5
     additiveBonus: 0
     multiplier: 1
   attackRange:
-    baseValue: 7
+    baseValue: 10
     additiveBonus: 0
     multiplier: 1
   viewingAngle:
-    baseValue: 30
+    baseValue: 20
     additiveBonus: 0
     multiplier: 1
   cost:
