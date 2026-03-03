@@ -64,7 +64,7 @@ public class ClearFlash : MonoBehaviour
 
     private void PlayClearSfx()
     {
-        // 一旦ここでBGMも止めているが、責務外かも。
+        // 一旦ここでBGMも止めている
         AudioManager.Instance?.StopBgm();
         AudioManager.Instance?.PlaySfx(clearFlashSfx);
 

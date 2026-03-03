@@ -752,7 +752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp:
-    baseValue: 60
+    baseValue: 54
     additiveBonus: 0
     multiplier: 1
   defense:
@@ -764,7 +764,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   money:
-    baseValue: 100
+    baseValue: 75
     additiveBonus: 0
     multiplier: 1
   enemyType: 0

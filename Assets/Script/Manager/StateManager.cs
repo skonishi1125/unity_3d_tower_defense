@@ -153,6 +153,7 @@ public class StateManager : MonoBehaviour
         if (State != GameState.Playing)
             return;
 
+        AudioManager.Instance?.StopBgm();
         OnGameOver?.Invoke();
         StartCoroutine(GameOverSequence());
     }

@@ -566,7 +566,7 @@ MonoBehaviour:
     additiveBonus: 0
     multiplier: 1
   money:
-    baseValue: 500
+    baseValue: 250
     additiveBonus: 0
     multiplier: 1
   enemyType: 2

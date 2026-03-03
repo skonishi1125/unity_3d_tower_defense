@@ -159,7 +159,7 @@ public class BuildController : MonoBehaviour
     }
 
 
-    // クリアしたあと、BuildModeをnoneとしてGhostを出さないようにする
+    // BuildModeをnoneとしてGhostを出さないようにする
     private void InactiveBuildMode()
     {
         CurrentBuildMode = BuildMode.None;
