@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad15824ced3f5954ba0feee203aa58b4, type: 3}
-  m_Name: 6_Definition_Knockback
+  m_Name: 5_Definition_Knockback
   m_EditorClassIdentifier: 
   DisplayName: "\u30AD\u30E3\u30CE\u30F3"
-  Description: "\u653B\u6483\u3057\u305F\u6575\u3092\u30B9\u30BF\u30F3\u3055\u305B\u308B\u3002\n\u30E1\u30BF\u30EB\u7CFB\u306E\u6575\u3082\u5F97\u610F\u3002"
+  Description: "\u653B\u6483\u3057\u305F\u6575\u3092\u30B9\u30BF\u30F3\u3055\u305B\u308B\u3002\n\u30E1\u30BF\u30EB\u7CFB\u306E\u6575\u306B\u7279\u653B\u3092\u6301\u3064\u3002"
   Icon: {fileID: 21300000, guid: 55041c3773341984b8a35d55c4d32166, type: 3}
   UnitPrefab: {fileID: 8671865796400775776, guid: b3456c000bb57d24ba7a16717fd49a22, type: 3}
-  HotkeySlot: 6
+  HotkeySlot: 5
