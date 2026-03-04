@@ -50,30 +50,33 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 8304212716229790698, guid: 634df397bc279ec41a98b3304f7b88a4, type: 3}
     spawnCount: 1
     spawnInterval: 2
-  - enemyPrefab: {fileID: 8304212716229790698, guid: d1aeaf46f47cb9c41bd910d9ddb2d289, type: 3}
+  - enemyPrefab: {fileID: 8304212716229790698, guid: e8ea81d3dfcee014aaa4f6378ff94c78, type: 3}
     spawnCount: 3
-    spawnInterval: 0.5
+    spawnInterval: 2
   - enemyPrefab: {fileID: 8304212716229790698, guid: de2a131cd3693f048a2f585df85ef1ac, type: 3}
     spawnCount: 3
-    spawnInterval: 0.5
+    spawnInterval: 1
   - enemyPrefab: {fileID: 8304212716229790698, guid: 1d20027813ab9e44bb459c8aa166be76, type: 3}
     spawnCount: 2
     spawnInterval: 1
-  - enemyPrefab: {fileID: 8304212716229790698, guid: a376534acf7eb7f44a76f52989dafd13, type: 3}
+  - enemyPrefab: {fileID: 8304212716229790698, guid: e8ea81d3dfcee014aaa4f6378ff94c78, type: 3}
     spawnCount: 3
-    spawnInterval: 0.5
-  - enemyPrefab: {fileID: 8304212716229790698, guid: ba178b556a7da894db167a9f23da59fb, type: 3}
+    spawnInterval: 2
+  - enemyPrefab: {fileID: 8304212716229790698, guid: de2a131cd3693f048a2f585df85ef1ac, type: 3}
+    spawnCount: 3
+    spawnInterval: 1
+  - enemyPrefab: {fileID: 8304212716229790698, guid: 1d20027813ab9e44bb459c8aa166be76, type: 3}
     spawnCount: 2
-    spawnInterval: 0.5
-  - enemyPrefab: {fileID: 8304212716229790698, guid: 499748d474cf3274cb0c534905dc595e, type: 3}
-    spawnCount: 4
-    spawnInterval: 0.5
-  - enemyPrefab: {fileID: 8304212716229790698, guid: ba178b556a7da894db167a9f23da59fb, type: 3}
-    spawnCount: 2
-    spawnInterval: 0.5
-  - enemyPrefab: {fileID: 8304212716229790698, guid: ba178b556a7da894db167a9f23da59fb, type: 3}
-    spawnCount: 2
-    spawnInterval: 0.5
+    spawnInterval: 1
+  - enemyPrefab: {fileID: 8304212716229790698, guid: e8ea81d3dfcee014aaa4f6378ff94c78, type: 3}
+    spawnCount: 3
+    spawnInterval: 2
+  - enemyPrefab: {fileID: 8304212716229790698, guid: de2a131cd3693f048a2f585df85ef1ac, type: 3}
+    spawnCount: 3
+    spawnInterval: 1
+  - enemyPrefab: {fileID: 8304212716229790698, guid: de2a131cd3693f048a2f585df85ef1ac, type: 3}
+    spawnCount: 3
+    spawnInterval: 1
   startDelay: 2
   endDelay: 0
   isBossWave: 1

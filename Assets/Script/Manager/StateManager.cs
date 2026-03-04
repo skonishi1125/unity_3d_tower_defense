@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -108,7 +107,7 @@ public class StateManager : MonoBehaviour
             // ライフ側のイベントと二重実行にならないように、
             // GameOver側でStateをチェックしている。ライフ側のイベントが先に走った場合、
             // Slowingになっているので、そもそもこの処理まで辿り着かないようにしている
-            GameOver(); 
+            GameOver();
         }
 
     }
