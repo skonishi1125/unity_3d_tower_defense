@@ -50,22 +50,23 @@ public class Tutorial : MonoBehaviour
     // 進むボタン
     public void NextPage()
     {
-        if (currentPageIndex < pages.Length - 1)
-        {
+        if (currentPageIndex >= pages.Length - 1)
+            currentPageIndex = 0;
+        else
             currentPageIndex++;
-            UpdatePageDisplay();
-        }
+
+        UpdatePageDisplay();
     }
 
     // 戻るボタン
     public void PrevPage()
     {
-        // 最初のページではない場合のみインデックスを減らす
-        if (currentPageIndex > 0)
-        {
+        if (currentPageIndex <= 0)
+            currentPageIndex = pages.Length - 1;
+        else
             currentPageIndex--;
-            UpdatePageDisplay();
-        }
+
+        UpdatePageDisplay();
     }
 
     // チュートリアルUI更新
