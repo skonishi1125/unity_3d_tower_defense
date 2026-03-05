@@ -32,7 +32,7 @@ public class UnitCombat : MonoBehaviour
         UpdateCoolTimeBar();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // ゲーム内時間が止まっているときは、処理を走らせない
         // (Editモード中などは、敵を殴らせない）
@@ -43,7 +43,13 @@ public class UnitCombat : MonoBehaviour
         if (unit.CurrentUnitState != UnitState.Battle)
             return;
 
-        attackTimer -= Time.deltaTime;
+        if (attackTimer > 0f)
+        {
+            attackTimer -= Time.fixedDeltaTime;
+            if (attackTimer < 0f)
+                attackTimer = 0f;
+        }
+
         UpdateCoolTimeBar();
 
         // タイマーをこの時点でリセットすると、
@@ -89,7 +95,9 @@ public class UnitCombat : MonoBehaviour
         h.TakeDamage(damage, status, kbPower, kbDuration);
 
         // 攻撃が終わったら、インターバルリセット
-        attackTimer = status.GetAttackInterval();
+        // attackTimer = status.GetAttackInterval();
+        // TimeScaleの増加によるマイナス分も引き継げるよう、+=とする
+        attackTimer += status.GetAttackInterval();
     }
 
     protected virtual bool TryGetTarget(out EnemyHealth attackEnemyHealth)

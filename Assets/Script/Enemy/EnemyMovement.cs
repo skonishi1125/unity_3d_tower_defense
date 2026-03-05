@@ -103,31 +103,30 @@ public class EnemyMovement : MonoBehaviour
         return totalPathDistance - GetRemainingDistance();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        // パス未指定
-        // もしくは、被弾してノックバック中は動かない
-        if (path == null || path.Count == 0 || isKnockedBack)
+        if (isKnockedBack)
+            return;
+
+        if (path == null)
             return;
 
         Transform target = path.Get(CurrentIndex);
-        if (target == null)
-            return;
-
-        // 敵(A)とwaypoint(B)の向きベクトルの取得。 AがBに向かうので、 B - A
         Vector3 to = target.position - transform.position;
-        to.y = 0f; // y軸の高さは考慮させない（平行移動させる）
+        Vector3 dir = to.normalized;
 
-        //Debug.Log($"idx={currentIndex} target={target.name} targetPos={target.position} enemyPos={transform.position}");
-        //Debug.DrawLine(transform.position, target.position, Color.yellow);
-
-        // Waypointに到達したときの判定
-        // sqr: square(2乗)を意味する単語 magnitude: 大きさ、絶対値を表す単語
-        // つまり、(B-A)^2 の大きさが、(有効距離)^2よりも少なければ到達したとみなしている
-        // to.magnitude = √ が考慮されるので、2乗して処理を軽めにしている
         float sqrDist = to.sqrMagnitude;
 
-        if (sqrDist <= arriveDistance * arriveDistance)
+        // 1フレームあたりの移動距離を算出 (fixedDeltaTimeを使用)
+        float moveSpeed = 0f;
+        if (status != null)
+            moveSpeed = status.GetSpeed();
+        float frameMoveDist = moveSpeed * Time.fixedDeltaTime;
+
+        // 到達許容距離と1フレームの移動距離を比較
+        float effectiveArriveDist = Mathf.Max(arriveDistance, frameMoveDist);
+
+        if (sqrDist <= effectiveArriveDist * effectiveArriveDist)
         {
             CurrentIndex++;
             if (CurrentIndex >= path.Count)
@@ -145,23 +144,78 @@ public class EnemyMovement : MonoBehaviour
 
         }
 
-        Move(to.normalized);
+        transform.position += dir * frameMoveDist;
         RotateSmoothly();
 
-
-        //if (Input.GetKeyDown(KeyCode.A))
-        //    ApplyKnockback(1f);
-
-
     }
 
-    private void Move(Vector3 dir)
-    {
-        float moveSpeed = 0f;
-        if (status != null)
-            moveSpeed = status.GetSpeed();
-        transform.position += dir * moveSpeed * Time.deltaTime;
-    }
+    //private void Update()
+    //{
+    //    // パス未指定
+    //    // もしくは、被弾してノックバック中は動かない
+    //    if (path == null || path.Count == 0 || isKnockedBack)
+    //        return;
+
+    //    Transform target = path.Get(CurrentIndex);
+    //    if (target == null)
+    //        return;
+
+    //    // 敵(A)とwaypoint(B)の向きベクトルの取得。 AがBに向かうので、 B - A
+    //    Vector3 to = target.position - transform.position;
+    //    to.y = 0f; // y軸の高さは考慮させない（平行移動させる）
+
+    //    //Debug.Log($"idx={currentIndex} target={target.name} targetPos={target.position} enemyPos={transform.position}");
+    //    //Debug.DrawLine(transform.position, target.position, Color.yellow);
+
+    //    // Waypointに到達したときの判定
+    //    // sqr: square(2乗)を意味する単語 magnitude: 大きさ、絶対値を表す単語
+    //    // つまり、(B-A)^2 の大きさが、(有効距離)^2よりも少なければ到達したとみなしている
+    //    // to.magnitude = √ が考慮されるので、2乗して処理を軽めにしている
+    //    float sqrDist = to.sqrMagnitude;
+
+    //    // 1フレームあたりの移動距離を算出
+    //    float moveSpeed = 0f;
+    //    if (status != null)
+    //        moveSpeed = status.GetSpeed();
+    //    float frameMoveDist = moveSpeed * Time.deltaTime;
+
+    //    // 到達許容距離と1フレームの移動距離を比較し、大きい方を実際の到達判定距離とする
+    //    float effectiveArriveDist = Mathf.Max(arriveDistance, frameMoveDist);
+    //    if (sqrDist <= effectiveArriveDist * effectiveArriveDist)
+    //    {
+    //        CurrentIndex++;
+    //        if (CurrentIndex >= path.Count)
+    //        {
+    //            ReachedGoal?.Invoke();
+    //            enabled = false;
+    //            return;
+    //        }
+
+    //        // 目的地更新
+    //        Transform newTarget = path.Get(CurrentIndex);
+    //        Vector3 newTo = newTarget.position - transform.position;
+    //        to.y = 0f;
+    //        DetectTargetRotate(newTo.normalized);
+
+    //    }
+
+    //    Move(to.normalized);
+    //    RotateSmoothly();
+
+
+    //    //if (Input.GetKeyDown(KeyCode.A))
+    //    //    ApplyKnockback(1f);
+
+
+    //}
+
+    //private void Move(Vector3 dir)
+    //{
+    //    float moveSpeed = 0f;
+    //    if (status != null)
+    //        moveSpeed = status.GetSpeed();
+    //    transform.position += dir * moveSpeed * Time.deltaTime;
+    //}
 
     private void DetectTargetRotate(Vector3 dir)
     {
@@ -177,12 +231,52 @@ public class EnemyMovement : MonoBehaviour
         // 即時振り向きの場合は下記
         // transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
 
+        //transform.rotation = Quaternion.Slerp(
+        //    transform.rotation,
+        //    targetRotation,
+        //    Time.deltaTime * rotationSpeed
+        //);
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             targetRotation,
-            Time.deltaTime * rotationSpeed
+            Time.fixedDeltaTime * rotationSpeed
         );
     }
+
+    //public void ApplyKnockback(float knockbackDistance, float stunDuration)
+    //{
+    //    // 実際KBする処理
+    //    if (knockbackDistance > 0f)
+    //    {
+    //        Vector3 knockbackDir = -transform.forward;
+    //        transform.DOMove(knockbackDir * knockbackDistance, 0.05f)
+    //            .SetRelative(true) // 相対座標移動 今の位置から、進行方向とは逆の方向に下がらせる
+    //            .SetLink(gameObject);
+    //    }
+
+    //    // スタン処理
+    //    if (stunDuration > 0f)
+    //    {
+    //        isKnockedBack = true;
+
+    //        float remainingTime = 0f;
+    //        if (stunTween != null && stunTween.IsActive())
+    //            remainingTime = stunTween.Duration() - stunTween.Elapsed();
+
+    //        // 例えば2秒のスタン中に、0.1秒のスタンが入った場合、上書きされるのを防ぐ
+    //        if (stunDuration > remainingTime)
+    //        {
+    //            stunTween?.Kill();
+    //            stunTween = DOVirtual.DelayedCall(stunDuration, () =>
+    //            {
+    //                isKnockedBack = false;
+    //            }, false).SetLink(gameObject); // Destroy時のエラー対策
+    //        }
+
+    //    }
+
+
+    //}
 
     public void ApplyKnockback(float knockbackDistance, float stunDuration)
     {
@@ -190,9 +284,10 @@ public class EnemyMovement : MonoBehaviour
         if (knockbackDistance > 0f)
         {
             Vector3 knockbackDir = -transform.forward;
-            transform.DOMove(knockbackDir * knockbackDistance, 0.05f)
-                .SetRelative(true) // 相対座標移動 今の位置から、進行方向とは逆の方向に下がらせる
-                .SetLink(gameObject);
+
+            // 修正箇所: DOMoveによるアニメーションを廃止し、即時座標移動に変更
+            // 倍速時のUpdate処理との競合や、1フレームの極端な吹っ飛びを防ぐため
+            transform.position += knockbackDir * knockbackDistance;
         }
 
         // スタン処理
@@ -204,19 +299,17 @@ public class EnemyMovement : MonoBehaviour
             if (stunTween != null && stunTween.IsActive())
                 remainingTime = stunTween.Duration() - stunTween.Elapsed();
 
-            // 例えば2秒のスタン中に、0.1秒のスタンが入った場合、上書きされるのを防ぐ
-            if (stunDuration >  remainingTime)
+            if (stunDuration > remainingTime)
             {
                 stunTween?.Kill();
+
+                // 修正箇所: 第3引数に false を追加し、TimeScaleの影響を受けるようにする
                 stunTween = DOVirtual.DelayedCall(stunDuration, () =>
                 {
                     isKnockedBack = false;
-                }).SetLink(gameObject); // Destroy時のエラー対策
+                }, false);
             }
-
         }
-
-
     }
 
 

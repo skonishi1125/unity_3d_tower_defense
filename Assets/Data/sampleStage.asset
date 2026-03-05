@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: sampleStage
   m_EditorClassIdentifier: 
   waves:
-  - {fileID: 11400000, guid: 35872fe3f71d5444bbd5eac02b7c6850, type: 2}
+  - {fileID: 11400000, guid: 5582c274af95c034bb181061a51d14da, type: 2}
