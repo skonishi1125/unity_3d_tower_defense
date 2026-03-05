@@ -12862,7 +12862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb5b7a1d076486458b3cd4234e7be92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialLife: 5
+  initialLife: 40
   lifeDamagedSfx: {fileID: 8300000, guid: b13b4cce53bc5af42a3f86c41e4a620b, type: 3}
   lifeZeroSfx: {fileID: 8300000, guid: dc6cf6df0393b6845bf22fae630f0538, type: 3}
 --- !u!1 &1512727826

@@ -79,4 +79,4 @@ MonoBehaviour:
     spawnInterval: 1
   startDelay: 2
   endDelay: 0
-  isBossWave: 1
+  isBossWave: 0

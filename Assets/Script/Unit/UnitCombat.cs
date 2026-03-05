@@ -36,7 +36,7 @@ public class UnitCombat : MonoBehaviour
     {
         // ゲーム内時間が止まっているときは、処理を走らせない
         // (Editモード中などは、敵を殴らせない）
-        if (Time.deltaTime == 0f)
+        if (Time.timeScale == 0f)
             return;
 
         // Ghost中などは、タイマーを走らせない

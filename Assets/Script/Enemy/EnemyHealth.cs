@@ -55,6 +55,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(float pureDamage, UnitStatus unitStatus, float kbPower = 0f, float kbDuration = 0f)
     {
+        Debug.Log($"[Frame: {Time.frameCount}] Damage: {pureDamage} / CurrentHP: {currentHp}");
         if (isDead) return;
 
         float damage = CalculateDamageAndCondition(pureDamage, unitStatus);
